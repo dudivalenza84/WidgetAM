@@ -1,0 +1,15 @@
+{
+  "name": "mac-media-widget",
+  "version": "1.0.0",
+  "description": "Mac Desktop Widget to control browser music playback",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^31.0.0"
+  }
+}
