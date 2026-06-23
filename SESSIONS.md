@@ -5,6 +5,7 @@ Formato: `YYYY-MM-DD · #NN — <objetivo> — <status>` → [arquivo](docs/sess
 
 ## 2026-06-23
 
+- 2026-06-23 · #05 — Fix: play com app fechado abria Apple Music em vez do Amazon Music — concluída → [arquivo](docs/sessions/2026-06-23-05.md)
 - 2026-06-23 · #04 — Liquid Glass nativo + tela de configurações + edgeMargin ajustável — concluída → [arquivo](docs/sessions/2026-06-23-04.md)
 - 2026-06-23 · #03 — Controle de volume do sistema (sidebar fixa + mute) — concluída → [arquivo](docs/sessions/2026-06-23-03.md)
 - 2026-06-23 · #02 — Limpeza Electron + setup Swift + integração mediaremote-adapter — concluída → [arquivo](docs/sessions/2026-06-23-02.md)

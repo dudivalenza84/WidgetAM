@@ -3,6 +3,14 @@
 Formato semver: MINOR por release cronológica, PATCH para hotfix.
 Entradas novas vão no topo.
 
+## [1.4.1] — 2026-06-23 · #05
+
+- **Fix: play com Amazon Music fechado abria o Music.app da Apple.** Em instalação limpa pelo
+  DMG, `autoLaunchOnPlay` valia o default `false`, e o botão caía num `togglePlayPause` global que
+  o macOS roteava para o player padrão. Default agora é `true` e `playPauseEnsuringApp()` só envia o
+  toggle global quando a sessão de Now Playing já é o Amazon Music — caso contrário garante o app e
+  só dá play quando ele vira a sessão. Fecha também o furo do app aberto porém sem sessão ativa.
+
 ## [1.4.0] — 2026-06-23 · #04
 
 - **Liquid Glass nativo** (macOS 26): novo `CardSurface` aplica `glassEffect(.regular.tint(...))` ao

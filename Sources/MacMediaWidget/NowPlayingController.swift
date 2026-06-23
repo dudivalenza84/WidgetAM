@@ -189,12 +189,23 @@ final class NowPlayingController: ObservableObject {
     /// estiver rodando, abre o app antes de mandar o play — caso contrário o
     /// comando não teria sessão de Now Playing onde atuar.
     func playPauseEnsuringApp() {
-        if AppSettings.shared.autoLaunchOnPlay, !track.isPlaying, !Self.isAmazonMusicRunning() {
-            Self.openAmazonMusic()
-            waitForAmazonMusicThenPlay()
+        // Se o Now Playing atual já é o Amazon Music, alterna normalmente — o
+        // comando tem uma sessão concreta onde atuar.
+        if track.bundleIdentifier == Self.amazonMusicBundleId {
+            send(.togglePlayPause)
             return
         }
-        send(.togglePlayPause)
+
+        // Sessão ainda não é o Amazon Music (app fechado, ou aberto mas sem nada
+        // tocando). Um `togglePlayPause` global aqui vazaria para o player padrão
+        // do sistema (Music.app da Apple), que abriria indevidamente. Em vez
+        // disso, garante o Amazon Music e só manda o play quando ele virar a
+        // sessão de Now Playing.
+        guard AppSettings.shared.autoLaunchOnPlay else { return }
+        if !Self.isAmazonMusicRunning() {
+            Self.openAmazonMusic()
+        }
+        waitForAmazonMusicThenPlay()
     }
 
     /// Após abrir o Amazon Music, aguarda ele virar a sessão de Now Playing antes

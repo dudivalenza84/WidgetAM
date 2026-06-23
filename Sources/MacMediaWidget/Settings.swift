@@ -42,7 +42,7 @@ final class AppSettings: ObservableObject {
         static let edgeMargin: CGFloat = 16
         static let gridStepY: CGFloat = 8
         static let tintOpacity: Double = 0.45
-        static let autoLaunchOnPlay = false
+        static let autoLaunchOnPlay = true
     }
 
     private init(defaults: UserDefaults = .standard) {
