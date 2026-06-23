@@ -1,0 +1,4909 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {
+    "hyperedges": [
+      {
+        "id": "now_playing_flow",
+        "label": "Fluxo Now Playing: UI, controller, adapter e player oficial",
+        "nodes": [
+          "contentview_contentview",
+          "nowplayingcontroller_nowplayingcontroller",
+          "mediaremote_adapter",
+          "amazon_music_app"
+        ],
+        "relation": "participate_in",
+        "confidence": "INFERRED",
+        "confidence_score": 0.85,
+        "source_file": "Sources/MacMediaWidget/NowPlayingController.swift"
+      },
+      {
+        "id": "live_preferences",
+        "label": "Prefer\u00eancias ao vivo via AppSettings/UserDefaults",
+        "nodes": [
+          "settings_appsettings",
+          "preferenceswindow_preferencesview",
+          "widgetwindow_widgetwindow",
+          "contentview_contentview"
+        ],
+        "relation": "participate_in",
+        "confidence": "INFERRED",
+        "confidence_score": 0.75,
+        "source_file": "Sources/MacMediaWidget/Settings.swift"
+      }
+    ]
+  },
+  "nodes": [
+    {
+      "label": "App.swift",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/App.swift",
+      "source_location": "L1",
+      "id": "macmediawidget_app",
+      "community": 2,
+      "norm_label": "app.swift"
+    },
+    {
+      "label": "AppKit",
+      "file_type": "code",
+      "type": "module",
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": "L1",
+      "id": "appkit",
+      "community": 6,
+      "norm_label": "appkit"
+    },
+    {
+      "label": "App",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/App.swift",
+      "source_location": "L6",
+      "id": "macmediawidget_app_app",
+      "community": 2,
+      "norm_label": "app"
+    },
+    {
+      "label": ".main()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/App.swift",
+      "source_location": "L8",
+      "id": "macmediawidget_app_app_main",
+      "community": 2,
+      "norm_label": ".main()"
+    },
+    {
+      "label": "AppDelegate",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/App.swift",
+      "source_location": "L17",
+      "id": "macmediawidget_app_appdelegate",
+      "community": 2,
+      "norm_label": "appdelegate"
+    },
+    {
+      "label": "NSObject",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "id": "nsobject",
+      "community": 2,
+      "norm_label": "nsobject"
+    },
+    {
+      "label": "NSApplicationDelegate",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "id": "nsapplicationdelegate",
+      "community": 2,
+      "norm_label": "nsapplicationdelegate"
+    },
+    {
+      "label": "WidgetWindow",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/App.swift",
+      "source_location": "L19",
+      "id": "widgetwindow",
+      "community": 2,
+      "norm_label": "widgetwindow"
+    },
+    {
+      "label": "TrayController",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/App.swift",
+      "source_location": "L20",
+      "id": "traycontroller",
+      "community": 2,
+      "norm_label": "traycontroller"
+    },
+    {
+      "label": ".applicationDidFinishLaunching()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/App.swift",
+      "source_location": "L24",
+      "id": "macmediawidget_app_appdelegate_applicationdidfinishlaunching",
+      "community": 2,
+      "norm_label": ".applicationdidfinishlaunching()"
+    },
+    {
+      "label": "Notification",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/App.swift",
+      "source_location": "L24",
+      "id": "sources_macmediawidget_app_swift_notification",
+      "community": 2,
+      "norm_label": "notification"
+    },
+    {
+      "label": ".applicationWillTerminate()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/App.swift",
+      "source_location": "L38",
+      "id": "macmediawidget_app_appdelegate_applicationwillterminate",
+      "community": 2,
+      "norm_label": ".applicationwillterminate()"
+    },
+    {
+      "label": "ContentView.swift",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L1",
+      "id": "macmediawidget_contentview",
+      "community": 1,
+      "norm_label": "contentview.swift"
+    },
+    {
+      "label": "SwiftUI",
+      "file_type": "code",
+      "type": "module",
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": "L3",
+      "id": "swiftui",
+      "community": 1,
+      "norm_label": "swiftui"
+    },
+    {
+      "label": "WidgetMetrics",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L5",
+      "id": "macmediawidget_contentview_widgetmetrics",
+      "community": 3,
+      "norm_label": "widgetmetrics"
+    },
+    {
+      "label": "CGFloat",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L6",
+      "id": "sources_macmediawidget_contentview_swift_cgfloat",
+      "community": 3,
+      "norm_label": "cgfloat"
+    },
+    {
+      "label": "ContentView",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L19",
+      "id": "macmediawidget_contentview_contentview",
+      "community": 1,
+      "norm_label": "contentview"
+    },
+    {
+      "label": "View",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "id": "view",
+      "community": 1,
+      "norm_label": "view"
+    },
+    {
+      "label": "NowPlayingController",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L20",
+      "id": "sources_macmediawidget_contentview_swift_nowplayingcontroller",
+      "community": 1,
+      "norm_label": "nowplayingcontroller"
+    },
+    {
+      "label": "Color",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L23",
+      "id": "color",
+      "community": 1,
+      "norm_label": "color"
+    },
+    {
+      "label": "TrackInfo",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L25",
+      "id": "trackinfo",
+      "community": 1,
+      "norm_label": "trackinfo"
+    },
+    {
+      "label": "String",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L128",
+      "id": "sources_macmediawidget_contentview_swift_string",
+      "community": 1,
+      "norm_label": "string"
+    },
+    {
+      "label": ".button()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L137",
+      "id": "macmediawidget_contentview_contentview_button",
+      "community": 1,
+      "norm_label": ".button()"
+    },
+    {
+      "label": "Void",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L137",
+      "id": "sources_macmediawidget_contentview_swift_void",
+      "community": 1,
+      "norm_label": "void"
+    },
+    {
+      "label": "CardSurface",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L148",
+      "id": "macmediawidget_contentview_cardsurface",
+      "community": 1,
+      "norm_label": "cardsurface"
+    },
+    {
+      "label": "ViewModifier",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "id": "viewmodifier",
+      "community": 1,
+      "norm_label": "viewmodifier"
+    },
+    {
+      "label": "Double",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L150",
+      "id": "sources_macmediawidget_contentview_swift_double",
+      "community": 1,
+      "norm_label": "double"
+    },
+    {
+      "label": "RoundedRectangle",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L152",
+      "id": "roundedrectangle",
+      "community": 1,
+      "norm_label": "roundedrectangle"
+    },
+    {
+      "label": ".body()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L156",
+      "id": "macmediawidget_contentview_cardsurface_body",
+      "community": 1,
+      "norm_label": ".body()"
+    },
+    {
+      "label": "Content",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L156",
+      "id": "content",
+      "community": 1,
+      "norm_label": "content"
+    },
+    {
+      "label": "VerticalVolumeSlider",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L185",
+      "id": "macmediawidget_contentview_verticalvolumeslider",
+      "community": 1,
+      "norm_label": "verticalvolumeslider"
+    },
+    {
+      "label": "NSViewRepresentable",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "id": "nsviewrepresentable",
+      "community": 1,
+      "norm_label": "nsviewrepresentable"
+    },
+    {
+      "label": ".makeNSView()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L189",
+      "id": "macmediawidget_contentview_verticalvolumeslider_makensview",
+      "community": 1,
+      "norm_label": ".makensview()"
+    },
+    {
+      "label": "Context",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L189",
+      "id": "context",
+      "community": 1,
+      "norm_label": "context"
+    },
+    {
+      "label": "NSSlider",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L189",
+      "id": "nsslider",
+      "community": 1,
+      "norm_label": "nsslider"
+    },
+    {
+      "label": ".updateNSView()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L200",
+      "id": "macmediawidget_contentview_verticalvolumeslider_updatensview",
+      "community": 1,
+      "norm_label": ".updatensview()"
+    },
+    {
+      "label": ".makeCoordinator()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L205",
+      "id": "macmediawidget_contentview_verticalvolumeslider_makecoordinator",
+      "community": 1,
+      "norm_label": ".makecoordinator()"
+    },
+    {
+      "label": "Coordinator",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L205",
+      "id": "coordinator",
+      "community": 1,
+      "norm_label": "coordinator"
+    },
+    {
+      "label": ".init()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L209",
+      "id": "macmediawidget_contentview_coordinator_init",
+      "community": 1,
+      "norm_label": ".init()"
+    },
+    {
+      "label": ".changed()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L210",
+      "id": "macmediawidget_contentview_coordinator_changed",
+      "community": 1,
+      "norm_label": ".changed()"
+    },
+    {
+      "label": ".averageColor()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L217",
+      "id": "macmediawidget_contentview_nsimage_averagecolor",
+      "community": 0,
+      "norm_label": ".averagecolor()"
+    },
+    {
+      "label": "NSColor",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L217",
+      "id": "nscolor",
+      "community": 0,
+      "norm_label": "nscolor"
+    },
+    {
+      "label": "NowPlayingController.swift",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L1",
+      "id": "macmediawidget_nowplayingcontroller",
+      "community": 6,
+      "norm_label": "nowplayingcontroller.swift"
+    },
+    {
+      "label": "Combine",
+      "file_type": "code",
+      "type": "module",
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": "L2",
+      "id": "combine",
+      "community": 6,
+      "norm_label": "combine"
+    },
+    {
+      "label": "TrackInfo",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L5",
+      "id": "macmediawidget_nowplayingcontroller_trackinfo",
+      "community": 0,
+      "norm_label": "trackinfo"
+    },
+    {
+      "label": "Equatable",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "id": "equatable",
+      "community": 0,
+      "norm_label": "equatable"
+    },
+    {
+      "label": "String",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L6",
+      "id": "sources_macmediawidget_nowplayingcontroller_swift_string",
+      "community": 0,
+      "norm_label": "string"
+    },
+    {
+      "label": "Double",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L10",
+      "id": "sources_macmediawidget_nowplayingcontroller_swift_double",
+      "community": 0,
+      "norm_label": "double"
+    },
+    {
+      "label": "Date",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L12",
+      "id": "date",
+      "community": 0,
+      "norm_label": "date"
+    },
+    {
+      "label": "Bool",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L13",
+      "id": "sources_macmediawidget_nowplayingcontroller_swift_bool",
+      "community": 0,
+      "norm_label": "bool"
+    },
+    {
+      "label": "NSImage",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L14",
+      "id": "nsimage",
+      "community": 0,
+      "norm_label": "nsimage"
+    },
+    {
+      "label": "MediaCommand",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L22",
+      "id": "macmediawidget_nowplayingcontroller_mediacommand",
+      "community": 6,
+      "norm_label": "mediacommand"
+    },
+    {
+      "label": "Int",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "id": "int",
+      "community": 3,
+      "norm_label": "int"
+    },
+    {
+      "label": "play",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L23",
+      "id": "macmediawidget_nowplayingcontroller_mediacommand_play",
+      "community": 6,
+      "norm_label": "play"
+    },
+    {
+      "label": "pause",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L24",
+      "id": "macmediawidget_nowplayingcontroller_mediacommand_pause",
+      "community": 6,
+      "norm_label": "pause"
+    },
+    {
+      "label": "togglePlayPause",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L25",
+      "id": "macmediawidget_nowplayingcontroller_mediacommand_toggleplaypause",
+      "community": 6,
+      "norm_label": "toggleplaypause"
+    },
+    {
+      "label": "nextTrack",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L26",
+      "id": "macmediawidget_nowplayingcontroller_mediacommand_nexttrack",
+      "community": 6,
+      "norm_label": "nexttrack"
+    },
+    {
+      "label": "previousTrack",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L27",
+      "id": "macmediawidget_nowplayingcontroller_mediacommand_previoustrack",
+      "community": 6,
+      "norm_label": "previoustrack"
+    },
+    {
+      "label": "NowPlayingController",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L34",
+      "id": "macmediawidget_nowplayingcontroller_nowplayingcontroller",
+      "community": 0,
+      "norm_label": "nowplayingcontroller"
+    },
+    {
+      "label": "ObservableObject",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "id": "observableobject",
+      "community": 8,
+      "norm_label": "observableobject"
+    },
+    {
+      "label": "Process",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L41",
+      "id": "process",
+      "community": 0,
+      "norm_label": "process"
+    },
+    {
+      "label": "Timer",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L43",
+      "id": "sources_macmediawidget_nowplayingcontroller_swift_timer",
+      "community": 0,
+      "norm_label": "timer"
+    },
+    {
+      "label": ".adapterDir()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L51",
+      "id": "macmediawidget_nowplayingcontroller_nowplayingcontroller_adapterdir",
+      "community": 0,
+      "norm_label": ".adapterdir()"
+    },
+    {
+      "label": ".frameworkPath()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L62",
+      "id": "macmediawidget_nowplayingcontroller_nowplayingcontroller_frameworkpath",
+      "community": 0,
+      "norm_label": ".frameworkpath()"
+    },
+    {
+      "label": ".scriptPath()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L72",
+      "id": "macmediawidget_nowplayingcontroller_nowplayingcontroller_scriptpath",
+      "community": 0,
+      "norm_label": ".scriptpath()"
+    },
+    {
+      "label": ".start()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L78",
+      "id": "macmediawidget_nowplayingcontroller_nowplayingcontroller_start",
+      "community": 0,
+      "norm_label": ".start()"
+    },
+    {
+      "label": ".stop()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L107",
+      "id": "macmediawidget_nowplayingcontroller_nowplayingcontroller_stop",
+      "community": 2,
+      "norm_label": ".stop()"
+    },
+    {
+      "label": ".startProgressTimer()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L115",
+      "id": "macmediawidget_nowplayingcontroller_nowplayingcontroller_startprogresstimer",
+      "community": 0,
+      "norm_label": ".startprogresstimer()"
+    },
+    {
+      "label": ".refreshDisplayedElapsed()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L124",
+      "id": "macmediawidget_nowplayingcontroller_nowplayingcontroller_refreshdisplayedelapsed",
+      "community": 0,
+      "norm_label": ".refreshdisplayedelapsed()"
+    },
+    {
+      "label": ".ingest()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L138",
+      "id": "macmediawidget_nowplayingcontroller_nowplayingcontroller_ingest",
+      "community": 0,
+      "norm_label": ".ingest()"
+    },
+    {
+      "label": "Data",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L138",
+      "id": "data",
+      "community": 0,
+      "norm_label": "data"
+    },
+    {
+      "label": ".handleLine()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L150",
+      "id": "macmediawidget_nowplayingcontroller_nowplayingcontroller_handleline",
+      "community": 0,
+      "norm_label": ".handleline()"
+    },
+    {
+      "label": ".send()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L183",
+      "id": "macmediawidget_nowplayingcontroller_nowplayingcontroller_send",
+      "community": 0,
+      "norm_label": ".send()"
+    },
+    {
+      "label": ".playPauseEnsuringApp()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L191",
+      "id": "macmediawidget_nowplayingcontroller_nowplayingcontroller_playpauseensuringapp",
+      "community": 0,
+      "norm_label": ".playpauseensuringapp()"
+    },
+    {
+      "label": ".waitForAmazonMusicThenPlay()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L205",
+      "id": "macmediawidget_nowplayingcontroller_nowplayingcontroller_waitforamazonmusicthenplay",
+      "community": 0,
+      "norm_label": ".waitforamazonmusicthenplay()"
+    },
+    {
+      "label": ".seek()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L218",
+      "id": "macmediawidget_nowplayingcontroller_nowplayingcontroller_seek",
+      "community": 0,
+      "norm_label": ".seek()"
+    },
+    {
+      "label": ".runAdapter()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L224",
+      "id": "macmediawidget_nowplayingcontroller_nowplayingcontroller_runadapter",
+      "community": 0,
+      "norm_label": ".runadapter()"
+    },
+    {
+      "label": ".isAmazonMusicRunning()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L242",
+      "id": "macmediawidget_nowplayingcontroller_nowplayingcontroller_isamazonmusicrunning",
+      "community": 0,
+      "norm_label": ".isamazonmusicrunning()"
+    },
+    {
+      "label": ".openAmazonMusic()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L247",
+      "id": "macmediawidget_nowplayingcontroller_nowplayingcontroller_openamazonmusic",
+      "community": 0,
+      "norm_label": ".openamazonmusic()"
+    },
+    {
+      "label": "PreferencesWindow.swift",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/PreferencesWindow.swift",
+      "source_location": "L1",
+      "id": "macmediawidget_preferenceswindow",
+      "community": 2,
+      "norm_label": "preferenceswindow.swift"
+    },
+    {
+      "label": "PreferencesController",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/PreferencesWindow.swift",
+      "source_location": "L6",
+      "id": "macmediawidget_preferenceswindow_preferencescontroller",
+      "community": 2,
+      "norm_label": "preferencescontroller"
+    },
+    {
+      "label": "NSWindowDelegate",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "id": "nswindowdelegate",
+      "community": 3,
+      "norm_label": "nswindowdelegate"
+    },
+    {
+      "label": "NSWindow",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/PreferencesWindow.swift",
+      "source_location": "L8",
+      "id": "nswindow",
+      "community": 2,
+      "norm_label": "nswindow"
+    },
+    {
+      "label": ".show()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/PreferencesWindow.swift",
+      "source_location": "L10",
+      "id": "macmediawidget_preferenceswindow_preferencescontroller_show",
+      "community": 2,
+      "norm_label": ".show()"
+    },
+    {
+      "label": ".windowWillClose()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/PreferencesWindow.swift",
+      "source_location": "L30",
+      "id": "macmediawidget_preferenceswindow_preferencescontroller_windowwillclose",
+      "community": 2,
+      "norm_label": ".windowwillclose()"
+    },
+    {
+      "label": "Notification",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/PreferencesWindow.swift",
+      "source_location": "L30",
+      "id": "sources_macmediawidget_preferenceswindow_swift_notification",
+      "community": 2,
+      "norm_label": "notification"
+    },
+    {
+      "label": "PreferencesView",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/PreferencesWindow.swift",
+      "source_location": "L37",
+      "id": "macmediawidget_preferenceswindow_preferencesview",
+      "community": 2,
+      "norm_label": "preferencesview"
+    },
+    {
+      "label": "Settings.swift",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/Settings.swift",
+      "source_location": "L1",
+      "id": "macmediawidget_settings",
+      "community": 8,
+      "norm_label": "settings.swift"
+    },
+    {
+      "label": "Foundation",
+      "file_type": "code",
+      "type": "module",
+      "source_file": "Sources/MacMediaWidget/Settings.swift",
+      "source_location": "L1",
+      "id": "foundation",
+      "community": 10,
+      "norm_label": "foundation"
+    },
+    {
+      "label": "AppSettings",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/Settings.swift",
+      "source_location": "L7",
+      "id": "macmediawidget_settings_appsettings",
+      "community": 8,
+      "norm_label": "appsettings"
+    },
+    {
+      "label": "CGFloat",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/Settings.swift",
+      "source_location": "L13",
+      "id": "sources_macmediawidget_settings_swift_cgfloat",
+      "community": 8,
+      "norm_label": "cgfloat"
+    },
+    {
+      "label": "Double",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/Settings.swift",
+      "source_location": "L23",
+      "id": "sources_macmediawidget_settings_swift_double",
+      "community": 8,
+      "norm_label": "double"
+    },
+    {
+      "label": "Bool",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/Settings.swift",
+      "source_location": "L28",
+      "id": "sources_macmediawidget_settings_swift_bool",
+      "community": 8,
+      "norm_label": "bool"
+    },
+    {
+      "label": "UserDefaults",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/Settings.swift",
+      "source_location": "L32",
+      "id": "userdefaults",
+      "community": 8,
+      "norm_label": "userdefaults"
+    },
+    {
+      "label": "Keys",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/Settings.swift",
+      "source_location": "L34",
+      "id": "macmediawidget_settings_keys",
+      "community": 8,
+      "norm_label": "keys"
+    },
+    {
+      "label": "Defaults",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/Settings.swift",
+      "source_location": "L41",
+      "id": "macmediawidget_settings_defaults",
+      "community": 8,
+      "norm_label": "defaults"
+    },
+    {
+      "label": ".init()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/Settings.swift",
+      "source_location": "L48",
+      "id": "macmediawidget_settings_appsettings_init",
+      "community": 8,
+      "norm_label": ".init()"
+    },
+    {
+      "label": "TrayController.swift",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/TrayController.swift",
+      "source_location": "L1",
+      "id": "macmediawidget_traycontroller",
+      "community": 6,
+      "norm_label": "traycontroller.swift"
+    },
+    {
+      "label": "TrayController",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/TrayController.swift",
+      "source_location": "L5",
+      "id": "macmediawidget_traycontroller_traycontroller",
+      "community": 4,
+      "norm_label": "traycontroller"
+    },
+    {
+      "label": "NSMenuDelegate",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "id": "nsmenudelegate",
+      "community": 4,
+      "norm_label": "nsmenudelegate"
+    },
+    {
+      "label": "NSStatusItem",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/TrayController.swift",
+      "source_location": "L7",
+      "id": "nsstatusitem",
+      "community": 4,
+      "norm_label": "nsstatusitem"
+    },
+    {
+      "label": "Void",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/TrayController.swift",
+      "source_location": "L8",
+      "id": "sources_macmediawidget_traycontroller_swift_void",
+      "community": 4,
+      "norm_label": "void"
+    },
+    {
+      "label": "NSMenuItem",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/TrayController.swift",
+      "source_location": "L13",
+      "id": "nsmenuitem",
+      "community": 4,
+      "norm_label": "nsmenuitem"
+    },
+    {
+      "label": ".init()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/TrayController.swift",
+      "source_location": "L15",
+      "id": "macmediawidget_traycontroller_traycontroller_init",
+      "community": 4,
+      "norm_label": ".init()"
+    },
+    {
+      "label": ".menuItem()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/TrayController.swift",
+      "source_location": "L48",
+      "id": "macmediawidget_traycontroller_traycontroller_menuitem",
+      "community": 4,
+      "norm_label": ".menuitem()"
+    },
+    {
+      "label": "String",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/TrayController.swift",
+      "source_location": "L48",
+      "id": "sources_macmediawidget_traycontroller_swift_string",
+      "community": 4,
+      "norm_label": "string"
+    },
+    {
+      "label": "Selector",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/TrayController.swift",
+      "source_location": "L48",
+      "id": "selector",
+      "community": 4,
+      "norm_label": "selector"
+    },
+    {
+      "label": ".menuWillOpen()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/TrayController.swift",
+      "source_location": "L55",
+      "id": "macmediawidget_traycontroller_traycontroller_menuwillopen",
+      "community": 4,
+      "norm_label": ".menuwillopen()"
+    },
+    {
+      "label": "NSMenu",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/TrayController.swift",
+      "source_location": "L55",
+      "id": "nsmenu",
+      "community": 4,
+      "norm_label": "nsmenu"
+    },
+    {
+      "label": ".toggleWidget()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/TrayController.swift",
+      "source_location": "L59",
+      "id": "macmediawidget_traycontroller_traycontroller_togglewidget",
+      "community": 4,
+      "norm_label": ".togglewidget()"
+    },
+    {
+      "label": ".openAmazonMusic()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/TrayController.swift",
+      "source_location": "L60",
+      "id": "macmediawidget_traycontroller_traycontroller_openamazonmusic",
+      "community": 4,
+      "norm_label": ".openamazonmusic()"
+    },
+    {
+      "label": ".openPreferences()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/TrayController.swift",
+      "source_location": "L61",
+      "id": "macmediawidget_traycontroller_traycontroller_openpreferences",
+      "community": 4,
+      "norm_label": ".openpreferences()"
+    },
+    {
+      "label": ".quit()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/TrayController.swift",
+      "source_location": "L62",
+      "id": "macmediawidget_traycontroller_traycontroller_quit",
+      "community": 4,
+      "norm_label": ".quit()"
+    },
+    {
+      "label": ".toggleLoginItem()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/TrayController.swift",
+      "source_location": "L64",
+      "id": "macmediawidget_traycontroller_traycontroller_toggleloginitem",
+      "community": 4,
+      "norm_label": ".toggleloginitem()"
+    },
+    {
+      "label": "WidgetWindow.swift",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": "L1",
+      "id": "macmediawidget_widgetwindow",
+      "community": 6,
+      "norm_label": "widgetwindow.swift"
+    },
+    {
+      "label": "WidgetWindow",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": "L9",
+      "id": "macmediawidget_widgetwindow_widgetwindow",
+      "community": 3,
+      "norm_label": "widgetwindow"
+    },
+    {
+      "label": "NSPanel",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "id": "nspanel",
+      "community": 3,
+      "norm_label": "nspanel"
+    },
+    {
+      "label": "Timer",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": "L15",
+      "id": "sources_macmediawidget_widgetwindow_swift_timer",
+      "community": 3,
+      "norm_label": "timer"
+    },
+    {
+      "label": ".init()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": "L18",
+      "id": "macmediawidget_widgetwindow_widgetwindow_init",
+      "community": 3,
+      "norm_label": ".init()"
+    },
+    {
+      "label": "NowPlayingController",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": "L18",
+      "id": "sources_macmediawidget_widgetwindow_swift_nowplayingcontroller",
+      "community": 3,
+      "norm_label": "nowplayingcontroller"
+    },
+    {
+      "label": "Bool",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": "L58",
+      "id": "sources_macmediawidget_widgetwindow_swift_bool",
+      "community": 3,
+      "norm_label": "bool"
+    },
+    {
+      "label": ".showWidget()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": "L61",
+      "id": "macmediawidget_widgetwindow_widgetwindow_showwidget",
+      "community": 3,
+      "norm_label": ".showwidget()"
+    },
+    {
+      "label": ".toggleVisibility()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": "L70",
+      "id": "macmediawidget_widgetwindow_widgetwindow_togglevisibility",
+      "community": 2,
+      "norm_label": ".togglevisibility()"
+    },
+    {
+      "label": ".windowDidMove()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": "L82",
+      "id": "macmediawidget_widgetwindow_widgetwindow_windowdidmove",
+      "community": 3,
+      "norm_label": ".windowdidmove()"
+    },
+    {
+      "label": "Notification",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": "L82",
+      "id": "sources_macmediawidget_widgetwindow_swift_notification",
+      "community": 3,
+      "norm_label": "notification"
+    },
+    {
+      "label": ".snapToGrid()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": "L90",
+      "id": "macmediawidget_widgetwindow_widgetwindow_snaptogrid",
+      "community": 3,
+      "norm_label": ".snaptogrid()"
+    },
+    {
+      "label": ".savedOrigin()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": "L119",
+      "id": "macmediawidget_widgetwindow_widgetwindow_savedorigin",
+      "community": 3,
+      "norm_label": ".savedorigin()"
+    },
+    {
+      "label": "NSPoint",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": "L119",
+      "id": "nspoint",
+      "community": 3,
+      "norm_label": "nspoint"
+    },
+    {
+      "label": "package-dmg.sh",
+      "file_type": "code",
+      "source_file": "scripts/package-dmg.sh",
+      "source_location": "L1",
+      "metadata": {
+        "language": "bash",
+        "kind": "file"
+      },
+      "id": "scripts_package_dmg",
+      "community": 9,
+      "norm_label": "package-dmg.sh"
+    },
+    {
+      "label": "package-dmg.sh script",
+      "file_type": "code",
+      "source_file": "scripts/package-dmg.sh",
+      "source_location": "L1",
+      "metadata": {
+        "language": "bash",
+        "kind": "bash_entrypoint"
+      },
+      "id": "users_dudivalenza_projetos_ia_pessoal_macmediawidget_scripts_package_dmg_sh__entry",
+      "community": 9,
+      "norm_label": "package-dmg.sh script"
+    },
+    {
+      "label": "App (entry point enum)",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/App.swift",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "app_app",
+      "community": 2,
+      "norm_label": "app (entry point enum)"
+    },
+    {
+      "label": "ContentView (widget card UI)",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "contentview_contentview",
+      "community": 3,
+      "norm_label": "contentview (widget card ui)"
+    },
+    {
+      "label": "CardSurface (Liquid Glass modifier)",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "contentview_cardsurface",
+      "community": 9,
+      "norm_label": "cardsurface (liquid glass modifier)"
+    },
+    {
+      "label": "VerticalVolumeSlider (NSSlider wrapper)",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "contentview_verticalvolumeslider",
+      "community": 3,
+      "norm_label": "verticalvolumeslider (nsslider wrapper)"
+    },
+    {
+      "label": "mediaremote-adapter (perl + framework bridge)",
+      "file_type": "concept",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": "https://github.com/ejbills/mediaremote-adapter",
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "mediaremote_adapter",
+      "community": 9,
+      "norm_label": "mediaremote-adapter (perl + framework bridge)"
+    },
+    {
+      "label": "Amazon Music.app (com.amazon.music)",
+      "file_type": "concept",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "amazon_music_app",
+      "community": 9,
+      "norm_label": "amazon music.app (com.amazon.music)"
+    },
+    {
+      "label": "Now Playing do macOS",
+      "file_type": "concept",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "now_playing_macos",
+      "community": 9,
+      "norm_label": "now playing do macos"
+    },
+    {
+      "label": "Liquid Glass nativo (glassEffect macOS 26)",
+      "file_type": "rationale",
+      "source_file": "CHANGELOG.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "liquid_glass_native",
+      "community": 9,
+      "norm_label": "liquid glass nativo (glasseffect macos 26)"
+    },
+    {
+      "label": "Controle de volume do sistema via AppleScript",
+      "file_type": "rationale",
+      "source_file": "CHANGELOG.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "system_volume_control",
+      "community": 3,
+      "norm_label": "controle de volume do sistema via applescript"
+    },
+    {
+      "label": "Sess\u00e3o 2026-06-23 #04",
+      "file_type": "document",
+      "source_file": "docs/sessions/2026-06-23-04.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "2026_06_23_04_session",
+      "community": 9,
+      "norm_label": "sessao 2026-06-23 #04"
+    },
+    {
+      "label": "Package.swift",
+      "file_type": "code",
+      "source_file": "Package.swift",
+      "source_location": "L1",
+      "id": "package",
+      "community": 12,
+      "norm_label": "package.swift"
+    },
+    {
+      "label": "PackageDescription",
+      "file_type": "code",
+      "type": "module",
+      "source_file": "Package.swift",
+      "source_location": "L2",
+      "id": "packagedescription",
+      "community": 12,
+      "norm_label": "packagedescription"
+    },
+    {
+      "label": "LoginItem.swift",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/LoginItem.swift",
+      "source_location": "L1",
+      "id": "macmediawidget_loginitem",
+      "community": 10,
+      "norm_label": "loginitem.swift"
+    },
+    {
+      "label": "ServiceManagement",
+      "file_type": "code",
+      "type": "module",
+      "source_file": "Sources/MacMediaWidget/LoginItem.swift",
+      "source_location": "L2",
+      "id": "servicemanagement",
+      "community": 10,
+      "norm_label": "servicemanagement"
+    },
+    {
+      "label": "LoginItem",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/LoginItem.swift",
+      "source_location": "L6",
+      "id": "macmediawidget_loginitem_loginitem",
+      "community": 10,
+      "norm_label": "loginitem"
+    },
+    {
+      "label": "Bool",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/LoginItem.swift",
+      "source_location": "L7",
+      "id": "sources_macmediawidget_loginitem_swift_bool",
+      "community": 10,
+      "norm_label": "bool"
+    },
+    {
+      "label": ".toggle()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/LoginItem.swift",
+      "source_location": "L12",
+      "id": "macmediawidget_loginitem_loginitem_toggle",
+      "community": 10,
+      "norm_label": ".toggle()"
+    },
+    {
+      "label": "SystemVolumeController.swift",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/SystemVolumeController.swift",
+      "source_location": "L1",
+      "id": "macmediawidget_systemvolumecontroller",
+      "community": 10,
+      "norm_label": "systemvolumecontroller.swift"
+    },
+    {
+      "label": "SystemVolumeController",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/SystemVolumeController.swift",
+      "source_location": "L11",
+      "id": "macmediawidget_systemvolumecontroller_systemvolumecontroller",
+      "community": 7,
+      "norm_label": "systemvolumecontroller"
+    },
+    {
+      "label": "Double",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/SystemVolumeController.swift",
+      "source_location": "L14",
+      "id": "sources_macmediawidget_systemvolumecontroller_swift_double",
+      "community": 7,
+      "norm_label": "double"
+    },
+    {
+      "label": "Bool",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/SystemVolumeController.swift",
+      "source_location": "L16",
+      "id": "sources_macmediawidget_systemvolumecontroller_swift_bool",
+      "community": 7,
+      "norm_label": "bool"
+    },
+    {
+      "label": "Int",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/SystemVolumeController.swift",
+      "source_location": "L19",
+      "id": "sources_macmediawidget_systemvolumecontroller_swift_int",
+      "community": 7,
+      "norm_label": "int"
+    },
+    {
+      "label": ".init()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/SystemVolumeController.swift",
+      "source_location": "L22",
+      "id": "macmediawidget_systemvolumecontroller_systemvolumecontroller_init",
+      "community": 7,
+      "norm_label": ".init()"
+    },
+    {
+      "label": ".readCurrentState()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/SystemVolumeController.swift",
+      "source_location": "L30",
+      "id": "macmediawidget_systemvolumecontroller_systemvolumecontroller_readcurrentstate",
+      "community": 7,
+      "norm_label": ".readcurrentstate()"
+    },
+    {
+      "label": ".setVolume()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/SystemVolumeController.swift",
+      "source_location": "L48",
+      "id": "macmediawidget_systemvolumecontroller_systemvolumecontroller_setvolume",
+      "community": 7,
+      "norm_label": ".setvolume()"
+    },
+    {
+      "label": ".toggleMute()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/SystemVolumeController.swift",
+      "source_location": "L57",
+      "id": "macmediawidget_systemvolumecontroller_systemvolumecontroller_togglemute",
+      "community": 7,
+      "norm_label": ".togglemute()"
+    },
+    {
+      "label": ".scheduleApply()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/SystemVolumeController.swift",
+      "source_location": "L67",
+      "id": "macmediawidget_systemvolumecontroller_systemvolumecontroller_scheduleapply",
+      "community": 7,
+      "norm_label": ".scheduleapply()"
+    },
+    {
+      "label": ".runOsascript()",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/SystemVolumeController.swift",
+      "source_location": "L87",
+      "id": "macmediawidget_systemvolumecontroller_systemvolumecontroller_runosascript",
+      "community": 7,
+      "norm_label": ".runosascript()"
+    },
+    {
+      "label": "String",
+      "file_type": "code",
+      "source_file": "Sources/MacMediaWidget/SystemVolumeController.swift",
+      "source_location": "L87",
+      "id": "sources_macmediawidget_systemvolumecontroller_swift_string",
+      "community": 7,
+      "norm_label": "string"
+    },
+    {
+      "label": "build-app.sh",
+      "file_type": "code",
+      "source_file": "scripts/build-app.sh",
+      "source_location": "L1",
+      "metadata": {
+        "language": "bash",
+        "kind": "file"
+      },
+      "id": "scripts_build_app",
+      "community": 13,
+      "norm_label": "build-app.sh"
+    },
+    {
+      "label": "build-app.sh script",
+      "file_type": "code",
+      "source_file": "scripts/build-app.sh",
+      "source_location": "L1",
+      "metadata": {
+        "language": "bash",
+        "kind": "bash_entrypoint"
+      },
+      "id": "users_dudivalenza_projetos_ia_pessoal_macmediawidget_scripts_build_app_sh__entry",
+      "community": 13,
+      "norm_label": "build-app.sh script"
+    },
+    {
+      "label": "mediaremote-adapter (perl entitled)",
+      "file_type": "concept",
+      "source_file": "docs/sessions/2026-06-23-01.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "concept_mediaremote_adapter",
+      "community": 5,
+      "norm_label": "mediaremote-adapter (perl entitled)"
+    },
+    {
+      "label": "Now Playing do macOS",
+      "file_type": "concept",
+      "source_file": "docs/sessions/2026-06-23-01.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "concept_now_playing",
+      "community": 5,
+      "norm_label": "now playing do macos"
+    },
+    {
+      "label": "Amazon Music.app oficial (com.amazon.music)",
+      "file_type": "concept",
+      "source_file": "docs/sessions/2026-06-23-01.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "concept_amazon_music_app",
+      "community": 5,
+      "norm_label": "amazon music.app oficial (com.amazon.music)"
+    },
+    {
+      "label": "Electron Castlabs com Widevine CDM",
+      "file_type": "concept",
+      "source_file": "docs/sessions/2026-06-23-01.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "concept_widevine_castlabs",
+      "community": 5,
+      "norm_label": "electron castlabs com widevine cdm"
+    },
+    {
+      "label": "SystemVolumeController (set volume via osascript)",
+      "file_type": "concept",
+      "source_file": "docs/sessions/2026-06-23-03.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "concept_systemvolumecontroller",
+      "community": 5,
+      "norm_label": "systemvolumecontroller (set volume via osascript)"
+    },
+    {
+      "label": "VerticalVolumeSlider (NSSlider via NSViewRepresentable)",
+      "file_type": "rationale",
+      "source_file": "docs/sessions/2026-06-23-03.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "concept_nsslider_vertical",
+      "community": 5,
+      "norm_label": "verticalvolumeslider (nsslider via nsviewrepresentable)"
+    },
+    {
+      "label": "NSPanel widget de mesa (borderless, todos os Spaces)",
+      "file_type": "concept",
+      "source_file": "docs/sessions/2026-06-23-02.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "concept_desktop_widget_window",
+      "community": 5,
+      "norm_label": "nspanel widget de mesa (borderless, todos os spaces)"
+    },
+    {
+      "label": "Snap por ancoragem \u00e0 borda (edgeMargin)",
+      "file_type": "rationale",
+      "source_file": "docs/sessions/2026-06-23-02.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "concept_edge_anchoring_snap",
+      "community": 5,
+      "norm_label": "snap por ancoragem a borda (edgemargin)"
+    },
+    {
+      "label": "Autostart no login via SMAppService",
+      "file_type": "concept",
+      "source_file": "docs/sessions/2026-06-23-02.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "concept_smappservice_autostart",
+      "community": 5,
+      "norm_label": "autostart no login via smappservice"
+    },
+    {
+      "label": "Build SPM + bundle .app + codesign ad-hoc",
+      "file_type": "rationale",
+      "source_file": "docs/sessions/2026-06-23-02.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "concept_spm_app_bundle",
+      "community": 5,
+      "norm_label": "build spm + bundle .app + codesign ad-hoc"
+    },
+    {
+      "label": "Protocolo de governan\u00e7a de sess\u00f5es",
+      "file_type": "concept",
+      "source_file": "docs/sessions/2026-06-22-01.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "concept_session_protocol",
+      "community": 11,
+      "norm_label": "protocolo de governanca de sessoes"
+    },
+    {
+      "label": "Sess\u00e3o 2026-06-22 #01 \u2014 Migra\u00e7\u00e3o git/GitHub + protocolo",
+      "file_type": "document",
+      "source_file": "docs/sessions/2026-06-22-01.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "session_2026_06_22_01",
+      "community": 11,
+      "norm_label": "sessao 2026-06-22 #01 \u2014 migracao git/github + protocolo"
+    },
+    {
+      "label": "Sess\u00e3o 2026-06-22 #02 \u2014 Recuperar ambiente Electron",
+      "file_type": "document",
+      "source_file": "docs/sessions/2026-06-22-02.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "session_2026_06_22_02",
+      "community": 14,
+      "norm_label": "sessao 2026-06-22 #02 \u2014 recuperar ambiente electron"
+    },
+    {
+      "label": "Sess\u00e3o 2026-06-23 #01 \u2014 PoC vira para Swift nativo",
+      "file_type": "document",
+      "source_file": "docs/sessions/2026-06-23-01.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "session_2026_06_23_01",
+      "community": 5,
+      "norm_label": "sessao 2026-06-23 #01 \u2014 poc vira para swift nativo"
+    },
+    {
+      "label": "Sess\u00e3o 2026-06-23 #02 \u2014 Limpeza Electron + setup Swift",
+      "file_type": "document",
+      "source_file": "docs/sessions/2026-06-23-02.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "session_2026_06_23_02",
+      "community": 5,
+      "norm_label": "sessao 2026-06-23 #02 \u2014 limpeza electron + setup swift"
+    },
+    {
+      "label": "Sess\u00e3o 2026-06-23 #03 \u2014 Controle de volume",
+      "file_type": "document",
+      "source_file": "docs/sessions/2026-06-23-03.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "session_2026_06_23_03",
+      "community": 5,
+      "norm_label": "sessao 2026-06-23 #03 \u2014 controle de volume"
+    }
+  ],
+  "links": [
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/App.swift",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "macmediawidget_app",
+      "target": "appkit",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/App.swift",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "macmediawidget_app",
+      "target": "macmediawidget_app_app",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/App.swift",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "macmediawidget_app",
+      "target": "macmediawidget_app_appdelegate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "macmediawidget_contentview",
+      "target": "appkit",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller",
+      "target": "appkit",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/PreferencesWindow.swift",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "macmediawidget_preferenceswindow",
+      "target": "appkit",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/TrayController.swift",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "macmediawidget_traycontroller",
+      "target": "appkit",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "macmediawidget_widgetwindow",
+      "target": "appkit",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/App.swift",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "macmediawidget_app_app",
+      "target": "macmediawidget_app_app_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/App.swift",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "macmediawidget_app_app_main",
+      "target": "macmediawidget_app_appdelegate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Sources/MacMediaWidget/App.swift",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "app_app",
+      "target": "macmediawidget_app_appdelegate"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Sources/MacMediaWidget/App.swift",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "macmediawidget_app_appdelegate",
+      "target": "macmediawidget_nowplayingcontroller_nowplayingcontroller"
+    },
+    {
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "Sources/MacMediaWidget/App.swift",
+      "source_location": "L21",
+      "weight": 1.0,
+      "context": "call",
+      "source": "macmediawidget_app_appdelegate",
+      "target": "macmediawidget_preferenceswindow_preferencescontroller"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Sources/MacMediaWidget/App.swift",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "macmediawidget_app_appdelegate",
+      "target": "macmediawidget_traycontroller_traycontroller"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Sources/MacMediaWidget/App.swift",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "macmediawidget_app_appdelegate",
+      "target": "macmediawidget_widgetwindow_widgetwindow"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/App.swift",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "macmediawidget_app_appdelegate",
+      "target": "macmediawidget_app_appdelegate_applicationdidfinishlaunching",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/App.swift",
+      "source_location": "L38",
+      "weight": 1.0,
+      "source": "macmediawidget_app_appdelegate",
+      "target": "macmediawidget_app_appdelegate_applicationwillterminate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/App.swift",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "macmediawidget_app_appdelegate",
+      "target": "nsapplicationdelegate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/App.swift",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "macmediawidget_app_appdelegate",
+      "target": "nsobject",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/App.swift",
+      "source_location": "L20",
+      "weight": 1.0,
+      "context": "field",
+      "source": "macmediawidget_app_appdelegate",
+      "target": "traycontroller",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/App.swift",
+      "source_location": "L19",
+      "weight": 1.0,
+      "context": "field",
+      "source": "macmediawidget_app_appdelegate",
+      "target": "widgetwindow",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/PreferencesWindow.swift",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "macmediawidget_preferenceswindow_preferencescontroller",
+      "target": "nsobject",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/TrayController.swift",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "macmediawidget_traycontroller_traycontroller",
+      "target": "nsobject",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/App.swift",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "macmediawidget_app_appdelegate_applicationdidfinishlaunching",
+      "target": "widgetwindow",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/App.swift",
+      "source_location": "L28",
+      "weight": 1.0,
+      "source": "macmediawidget_app_appdelegate_applicationdidfinishlaunching",
+      "target": "traycontroller",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "Sources/MacMediaWidget/App.swift",
+      "source_location": "L30",
+      "weight": 1.0,
+      "source": "macmediawidget_app_appdelegate_applicationdidfinishlaunching",
+      "target": "macmediawidget_nowplayingcontroller_nowplayingcontroller_openamazonmusic"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "Sources/MacMediaWidget/App.swift",
+      "source_location": "L35",
+      "weight": 1.0,
+      "source": "macmediawidget_app_appdelegate_applicationdidfinishlaunching",
+      "target": "macmediawidget_nowplayingcontroller_nowplayingcontroller_start"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "Sources/MacMediaWidget/App.swift",
+      "source_location": "L31",
+      "weight": 1.0,
+      "source": "macmediawidget_app_appdelegate_applicationdidfinishlaunching",
+      "target": "macmediawidget_preferenceswindow_preferencescontroller_show"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "Sources/MacMediaWidget/App.swift",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "macmediawidget_app_appdelegate_applicationdidfinishlaunching",
+      "target": "macmediawidget_widgetwindow_widgetwindow_showwidget"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "Sources/MacMediaWidget/App.swift",
+      "source_location": "L29",
+      "weight": 1.0,
+      "source": "macmediawidget_app_appdelegate_applicationdidfinishlaunching",
+      "target": "macmediawidget_widgetwindow_widgetwindow_togglevisibility"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/App.swift",
+      "source_location": "L24",
+      "weight": 1.0,
+      "context": "parameter_type",
+      "source": "macmediawidget_app_appdelegate_applicationdidfinishlaunching",
+      "target": "sources_macmediawidget_app_swift_notification",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/App.swift",
+      "source_location": "L38",
+      "weight": 1.0,
+      "context": "parameter_type",
+      "source": "macmediawidget_app_appdelegate_applicationwillterminate",
+      "target": "sources_macmediawidget_app_swift_notification",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "Sources/MacMediaWidget/App.swift",
+      "source_location": "L39",
+      "weight": 1.0,
+      "source": "macmediawidget_app_appdelegate_applicationwillterminate",
+      "target": "macmediawidget_nowplayingcontroller_nowplayingcontroller_stop"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L148",
+      "weight": 1.0,
+      "source": "macmediawidget_contentview",
+      "target": "macmediawidget_contentview_cardsurface",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "macmediawidget_contentview",
+      "target": "macmediawidget_contentview_contentview",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L207",
+      "weight": 1.0,
+      "source": "macmediawidget_contentview",
+      "target": "coordinator",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L185",
+      "weight": 1.0,
+      "source": "macmediawidget_contentview",
+      "target": "macmediawidget_contentview_verticalvolumeslider",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "macmediawidget_contentview",
+      "target": "macmediawidget_contentview_widgetmetrics",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L214",
+      "weight": 1.0,
+      "source": "macmediawidget_contentview",
+      "target": "nsimage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "macmediawidget_contentview",
+      "target": "swiftui",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/PreferencesWindow.swift",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "macmediawidget_preferenceswindow",
+      "target": "swiftui",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "macmediawidget_widgetwindow",
+      "target": "swiftui",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "contentview_contentview",
+      "target": "macmediawidget_contentview_widgetmetrics"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L13",
+      "weight": 1.0,
+      "context": "field",
+      "source": "macmediawidget_contentview_widgetmetrics",
+      "target": "sources_macmediawidget_contentview_swift_cgfloat",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "macmediawidget_widgetwindow_widgetwindow",
+      "target": "macmediawidget_contentview_widgetmetrics"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L137",
+      "weight": 1.0,
+      "context": "parameter_type",
+      "source": "macmediawidget_contentview_contentview_button",
+      "target": "sources_macmediawidget_contentview_swift_cgfloat",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L234",
+      "weight": 1.0,
+      "source": "macmediawidget_contentview_nsimage_averagecolor",
+      "target": "sources_macmediawidget_contentview_swift_cgfloat",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L23",
+      "weight": 1.0,
+      "context": "field",
+      "source": "macmediawidget_contentview_contentview",
+      "target": "color",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L137",
+      "weight": 1.0,
+      "source": "macmediawidget_contentview_contentview",
+      "target": "macmediawidget_contentview_contentview_button",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L20",
+      "weight": 1.0,
+      "context": "field",
+      "source": "macmediawidget_contentview_contentview",
+      "target": "sources_macmediawidget_contentview_swift_nowplayingcontroller",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L128",
+      "weight": 1.0,
+      "context": "field",
+      "source": "macmediawidget_contentview_contentview",
+      "target": "sources_macmediawidget_contentview_swift_string",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L25",
+      "weight": 1.0,
+      "context": "field",
+      "source": "macmediawidget_contentview_contentview",
+      "target": "trackinfo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L112",
+      "weight": 1.0,
+      "context": "field",
+      "source": "macmediawidget_contentview_contentview",
+      "target": "view",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": "L41",
+      "weight": 1.0,
+      "source": "macmediawidget_widgetwindow_widgetwindow_init",
+      "target": "macmediawidget_contentview_contentview"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L156",
+      "weight": 1.0,
+      "context": "return_type",
+      "source": "macmediawidget_contentview_cardsurface_body",
+      "target": "view",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L137",
+      "weight": 1.0,
+      "context": "return_type",
+      "source": "macmediawidget_contentview_contentview_button",
+      "target": "view",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/PreferencesWindow.swift",
+      "source_location": "L40",
+      "weight": 1.0,
+      "context": "field",
+      "source": "macmediawidget_preferenceswindow_preferencesview",
+      "target": "view",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L149",
+      "weight": 1.0,
+      "context": "field",
+      "source": "macmediawidget_contentview_cardsurface",
+      "target": "color",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L137",
+      "weight": 1.0,
+      "context": "parameter_type",
+      "source": "macmediawidget_contentview_contentview_button",
+      "target": "sources_macmediawidget_contentview_swift_string",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L137",
+      "weight": 1.0,
+      "context": "parameter_type",
+      "source": "macmediawidget_contentview_contentview_button",
+      "target": "sources_macmediawidget_contentview_swift_void",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L208",
+      "weight": 1.0,
+      "context": "field",
+      "source": "coordinator",
+      "target": "sources_macmediawidget_contentview_swift_void",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L209",
+      "weight": 1.0,
+      "context": "parameter_type",
+      "source": "macmediawidget_contentview_coordinator_init",
+      "target": "sources_macmediawidget_contentview_swift_void",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L187",
+      "weight": 1.0,
+      "context": "field",
+      "source": "macmediawidget_contentview_verticalvolumeslider",
+      "target": "sources_macmediawidget_contentview_swift_void",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L156",
+      "weight": 1.0,
+      "source": "macmediawidget_contentview_cardsurface",
+      "target": "macmediawidget_contentview_cardsurface_body",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L152",
+      "weight": 1.0,
+      "context": "field",
+      "source": "macmediawidget_contentview_cardsurface",
+      "target": "roundedrectangle",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L150",
+      "weight": 1.0,
+      "context": "field",
+      "source": "macmediawidget_contentview_cardsurface",
+      "target": "sources_macmediawidget_contentview_swift_double",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L148",
+      "weight": 1.0,
+      "source": "macmediawidget_contentview_cardsurface",
+      "target": "viewmodifier",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L208",
+      "weight": 1.0,
+      "context": "field",
+      "source": "coordinator",
+      "target": "sources_macmediawidget_contentview_swift_double",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L209",
+      "weight": 1.0,
+      "context": "parameter_type",
+      "source": "macmediawidget_contentview_coordinator_init",
+      "target": "sources_macmediawidget_contentview_swift_double",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L187",
+      "weight": 1.0,
+      "context": "field",
+      "source": "macmediawidget_contentview_verticalvolumeslider",
+      "target": "sources_macmediawidget_contentview_swift_double",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L156",
+      "weight": 1.0,
+      "context": "parameter_type",
+      "source": "macmediawidget_contentview_cardsurface_body",
+      "target": "content",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L205",
+      "weight": 1.0,
+      "source": "macmediawidget_contentview_verticalvolumeslider",
+      "target": "macmediawidget_contentview_verticalvolumeslider_makecoordinator",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L189",
+      "weight": 1.0,
+      "source": "macmediawidget_contentview_verticalvolumeslider",
+      "target": "macmediawidget_contentview_verticalvolumeslider_makensview",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L200",
+      "weight": 1.0,
+      "source": "macmediawidget_contentview_verticalvolumeslider",
+      "target": "macmediawidget_contentview_verticalvolumeslider_updatensview",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L185",
+      "weight": 1.0,
+      "source": "macmediawidget_contentview_verticalvolumeslider",
+      "target": "nsviewrepresentable",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L189",
+      "weight": 1.0,
+      "context": "parameter_type",
+      "source": "macmediawidget_contentview_verticalvolumeslider_makensview",
+      "target": "context",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L193",
+      "weight": 1.0,
+      "source": "macmediawidget_contentview_verticalvolumeslider_makensview",
+      "target": "macmediawidget_contentview_coordinator_changed",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L189",
+      "weight": 1.0,
+      "source": "macmediawidget_contentview_verticalvolumeslider_makensview",
+      "target": "nsslider",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L200",
+      "weight": 1.0,
+      "context": "parameter_type",
+      "source": "macmediawidget_contentview_verticalvolumeslider_updatensview",
+      "target": "context",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L210",
+      "weight": 1.0,
+      "context": "parameter_type",
+      "source": "macmediawidget_contentview_coordinator_changed",
+      "target": "nsslider",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L200",
+      "weight": 1.0,
+      "context": "parameter_type",
+      "source": "macmediawidget_contentview_verticalvolumeslider_updatensview",
+      "target": "nsslider",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L205",
+      "weight": 1.0,
+      "context": "call",
+      "source": "macmediawidget_contentview_verticalvolumeslider_makecoordinator",
+      "target": "coordinator",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L210",
+      "weight": 1.0,
+      "source": "coordinator",
+      "target": "macmediawidget_contentview_coordinator_changed",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L209",
+      "weight": 1.0,
+      "source": "coordinator",
+      "target": "macmediawidget_contentview_coordinator_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L234",
+      "weight": 1.0,
+      "source": "macmediawidget_contentview_nsimage_averagecolor",
+      "target": "data"
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L217",
+      "weight": 1.0,
+      "source": "macmediawidget_contentview_nsimage_averagecolor",
+      "target": "nscolor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": "L217",
+      "weight": 1.0,
+      "source": "nsimage",
+      "target": "macmediawidget_contentview_nsimage_averagecolor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller",
+      "target": "combine",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller",
+      "target": "macmediawidget_nowplayingcontroller_mediacommand",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L34",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller",
+      "target": "macmediawidget_nowplayingcontroller_nowplayingcontroller",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller",
+      "target": "macmediawidget_nowplayingcontroller_trackinfo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/Settings.swift",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "macmediawidget_settings",
+      "target": "combine",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/SystemVolumeController.swift",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "macmediawidget_systemvolumecontroller",
+      "target": "combine"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "macmediawidget_widgetwindow",
+      "target": "combine",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "contentview_contentview",
+      "target": "macmediawidget_nowplayingcontroller_trackinfo"
+    },
+    {
+      "relation": "shares_data_with",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": null,
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller",
+      "target": "macmediawidget_nowplayingcontroller_trackinfo"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L12",
+      "weight": 1.0,
+      "context": "field",
+      "source": "macmediawidget_nowplayingcontroller_trackinfo",
+      "target": "date",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_trackinfo",
+      "target": "equatable",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L14",
+      "weight": 1.0,
+      "context": "field",
+      "source": "macmediawidget_nowplayingcontroller_trackinfo",
+      "target": "nsimage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L16",
+      "weight": 1.0,
+      "context": "field",
+      "source": "macmediawidget_nowplayingcontroller_trackinfo",
+      "target": "sources_macmediawidget_nowplayingcontroller_swift_bool",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L11",
+      "weight": 1.0,
+      "context": "field",
+      "source": "macmediawidget_nowplayingcontroller_trackinfo",
+      "target": "sources_macmediawidget_nowplayingcontroller_swift_double",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L9",
+      "weight": 1.0,
+      "context": "field",
+      "source": "macmediawidget_nowplayingcontroller_trackinfo",
+      "target": "sources_macmediawidget_nowplayingcontroller_swift_string",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L51",
+      "weight": 1.0,
+      "context": "return_type",
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller_adapterdir",
+      "target": "sources_macmediawidget_nowplayingcontroller_swift_string",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L62",
+      "weight": 1.0,
+      "context": "return_type",
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller_frameworkpath",
+      "target": "sources_macmediawidget_nowplayingcontroller_swift_string",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L224",
+      "weight": 1.0,
+      "context": "parameter_type",
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller_runadapter",
+      "target": "sources_macmediawidget_nowplayingcontroller_swift_string",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L72",
+      "weight": 1.0,
+      "context": "return_type",
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller_scriptpath",
+      "target": "sources_macmediawidget_nowplayingcontroller_swift_string",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L39",
+      "weight": 1.0,
+      "context": "field",
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller",
+      "target": "sources_macmediawidget_nowplayingcontroller_swift_double",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L218",
+      "weight": 1.0,
+      "context": "parameter_type",
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller_seek",
+      "target": "sources_macmediawidget_nowplayingcontroller_swift_double",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L242",
+      "weight": 1.0,
+      "context": "return_type",
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller_isamazonmusicrunning",
+      "target": "sources_macmediawidget_nowplayingcontroller_swift_bool",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L173",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller_handleline",
+      "target": "nsimage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "Sources/MacMediaWidget/TrayController.swift",
+      "source_location": "L29",
+      "weight": 1.0,
+      "source": "macmediawidget_traycontroller_traycontroller_init",
+      "target": "nsimage"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_mediacommand",
+      "target": "int",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "case_of",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_mediacommand",
+      "target": "macmediawidget_nowplayingcontroller_mediacommand_nexttrack",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "case_of",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_mediacommand",
+      "target": "macmediawidget_nowplayingcontroller_mediacommand_pause",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "case_of",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_mediacommand",
+      "target": "macmediawidget_nowplayingcontroller_mediacommand_play",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "case_of",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L27",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_mediacommand",
+      "target": "macmediawidget_nowplayingcontroller_mediacommand_previoustrack",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "case_of",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_mediacommand",
+      "target": "macmediawidget_nowplayingcontroller_mediacommand_toggleplaypause",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L183",
+      "weight": 1.0,
+      "context": "parameter_type",
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller_send",
+      "target": "macmediawidget_nowplayingcontroller_mediacommand",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller",
+      "target": "macmediawidget_nowplayingcontroller_mediacommand"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L219",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller_seek",
+      "target": "int",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L205",
+      "weight": 1.0,
+      "context": "parameter_type",
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller_waitforamazonmusicthenplay",
+      "target": "int",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": "L28",
+      "weight": 1.0,
+      "source": "macmediawidget_widgetwindow_widgetwindow_init",
+      "target": "int"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "contentview_contentview",
+      "target": "macmediawidget_nowplayingcontroller_nowplayingcontroller"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L42",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller",
+      "target": "data",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L51",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller",
+      "target": "macmediawidget_nowplayingcontroller_nowplayingcontroller_adapterdir",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L62",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller",
+      "target": "macmediawidget_nowplayingcontroller_nowplayingcontroller_frameworkpath",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L150",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller",
+      "target": "macmediawidget_nowplayingcontroller_nowplayingcontroller_handleline",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L138",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller",
+      "target": "macmediawidget_nowplayingcontroller_nowplayingcontroller_ingest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L242",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller",
+      "target": "macmediawidget_nowplayingcontroller_nowplayingcontroller_isamazonmusicrunning",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L247",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller",
+      "target": "macmediawidget_nowplayingcontroller_nowplayingcontroller_openamazonmusic",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L191",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller",
+      "target": "macmediawidget_nowplayingcontroller_nowplayingcontroller_playpauseensuringapp",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L124",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller",
+      "target": "macmediawidget_nowplayingcontroller_nowplayingcontroller_refreshdisplayedelapsed",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L224",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller",
+      "target": "macmediawidget_nowplayingcontroller_nowplayingcontroller_runadapter",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L72",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller",
+      "target": "macmediawidget_nowplayingcontroller_nowplayingcontroller_scriptpath",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L218",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller",
+      "target": "macmediawidget_nowplayingcontroller_nowplayingcontroller_seek",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L183",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller",
+      "target": "macmediawidget_nowplayingcontroller_nowplayingcontroller_send",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L78",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller",
+      "target": "macmediawidget_nowplayingcontroller_nowplayingcontroller_start",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L115",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller",
+      "target": "macmediawidget_nowplayingcontroller_nowplayingcontroller_startprogresstimer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L107",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller",
+      "target": "macmediawidget_nowplayingcontroller_nowplayingcontroller_stop",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L205",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller",
+      "target": "macmediawidget_nowplayingcontroller_nowplayingcontroller_waitforamazonmusicthenplay",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L34",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller",
+      "target": "observableobject",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L41",
+      "weight": 1.0,
+      "context": "field",
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller",
+      "target": "process",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L43",
+      "weight": 1.0,
+      "context": "field",
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller",
+      "target": "sources_macmediawidget_nowplayingcontroller_swift_timer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller",
+      "target": "amazon_music_app"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller",
+      "target": "mediaremote_adapter"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller",
+      "target": "macmediawidget_settings_appsettings"
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/Settings.swift",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "macmediawidget_settings_appsettings",
+      "target": "observableobject",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/SystemVolumeController.swift",
+      "source_location": "L11",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "macmediawidget_systemvolumecontroller_systemvolumecontroller",
+      "target": "observableobject"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L225",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller_runadapter",
+      "target": "process",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L81",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller_start",
+      "target": "process",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "Sources/MacMediaWidget/SystemVolumeController.swift",
+      "source_location": "L88",
+      "weight": 1.0,
+      "source": "macmediawidget_systemvolumecontroller_systemvolumecontroller_runosascript",
+      "target": "process"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L117",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller_startprogresstimer",
+      "target": "sources_macmediawidget_nowplayingcontroller_swift_timer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L73",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller_scriptpath",
+      "target": "macmediawidget_nowplayingcontroller_nowplayingcontroller_adapterdir",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L227",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller_runadapter",
+      "target": "macmediawidget_nowplayingcontroller_nowplayingcontroller_frameworkpath",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L83",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller_start",
+      "target": "macmediawidget_nowplayingcontroller_nowplayingcontroller_frameworkpath",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L227",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller_runadapter",
+      "target": "macmediawidget_nowplayingcontroller_nowplayingcontroller_scriptpath",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L83",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller_start",
+      "target": "macmediawidget_nowplayingcontroller_nowplayingcontroller_scriptpath",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L93",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller_start",
+      "target": "macmediawidget_nowplayingcontroller_nowplayingcontroller_ingest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L104",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller_start",
+      "target": "macmediawidget_nowplayingcontroller_nowplayingcontroller_startprogresstimer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L118",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller_startprogresstimer",
+      "target": "macmediawidget_nowplayingcontroller_nowplayingcontroller_refreshdisplayedelapsed",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L178",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller_handleline",
+      "target": "macmediawidget_nowplayingcontroller_nowplayingcontroller_refreshdisplayedelapsed",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L138",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller_ingest",
+      "target": "data",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L145",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller_ingest",
+      "target": "macmediawidget_nowplayingcontroller_nowplayingcontroller_handleline",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L150",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller_handleline",
+      "target": "data",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L197",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller_playpauseensuringapp",
+      "target": "macmediawidget_nowplayingcontroller_nowplayingcontroller_send",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L184",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller_send",
+      "target": "macmediawidget_nowplayingcontroller_nowplayingcontroller_runadapter",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L208",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller_waitforamazonmusicthenplay",
+      "target": "macmediawidget_nowplayingcontroller_nowplayingcontroller_send",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L192",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller_playpauseensuringapp",
+      "target": "macmediawidget_nowplayingcontroller_nowplayingcontroller_isamazonmusicrunning",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L193",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller_playpauseensuringapp",
+      "target": "macmediawidget_nowplayingcontroller_nowplayingcontroller_openamazonmusic",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L194",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller_playpauseensuringapp",
+      "target": "macmediawidget_nowplayingcontroller_nowplayingcontroller_waitforamazonmusicthenplay",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift",
+      "source_location": "L220",
+      "weight": 1.0,
+      "source": "macmediawidget_nowplayingcontroller_nowplayingcontroller_seek",
+      "target": "macmediawidget_nowplayingcontroller_nowplayingcontroller_runadapter",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/PreferencesWindow.swift",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "macmediawidget_preferenceswindow",
+      "target": "macmediawidget_preferenceswindow_preferencescontroller",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/PreferencesWindow.swift",
+      "source_location": "L37",
+      "weight": 1.0,
+      "source": "macmediawidget_preferenceswindow",
+      "target": "macmediawidget_preferenceswindow_preferencesview",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/PreferencesWindow.swift",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "macmediawidget_preferenceswindow_preferencescontroller",
+      "target": "macmediawidget_preferenceswindow_preferencescontroller_show",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/PreferencesWindow.swift",
+      "source_location": "L30",
+      "weight": 1.0,
+      "source": "macmediawidget_preferenceswindow_preferencescontroller",
+      "target": "macmediawidget_preferenceswindow_preferencescontroller_windowwillclose",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/PreferencesWindow.swift",
+      "source_location": "L8",
+      "weight": 1.0,
+      "context": "field",
+      "source": "macmediawidget_preferenceswindow_preferencescontroller",
+      "target": "nswindow",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/PreferencesWindow.swift",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "macmediawidget_preferenceswindow_preferencescontroller",
+      "target": "nswindowdelegate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Sources/MacMediaWidget/PreferencesWindow.swift",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "macmediawidget_preferenceswindow_preferencescontroller",
+      "target": "macmediawidget_preferenceswindow_preferencesview"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "macmediawidget_widgetwindow_widgetwindow",
+      "target": "nswindowdelegate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/PreferencesWindow.swift",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "macmediawidget_preferenceswindow_preferencescontroller_show",
+      "target": "nswindow",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/PreferencesWindow.swift",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "macmediawidget_preferenceswindow_preferencescontroller_show",
+      "target": "macmediawidget_preferenceswindow_preferencesview",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/PreferencesWindow.swift",
+      "source_location": "L30",
+      "weight": 1.0,
+      "context": "parameter_type",
+      "source": "macmediawidget_preferenceswindow_preferencescontroller_windowwillclose",
+      "target": "sources_macmediawidget_preferenceswindow_swift_notification",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/sessions/2026-06-23-04.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "2026_06_23_04_session",
+      "target": "macmediawidget_preferenceswindow_preferencesview"
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Sources/MacMediaWidget/PreferencesWindow.swift",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "macmediawidget_settings_appsettings",
+      "target": "macmediawidget_preferenceswindow_preferencesview"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/Settings.swift",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "macmediawidget_settings",
+      "target": "foundation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/Settings.swift",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "macmediawidget_settings",
+      "target": "macmediawidget_settings_appsettings",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/Settings.swift",
+      "source_location": "L41",
+      "weight": 1.0,
+      "source": "macmediawidget_settings",
+      "target": "macmediawidget_settings_defaults",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/Settings.swift",
+      "source_location": "L34",
+      "weight": 1.0,
+      "source": "macmediawidget_settings",
+      "target": "macmediawidget_settings_keys",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/LoginItem.swift",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "macmediawidget_loginitem",
+      "target": "foundation"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/SystemVolumeController.swift",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "macmediawidget_systemvolumecontroller",
+      "target": "foundation"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/sessions/2026-06-23-04.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "2026_06_23_04_session",
+      "target": "macmediawidget_settings_appsettings"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "contentview_contentview",
+      "target": "macmediawidget_settings_appsettings"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/Settings.swift",
+      "source_location": "L48",
+      "weight": 1.0,
+      "source": "macmediawidget_settings_appsettings",
+      "target": "macmediawidget_settings_appsettings_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/Settings.swift",
+      "source_location": "L28",
+      "weight": 1.0,
+      "context": "field",
+      "source": "macmediawidget_settings_appsettings",
+      "target": "sources_macmediawidget_settings_swift_bool",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/Settings.swift",
+      "source_location": "L18",
+      "weight": 1.0,
+      "context": "field",
+      "source": "macmediawidget_settings_appsettings",
+      "target": "sources_macmediawidget_settings_swift_cgfloat",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/Settings.swift",
+      "source_location": "L23",
+      "weight": 1.0,
+      "context": "field",
+      "source": "macmediawidget_settings_appsettings",
+      "target": "sources_macmediawidget_settings_swift_double",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/Settings.swift",
+      "source_location": "L32",
+      "weight": 1.0,
+      "context": "field",
+      "source": "macmediawidget_settings_appsettings",
+      "target": "userdefaults",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "macmediawidget_widgetwindow_widgetwindow",
+      "target": "macmediawidget_settings_appsettings"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/Settings.swift",
+      "source_location": "L56",
+      "weight": 1.0,
+      "source": "macmediawidget_settings_appsettings_init",
+      "target": "sources_macmediawidget_settings_swift_cgfloat",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/Settings.swift",
+      "source_location": "L43",
+      "weight": 1.0,
+      "context": "field",
+      "source": "macmediawidget_settings_defaults",
+      "target": "sources_macmediawidget_settings_swift_cgfloat",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/Settings.swift",
+      "source_location": "L51",
+      "weight": 1.0,
+      "source": "macmediawidget_settings_appsettings_init",
+      "target": "sources_macmediawidget_settings_swift_double",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/Settings.swift",
+      "source_location": "L44",
+      "weight": 1.0,
+      "context": "field",
+      "source": "macmediawidget_settings_defaults",
+      "target": "sources_macmediawidget_settings_swift_double",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/Settings.swift",
+      "source_location": "L48",
+      "weight": 1.0,
+      "context": "parameter_type",
+      "source": "macmediawidget_settings_appsettings_init",
+      "target": "userdefaults",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/TrayController.swift",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "macmediawidget_traycontroller",
+      "target": "macmediawidget_traycontroller_traycontroller",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/TrayController.swift",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "macmediawidget_traycontroller_traycontroller",
+      "target": "macmediawidget_traycontroller_traycontroller_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/TrayController.swift",
+      "source_location": "L48",
+      "weight": 1.0,
+      "source": "macmediawidget_traycontroller_traycontroller",
+      "target": "macmediawidget_traycontroller_traycontroller_menuitem",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/TrayController.swift",
+      "source_location": "L55",
+      "weight": 1.0,
+      "source": "macmediawidget_traycontroller_traycontroller",
+      "target": "macmediawidget_traycontroller_traycontroller_menuwillopen",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/TrayController.swift",
+      "source_location": "L60",
+      "weight": 1.0,
+      "source": "macmediawidget_traycontroller_traycontroller",
+      "target": "macmediawidget_traycontroller_traycontroller_openamazonmusic",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/TrayController.swift",
+      "source_location": "L61",
+      "weight": 1.0,
+      "source": "macmediawidget_traycontroller_traycontroller",
+      "target": "macmediawidget_traycontroller_traycontroller_openpreferences",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/TrayController.swift",
+      "source_location": "L62",
+      "weight": 1.0,
+      "source": "macmediawidget_traycontroller_traycontroller",
+      "target": "macmediawidget_traycontroller_traycontroller_quit",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/TrayController.swift",
+      "source_location": "L64",
+      "weight": 1.0,
+      "source": "macmediawidget_traycontroller_traycontroller",
+      "target": "macmediawidget_traycontroller_traycontroller_toggleloginitem",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/TrayController.swift",
+      "source_location": "L59",
+      "weight": 1.0,
+      "source": "macmediawidget_traycontroller_traycontroller",
+      "target": "macmediawidget_traycontroller_traycontroller_togglewidget",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/TrayController.swift",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "macmediawidget_traycontroller_traycontroller",
+      "target": "nsmenudelegate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/TrayController.swift",
+      "source_location": "L13",
+      "weight": 1.0,
+      "context": "field",
+      "source": "macmediawidget_traycontroller_traycontroller",
+      "target": "nsmenuitem",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/TrayController.swift",
+      "source_location": "L7",
+      "weight": 1.0,
+      "context": "field",
+      "source": "macmediawidget_traycontroller_traycontroller",
+      "target": "nsstatusitem",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/TrayController.swift",
+      "source_location": "L11",
+      "weight": 1.0,
+      "context": "field",
+      "source": "macmediawidget_traycontroller_traycontroller",
+      "target": "sources_macmediawidget_traycontroller_swift_void",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "Sources/MacMediaWidget/TrayController.swift",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "macmediawidget_traycontroller_traycontroller",
+      "target": "amazon_music_app"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/TrayController.swift",
+      "source_location": "L15",
+      "weight": 1.0,
+      "context": "parameter_type",
+      "source": "macmediawidget_traycontroller_traycontroller_init",
+      "target": "sources_macmediawidget_traycontroller_swift_void",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/TrayController.swift",
+      "source_location": "L48",
+      "weight": 1.0,
+      "source": "macmediawidget_traycontroller_traycontroller_menuitem",
+      "target": "nsmenuitem",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/TrayController.swift",
+      "source_location": "L37",
+      "weight": 1.0,
+      "source": "macmediawidget_traycontroller_traycontroller_init",
+      "target": "macmediawidget_traycontroller_traycontroller_menuitem",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/TrayController.swift",
+      "source_location": "L35",
+      "weight": 1.0,
+      "source": "macmediawidget_traycontroller_traycontroller_init",
+      "target": "nsmenu",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/TrayController.swift",
+      "source_location": "L48",
+      "weight": 1.0,
+      "context": "parameter_type",
+      "source": "macmediawidget_traycontroller_traycontroller_menuitem",
+      "target": "selector",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/TrayController.swift",
+      "source_location": "L48",
+      "weight": 1.0,
+      "context": "parameter_type",
+      "source": "macmediawidget_traycontroller_traycontroller_menuitem",
+      "target": "sources_macmediawidget_traycontroller_swift_string",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/TrayController.swift",
+      "source_location": "L55",
+      "weight": 1.0,
+      "context": "parameter_type",
+      "source": "macmediawidget_traycontroller_traycontroller_menuwillopen",
+      "target": "nsmenu",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "macmediawidget_widgetwindow",
+      "target": "macmediawidget_widgetwindow_widgetwindow",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "macmediawidget_widgetwindow_widgetwindow",
+      "target": "macmediawidget_widgetwindow_widgetwindow_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": "L119",
+      "weight": 1.0,
+      "source": "macmediawidget_widgetwindow_widgetwindow",
+      "target": "macmediawidget_widgetwindow_widgetwindow_savedorigin",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": "L61",
+      "weight": 1.0,
+      "source": "macmediawidget_widgetwindow_widgetwindow",
+      "target": "macmediawidget_widgetwindow_widgetwindow_showwidget",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": "L90",
+      "weight": 1.0,
+      "source": "macmediawidget_widgetwindow_widgetwindow",
+      "target": "macmediawidget_widgetwindow_widgetwindow_snaptogrid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": "L70",
+      "weight": 1.0,
+      "source": "macmediawidget_widgetwindow_widgetwindow",
+      "target": "macmediawidget_widgetwindow_widgetwindow_togglevisibility",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": "L82",
+      "weight": 1.0,
+      "source": "macmediawidget_widgetwindow_widgetwindow",
+      "target": "macmediawidget_widgetwindow_widgetwindow_windowdidmove",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "macmediawidget_widgetwindow_widgetwindow",
+      "target": "nspanel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": "L59",
+      "weight": 1.0,
+      "context": "field",
+      "source": "macmediawidget_widgetwindow_widgetwindow",
+      "target": "sources_macmediawidget_widgetwindow_swift_bool",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": "L15",
+      "weight": 1.0,
+      "context": "field",
+      "source": "macmediawidget_widgetwindow_widgetwindow",
+      "target": "sources_macmediawidget_widgetwindow_swift_timer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "macmediawidget_widgetwindow_widgetwindow",
+      "target": "contentview_contentview"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": "L84",
+      "weight": 1.0,
+      "source": "macmediawidget_widgetwindow_widgetwindow_windowdidmove",
+      "target": "sources_macmediawidget_widgetwindow_swift_timer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": "L53",
+      "weight": 1.0,
+      "source": "macmediawidget_widgetwindow_widgetwindow_init",
+      "target": "macmediawidget_widgetwindow_widgetwindow_snaptogrid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": "L18",
+      "weight": 1.0,
+      "context": "parameter_type",
+      "source": "macmediawidget_widgetwindow_widgetwindow_init",
+      "target": "sources_macmediawidget_widgetwindow_swift_nowplayingcontroller",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": "L62",
+      "weight": 1.0,
+      "source": "macmediawidget_widgetwindow_widgetwindow_showwidget",
+      "target": "macmediawidget_widgetwindow_widgetwindow_savedorigin",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": "L85",
+      "weight": 1.0,
+      "source": "macmediawidget_widgetwindow_widgetwindow_windowdidmove",
+      "target": "macmediawidget_widgetwindow_widgetwindow_snaptogrid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": "L82",
+      "weight": 1.0,
+      "context": "parameter_type",
+      "source": "macmediawidget_widgetwindow_widgetwindow_windowdidmove",
+      "target": "sources_macmediawidget_widgetwindow_swift_notification",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": "L112",
+      "weight": 1.0,
+      "source": "macmediawidget_widgetwindow_widgetwindow_snaptogrid",
+      "target": "nspoint",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/WidgetWindow.swift",
+      "source_location": "L119",
+      "weight": 1.0,
+      "context": "return_type",
+      "source": "macmediawidget_widgetwindow_widgetwindow_savedorigin",
+      "target": "nspoint",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/sessions/2026-06-23-04.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "2026_06_23_04_session",
+      "target": "scripts_package_dmg"
+    },
+    {
+      "relation": "references",
+      "confidence": "AMBIGUOUS",
+      "confidence_score": 0.2,
+      "source_file": "scripts/package-dmg.sh",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "scripts_package_dmg",
+      "target": "amazon_music_app"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/package-dmg.sh",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "scripts_package_dmg",
+      "target": "users_dudivalenza_projetos_ia_pessoal_macmediawidget_scripts_package_dmg_sh__entry",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "contentview_contentview",
+      "target": "contentview_cardsurface"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "contentview_contentview",
+      "target": "contentview_verticalvolumeslider"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "contentview_cardsurface",
+      "target": "liquid_glass_native"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "Sources/MacMediaWidget/ContentView.swift",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "contentview_verticalvolumeslider",
+      "target": "system_volume_control"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "mediaremote_adapter",
+      "target": "now_playing_macos"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "now_playing_macos",
+      "target": "amazon_music_app"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/sessions/2026-06-23-04.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "2026_06_23_04_session",
+      "target": "liquid_glass_native"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "Package.swift",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "package",
+      "target": "packagedescription"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/LoginItem.swift",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "macmediawidget_loginitem",
+      "target": "macmediawidget_loginitem_loginitem"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/LoginItem.swift",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "macmediawidget_loginitem",
+      "target": "servicemanagement"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/LoginItem.swift",
+      "source_location": "L12",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "macmediawidget_loginitem_loginitem",
+      "target": "macmediawidget_loginitem_loginitem_toggle"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/LoginItem.swift",
+      "source_location": "L7",
+      "weight": 1.0,
+      "context": "field",
+      "confidence_score": 1.0,
+      "source": "macmediawidget_loginitem_loginitem",
+      "target": "sources_macmediawidget_loginitem_swift_bool"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/LoginItem.swift",
+      "source_location": "L12",
+      "weight": 1.0,
+      "context": "return_type",
+      "confidence_score": 1.0,
+      "source": "macmediawidget_loginitem_loginitem_toggle",
+      "target": "sources_macmediawidget_loginitem_swift_bool"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/SystemVolumeController.swift",
+      "source_location": "L11",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "macmediawidget_systemvolumecontroller",
+      "target": "macmediawidget_systemvolumecontroller_systemvolumecontroller"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/SystemVolumeController.swift",
+      "source_location": "L22",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "macmediawidget_systemvolumecontroller_systemvolumecontroller",
+      "target": "macmediawidget_systemvolumecontroller_systemvolumecontroller_init"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/SystemVolumeController.swift",
+      "source_location": "L30",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "macmediawidget_systemvolumecontroller_systemvolumecontroller",
+      "target": "macmediawidget_systemvolumecontroller_systemvolumecontroller_readcurrentstate"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/SystemVolumeController.swift",
+      "source_location": "L87",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "macmediawidget_systemvolumecontroller_systemvolumecontroller",
+      "target": "macmediawidget_systemvolumecontroller_systemvolumecontroller_runosascript"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/SystemVolumeController.swift",
+      "source_location": "L67",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "macmediawidget_systemvolumecontroller_systemvolumecontroller",
+      "target": "macmediawidget_systemvolumecontroller_systemvolumecontroller_scheduleapply"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/SystemVolumeController.swift",
+      "source_location": "L48",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "macmediawidget_systemvolumecontroller_systemvolumecontroller",
+      "target": "macmediawidget_systemvolumecontroller_systemvolumecontroller_setvolume"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/SystemVolumeController.swift",
+      "source_location": "L57",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "macmediawidget_systemvolumecontroller_systemvolumecontroller",
+      "target": "macmediawidget_systemvolumecontroller_systemvolumecontroller_togglemute"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/SystemVolumeController.swift",
+      "source_location": "L16",
+      "weight": 1.0,
+      "context": "field",
+      "confidence_score": 1.0,
+      "source": "macmediawidget_systemvolumecontroller_systemvolumecontroller",
+      "target": "sources_macmediawidget_systemvolumecontroller_swift_bool"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/SystemVolumeController.swift",
+      "source_location": "L14",
+      "weight": 1.0,
+      "context": "field",
+      "confidence_score": 1.0,
+      "source": "macmediawidget_systemvolumecontroller_systemvolumecontroller",
+      "target": "sources_macmediawidget_systemvolumecontroller_swift_double"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/SystemVolumeController.swift",
+      "source_location": "L19",
+      "weight": 1.0,
+      "context": "field",
+      "confidence_score": 1.0,
+      "source": "macmediawidget_systemvolumecontroller_systemvolumecontroller",
+      "target": "sources_macmediawidget_systemvolumecontroller_swift_int"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/SystemVolumeController.swift",
+      "source_location": "L39",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "macmediawidget_systemvolumecontroller_systemvolumecontroller_readcurrentstate",
+      "target": "sources_macmediawidget_systemvolumecontroller_swift_double"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/SystemVolumeController.swift",
+      "source_location": "L48",
+      "weight": 1.0,
+      "context": "parameter_type",
+      "confidence_score": 1.0,
+      "source": "macmediawidget_systemvolumecontroller_systemvolumecontroller_setvolume",
+      "target": "sources_macmediawidget_systemvolumecontroller_swift_double"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/SystemVolumeController.swift",
+      "source_location": "L36",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "macmediawidget_systemvolumecontroller_systemvolumecontroller_readcurrentstate",
+      "target": "sources_macmediawidget_systemvolumecontroller_swift_int"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/SystemVolumeController.swift",
+      "source_location": "L67",
+      "weight": 1.0,
+      "context": "parameter_type",
+      "confidence_score": 1.0,
+      "source": "macmediawidget_systemvolumecontroller_systemvolumecontroller_scheduleapply",
+      "target": "sources_macmediawidget_systemvolumecontroller_swift_int"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/SystemVolumeController.swift",
+      "source_location": "L52",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "macmediawidget_systemvolumecontroller_systemvolumecontroller_setvolume",
+      "target": "sources_macmediawidget_systemvolumecontroller_swift_int"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/SystemVolumeController.swift",
+      "source_location": "L23",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "macmediawidget_systemvolumecontroller_systemvolumecontroller_init",
+      "target": "macmediawidget_systemvolumecontroller_systemvolumecontroller_readcurrentstate"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/SystemVolumeController.swift",
+      "source_location": "L34",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "macmediawidget_systemvolumecontroller_systemvolumecontroller_readcurrentstate",
+      "target": "macmediawidget_systemvolumecontroller_systemvolumecontroller_runosascript"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/SystemVolumeController.swift",
+      "source_location": "L52",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "macmediawidget_systemvolumecontroller_systemvolumecontroller_setvolume",
+      "target": "macmediawidget_systemvolumecontroller_systemvolumecontroller_scheduleapply"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/SystemVolumeController.swift",
+      "source_location": "L61",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "macmediawidget_systemvolumecontroller_systemvolumecontroller_togglemute",
+      "target": "macmediawidget_systemvolumecontroller_systemvolumecontroller_runosascript"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/SystemVolumeController.swift",
+      "source_location": "L77",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "macmediawidget_systemvolumecontroller_systemvolumecontroller_scheduleapply",
+      "target": "macmediawidget_systemvolumecontroller_systemvolumecontroller_runosascript"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "Sources/MacMediaWidget/SystemVolumeController.swift",
+      "source_location": "L87",
+      "weight": 1.0,
+      "context": "parameter_type",
+      "confidence_score": 1.0,
+      "source": "macmediawidget_systemvolumecontroller_systemvolumecontroller_runosascript",
+      "target": "sources_macmediawidget_systemvolumecontroller_swift_string"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/build-app.sh",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scripts_build_app",
+      "target": "users_dudivalenza_projetos_ia_pessoal_macmediawidget_scripts_build_app_sh__entry"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/sessions/2026-06-23-01.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "concept_mediaremote_adapter",
+      "target": "concept_amazon_music_app"
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/sessions/2026-06-23-01.md",
+      "source_location": "Valida\u00e7\u00e3o",
+      "weight": 1.0,
+      "source": "concept_now_playing",
+      "target": "concept_mediaremote_adapter"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/sessions/2026-06-23-01.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "session_2026_06_23_01",
+      "target": "concept_mediaremote_adapter"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/sessions/2026-06-23-02.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "session_2026_06_23_02",
+      "target": "concept_mediaremote_adapter"
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/sessions/2026-06-23-01.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "concept_amazon_music_app",
+      "target": "concept_now_playing"
+    },
+    {
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "source_file": "docs/sessions/2026-06-23-01.md",
+      "source_location": null,
+      "weight": 0.7,
+      "source": "concept_widevine_castlabs",
+      "target": "concept_amazon_music_app"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/sessions/2026-06-23-01.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "session_2026_06_23_01",
+      "target": "concept_widevine_castlabs"
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/sessions/2026-06-23-03.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "concept_systemvolumecontroller",
+      "target": "concept_nsslider_vertical"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/sessions/2026-06-23-03.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "session_2026_06_23_03",
+      "target": "concept_systemvolumecontroller"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/sessions/2026-06-23-03.md",
+      "source_location": "Decis\u00f5es t\u00e9cnicas",
+      "weight": 1.0,
+      "source": "concept_nsslider_vertical",
+      "target": "concept_desktop_widget_window"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/sessions/2026-06-23-02.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "concept_edge_anchoring_snap",
+      "target": "concept_desktop_widget_window"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/sessions/2026-06-23-02.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "session_2026_06_23_02",
+      "target": "concept_desktop_widget_window"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/sessions/2026-06-23-02.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "session_2026_06_23_02",
+      "target": "concept_smappservice_autostart"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/sessions/2026-06-23-02.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "session_2026_06_23_02",
+      "target": "concept_spm_app_bundle"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/sessions/2026-06-22-01.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "session_2026_06_22_01",
+      "target": "concept_session_protocol"
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "now_playing_flow",
+      "label": "Fluxo Now Playing: UI, controller, adapter e player oficial",
+      "nodes": [
+        "contentview_contentview",
+        "nowplayingcontroller_nowplayingcontroller",
+        "mediaremote_adapter",
+        "amazon_music_app"
+      ],
+      "relation": "participate_in",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "Sources/MacMediaWidget/NowPlayingController.swift"
+    },
+    {
+      "id": "live_preferences",
+      "label": "Prefer\u00eancias ao vivo via AppSettings/UserDefaults",
+      "nodes": [
+        "settings_appsettings",
+        "preferenceswindow_preferencesview",
+        "widgetwindow_widgetwindow",
+        "contentview_contentview"
+      ],
+      "relation": "participate_in",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "Sources/MacMediaWidget/Settings.swift"
+    }
+  ],
+  "built_at_commit": "54f4616ba73d98861bfa5a7142bb67c4ec31462a"
+}

@@ -18,6 +18,7 @@ enum WidgetMetrics {
 /// com sombra, controles centralizados e barra de progresso animada.
 struct ContentView: View {
     @ObservedObject var nowPlaying: NowPlayingController
+    @ObservedObject private var settings = AppSettings.shared
     @StateObject private var volume = SystemVolumeController()
     @State private var tint: Color = .clear
 
@@ -43,8 +44,7 @@ struct ContentView: View {
         }
         .padding(16)
         .frame(width: WidgetMetrics.width, height: WidgetMetrics.height)
-        .background(cardBackground)
-        .clipShape(RoundedRectangle(cornerRadius: WidgetMetrics.cornerRadius, style: .continuous))
+        .modifier(CardSurface(tint: tint, tintOpacity: settings.tintOpacity))
         .shadow(color: .black.opacity(0.25), radius: 12, x: 0, y: 6)
         .padding(WidgetMetrics.shadowMargin)
         .frame(width: WidgetMetrics.windowWidth, height: WidgetMetrics.windowHeight)
@@ -58,13 +58,6 @@ struct ContentView: View {
     }
 
     // MARK: - Componentes
-
-    private var cardBackground: some View {
-        ZStack {
-            Rectangle().fill(.ultraThinMaterial)
-            tint.opacity(0.45)
-        }
-    }
 
     @ViewBuilder
     private var artwork: some View {
@@ -106,7 +99,7 @@ struct ContentView: View {
         HStack(spacing: 26) {
             button("backward.fill", size: 15) { nowPlaying.send(.previousTrack) }
             button(track.isPlaying ? "pause.fill" : "play.fill", size: 18) {
-                nowPlaying.send(.togglePlayPause)
+                nowPlaying.playPauseEnsuringApp()
             }
             button("forward.fill", size: 15) { nowPlaying.send(.nextTrack) }
         }
@@ -146,6 +139,42 @@ struct ContentView: View {
             Image(systemName: systemName).font(.system(size: size, weight: .medium))
         }
         .buttonStyle(.plain)
+    }
+}
+
+/// Superfície do card. No macOS 26 usa o `glassEffect` nativo (Liquid Glass)
+/// tonalizado pela cor da capa; em versões anteriores cai para `.ultraThinMaterial`
+/// com overlay de cor, o visual da base anterior.
+private struct CardSurface: ViewModifier {
+    let tint: Color
+    let tintOpacity: Double
+
+    private var shape: RoundedRectangle {
+        RoundedRectangle(cornerRadius: WidgetMetrics.cornerRadius, style: .continuous)
+    }
+
+    @ViewBuilder
+    func body(content: Content) -> some View {
+        if #available(macOS 26, *) {
+            // O vidro vai numa camada de fundo, não sobre o conteúdo: aplicar
+            // `glassEffect` diretamente na stack faz o macOS tratar o card inteiro
+            // como superfície de vidro que captura o arraste, roubando o clique do
+            // NSSlider de volume e movendo a janela.
+            content
+                .background {
+                    Color.clear.glassEffect(.regular.tint(tint.opacity(tintOpacity)), in: shape)
+                }
+                .clipShape(shape)
+        } else {
+            content
+                .background(
+                    ZStack {
+                        Rectangle().fill(.ultraThinMaterial)
+                        tint.opacity(tintOpacity)
+                    }
+                )
+                .clipShape(shape)
+        }
     }
 }
 

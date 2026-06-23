@@ -18,6 +18,7 @@ enum App {
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private var widgetWindow: WidgetWindow!
     private var tray: TrayController!
+    private let preferences = PreferencesController()
     private let nowPlaying = NowPlayingController()
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -27,6 +28,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         tray = TrayController(
             onToggleWidget: { [weak self] in self?.widgetWindow.toggleVisibility() },
             onOpenAmazonMusic: { NowPlayingController.openAmazonMusic() },
+            onOpenPreferences: { [weak self] in self?.preferences.show() },
             onQuit: { NSApp.terminate(nil) }
         )
 

@@ -7,6 +7,7 @@ final class TrayController: NSObject, NSMenuDelegate {
     private let statusItem: NSStatusItem
     private let onToggleWidget: () -> Void
     private let onOpenAmazonMusic: () -> Void
+    private let onOpenPreferences: () -> Void
     private let onQuit: () -> Void
 
     private var loginItemMenuItem: NSMenuItem!
@@ -14,10 +15,12 @@ final class TrayController: NSObject, NSMenuDelegate {
     init(
         onToggleWidget: @escaping () -> Void,
         onOpenAmazonMusic: @escaping () -> Void,
+        onOpenPreferences: @escaping () -> Void,
         onQuit: @escaping () -> Void
     ) {
         self.onToggleWidget = onToggleWidget
         self.onOpenAmazonMusic = onOpenAmazonMusic
+        self.onOpenPreferences = onOpenPreferences
         self.onQuit = onQuit
         self.statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         super.init()
@@ -34,6 +37,7 @@ final class TrayController: NSObject, NSMenuDelegate {
         menu.addItem(menuItem("Mostrar/ocultar widget", #selector(toggleWidget)))
         menu.addItem(menuItem("Abrir Amazon Music", #selector(openAmazonMusic)))
         menu.addItem(.separator())
+        menu.addItem(menuItem("Preferências…", #selector(openPreferences)))
         loginItemMenuItem = menuItem("Abrir no login", #selector(toggleLoginItem))
         menu.addItem(loginItemMenuItem)
         menu.addItem(.separator())
@@ -54,6 +58,7 @@ final class TrayController: NSObject, NSMenuDelegate {
 
     @objc private func toggleWidget() { onToggleWidget() }
     @objc private func openAmazonMusic() { onOpenAmazonMusic() }
+    @objc private func openPreferences() { onOpenPreferences() }
     @objc private func quit() { onQuit() }
 
     @objc private func toggleLoginItem() {

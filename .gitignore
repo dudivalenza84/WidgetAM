@@ -16,3 +16,9 @@ dist/
 # Env / segredos
 .env
 .env.local
+
+# graphify — artefatos locais de máquina (paths absolutos / cache); os outputs
+# do grafo (graph.json, graph.html, GRAPH_REPORT.md, manifest.json) são versionados.
+graphify-out/.graphify_python
+graphify-out/.graphify_root
+graphify-out/cache/

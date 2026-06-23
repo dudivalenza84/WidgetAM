@@ -184,6 +184,36 @@ final class NowPlayingController: ObservableObject {
         runAdapter(["send", String(command.rawValue)])
     }
 
+    /// Aciona play/pause a partir do botão central do widget. Se a preferência
+    /// `autoLaunchOnPlay` estiver ligada, está pausado e o `Amazon Music.app` não
+    /// estiver rodando, abre o app antes de mandar o play — caso contrário o
+    /// comando não teria sessão de Now Playing onde atuar.
+    func playPauseEnsuringApp() {
+        if AppSettings.shared.autoLaunchOnPlay, !track.isPlaying, !Self.isAmazonMusicRunning() {
+            Self.openAmazonMusic()
+            waitForAmazonMusicThenPlay()
+            return
+        }
+        send(.togglePlayPause)
+    }
+
+    /// Após abrir o Amazon Music, aguarda ele virar a sessão de Now Playing antes
+    /// de mandar o play. Um `play` global enviado cedo demais vaza para o app de
+    /// música padrão do sistema (Music.app da Apple), que então abre indevidamente.
+    /// Só dispara o comando quando o Now Playing já é o Amazon Music; se não virar
+    /// dentro do tempo, desiste sem enviar nada.
+    private func waitForAmazonMusicThenPlay(attempt: Int = 0) {
+        let maxAttempts = 30 // ~15s (0,5s por tentativa)
+        if track.bundleIdentifier == Self.amazonMusicBundleId {
+            if !track.isPlaying { send(.play) }
+            return
+        }
+        guard attempt < maxAttempts else { return }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            self?.waitForAmazonMusicThenPlay(attempt: attempt + 1)
+        }
+    }
+
     /// Seek para uma posição absoluta em segundos.
     func seek(toSeconds seconds: Double) {
         let micros = Int(seconds * 1_000_000)
@@ -206,11 +236,17 @@ final class NowPlayingController: ObservableObject {
 
     // MARK: - Util
 
+    static let amazonMusicBundleId = "com.amazon.music"
+
+    /// Indica se o `Amazon Music.app` está em execução no momento.
+    static func isAmazonMusicRunning() -> Bool {
+        !NSRunningApplication.runningApplications(withBundleIdentifier: amazonMusicBundleId).isEmpty
+    }
+
     /// Abre (ou traz à frente) o app oficial do Amazon Music.
     static func openAmazonMusic() {
-        let bundleId = "com.amazon.music"
-        guard let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleId) else {
-            NSLog("MacMediaWidget: Amazon Music.app não encontrado (\(bundleId))")
+        guard let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: amazonMusicBundleId) else {
+            NSLog("MacMediaWidget: Amazon Music.app não encontrado (\(amazonMusicBundleId))")
             return
         }
         let config = NSWorkspace.OpenConfiguration()

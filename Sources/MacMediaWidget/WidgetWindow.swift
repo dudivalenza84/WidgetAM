@@ -1,4 +1,5 @@
 import AppKit
+import Combine
 import SwiftUI
 
 /// Janela do widget de mesa: sem bordas, translúcida, em nível de mesa (atrás
@@ -7,14 +8,12 @@ import SwiftUI
 /// persiste a posição em UserDefaults.
 @MainActor
 final class WidgetWindow: NSPanel, NSWindowDelegate {
-    /// Distância da borda da tela até a borda visível do card, em pontos.
-    /// Calibrada para o widget assentar na mesma coluna dos widgets nativos.
-    private let edgeMargin: CGFloat = 16
-    /// Passo fino para alinhamento vertical (ajuste de altura livre).
-    private let gridStepY: CGFloat = 8
+    /// Margem da borda e passo da grade vêm das preferências (ajustáveis ao vivo).
+    private let settings = AppSettings.shared
     private let originDefaultsKey = "widgetOrigin"
 
     private var snapTimer: Timer?
+    private var cancellables = Set<AnyCancellable>()
 
     init(nowPlaying: NowPlayingController) {
         super.init(
@@ -42,6 +41,18 @@ final class WidgetWindow: NSPanel, NSWindowDelegate {
         let host = NSHostingView(rootView: ContentView(nowPlaying: nowPlaying))
         host.autoresizingMask = [.width, .height]
         contentView = host
+
+        // Reposiciona ao vivo quando a margem ou o passo da grade mudam nas
+        // preferências (ignora a emissão do valor inicial com dropFirst).
+        Publishers.Merge(
+            settings.$edgeMargin.map { _ in () },
+            settings.$gridStepY.map { _ in () }
+        )
+        .dropFirst()
+        .sink { [weak self] in
+            Task { @MainActor in self?.snapToGrid() }
+        }
+        .store(in: &cancellables)
     }
 
     override var canBecomeKey: Bool { true }
@@ -88,14 +99,15 @@ final class WidgetWindow: NSPanel, NSWindowDelegate {
         let snappedX: CGFloat
         if cardCenterX > sf.midX {
             // Ancora à direita.
-            snappedX = sf.maxX - edgeMargin + margin - frame.width
+            snappedX = sf.maxX - settings.edgeMargin + margin - frame.width
         } else {
             // Ancora à esquerda.
-            snappedX = sf.minX + edgeMargin - margin
+            snappedX = sf.minX + settings.edgeMargin - margin
         }
 
         // Vertical: grade fina, para ajuste de altura livre.
-        let snappedY = (origin.y / gridStepY).rounded() * gridStepY
+        let stepY = max(settings.gridStepY, 1)
+        let snappedY = (origin.y / stepY).rounded() * stepY
 
         let snapped = NSPoint(x: snappedX, y: snappedY)
         if snapped != origin {

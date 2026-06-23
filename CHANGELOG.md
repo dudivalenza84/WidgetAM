@@ -3,6 +3,23 @@
 Formato semver: MINOR por release cronológica, PATCH para hotfix.
 Entradas novas vão no topo.
 
+## [1.4.0] — 2026-06-23 · #04
+
+- **Liquid Glass nativo** (macOS 26): novo `CardSurface` aplica `glassEffect(.regular.tint(...))` ao
+  card, com fallback para `.ultraThinMaterial` em versões anteriores. O efeito vai numa camada de
+  `.background` — aplicá-lo direto na stack fazia o card inteiro virar superfície de vidro e capturar
+  o arraste, roubando o clique do `NSSlider` de volume.
+- **Tela de configurações dedicada**: `AppSettings` (sobre `UserDefaults`) + `PreferencesView`
+  (Form agrupado), aberta pelo item "Preferências…" da bandeja. Ajusta ao vivo: margem da borda,
+  passo da grade vertical, opacidade do tint, abrir Amazon Music ao dar play e abrir no login.
+- **`edgeMargin` ajustável**: deixou de ser constante; `WidgetWindow` lê das preferências e re-snapa
+  em tempo real (Combine). A calibração do alinhamento com a coluna dos widgets nativos virou visual.
+- **Auto-abrir Amazon Music ao dar play**: com o app fechado, o play abre o `com.amazon.music`. O
+  comando só é enviado quando o app já é o Now Playing (`waitForAmazonMusicThenPlay`) — evita vazar o
+  `play` para o Music.app da Apple.
+- **Empacotamento**: `scripts/package-dmg.sh` gera `dist/MacMediaWidget.dmg`. README reescrito para a
+  stack Swift, com build, empacotamento e instalação (contorno de Gatekeeper para uso pessoal).
+
 ## [1.3.0] — 2026-06-23 · #03
 
 - **Controle de volume do sistema** implementado (`SystemVolumeController`): leitura e ajuste do
