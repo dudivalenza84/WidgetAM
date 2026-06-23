@@ -34,6 +34,9 @@ final class WidgetWindow: NSPanel, NSWindowDelegate {
         hasShadow = false
         isMovableByWindowBackground = true
         collectionBehavior = [.canJoinAllSpaces, .stationary, .ignoresCycle]
+        // Necessário para o hover (slider de volume) funcionar mesmo com a janela
+        // não-key/não-ativante.
+        acceptsMouseMovedEvents = true
         delegate = self
 
         let host = NSHostingView(rootView: ContentView(nowPlaying: nowPlaying))

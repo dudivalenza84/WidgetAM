@@ -3,6 +3,18 @@
 Formato semver: MINOR por release cronológica, PATCH para hotfix.
 Entradas novas vão no topo.
 
+## [1.3.0] — 2026-06-23 · #03
+
+- **Controle de volume do sistema** implementado (`SystemVolumeController`): leitura e ajuste do
+  volume de saída via AppleScript (`set volume`), aplicação coalescida no arrasto e mute usando o
+  flag do macOS (preserva o nível ao desmutar). É volume global, não por-app.
+- **UI**: sidebar de volume fixa na lateral direita do card — slider vertical + ícone de mute.
+  O slider é um `NSSlider` nativo (`NSViewRepresentable`), não um `Slider` SwiftUI rotacionado: a
+  rotação deslocava a área de hit-test e o arrasto movia o widget (`isMovableByWindowBackground`)
+  em vez de mudar o volume.
+- **Persistência** descartada como item autônomo: a parte útil (posição da janela) já estava feita;
+  preferências futuras ficam acopladas à "Tela de configurações dedicada".
+
 ## [1.2.0] — 2026-06-23 · #02
 
 - **Base Electron removida** e projeto reescrito em **Swift nativo** (SPM, alvo executável +

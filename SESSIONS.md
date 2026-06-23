@@ -5,6 +5,7 @@ Formato: `YYYY-MM-DD · #NN — <objetivo> — <status>` → [arquivo](docs/sess
 
 ## 2026-06-23
 
+- 2026-06-23 · #03 — Controle de volume do sistema (sidebar fixa + mute) — concluída → [arquivo](docs/sessions/2026-06-23-03.md)
 - 2026-06-23 · #02 — Limpeza Electron + setup Swift + integração mediaremote-adapter — concluída → [arquivo](docs/sessions/2026-06-23-02.md)
 - 2026-06-23 · #01 — PoC de arquitetura: vira para Swift nativo controlando o app oficial via Now Playing — concluída → [arquivo](docs/sessions/2026-06-23-01.md)
 

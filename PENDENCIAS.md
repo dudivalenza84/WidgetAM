@@ -38,13 +38,15 @@ Migração para `PENDENCIAS_CONCLUIDAS.md` só por pedido explícito.
 
 ## Baixa
 
-- [~] **Persistência** (posição da janela, preferências) em `UserDefaults`. (#01 2026-06-23 —
-  posição da janela feita no #02; preferências futuras quando houver tela de configurações)
+- [x] **Persistência** (posição da janela, preferências) em `UserDefaults`. (#01 2026-06-23 —
+  posição da janela feita no #02; descartado como item autônomo no #03 — preferências futuras
+  ficam acopladas à "Tela de configurações dedicada")
 - [ ] **Empacotamento/distribuição** do `.app` (`.dmg` opcional; sem Apple Developer ID →
   contorno de Gatekeeper para uso pessoal). (#01 2026-06-23)
-- [ ] **Controle de volume — opção 1 (volume do sistema)**: ajustar o volume do macOS via
+- [x] **Controle de volume — opção 1 (volume do sistema)**: ajustar o volume do macOS via
   AppleScript (`set volume`). Decidido no #02: é global, não por-app; volume por-app real exige
-  driver de áudio virtual (fora de escopo) e o MediaRemote não tem comando de volume. (#02 2026-06-23)
+  driver de áudio virtual (fora de escopo) e o MediaRemote não tem comando de volume. (#02 2026-06-23 ·
+  feito #03 — sidebar fixa com slider vertical `NSSlider` + mute; `SystemVolumeController`)
 - [ ] **Calibrar `edgeMargin`** do snap horizontal para casar exatamente com a coluna dos widgets
   nativos (hoje 16pt, ajuste empírico na tela). (#02 2026-06-23)
 

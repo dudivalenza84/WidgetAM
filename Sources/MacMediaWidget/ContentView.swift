@@ -1,3 +1,4 @@
+import AppKit
 import SwiftUI
 
 /// Dimensões do card, espelhando a proporção do widget de música nativo do macOS.
@@ -17,12 +18,13 @@ enum WidgetMetrics {
 /// com sombra, controles centralizados e barra de progresso animada.
 struct ContentView: View {
     @ObservedObject var nowPlaying: NowPlayingController
+    @StateObject private var volume = SystemVolumeController()
     @State private var tint: Color = .clear
 
     private var track: TrackInfo { nowPlaying.track }
 
     var body: some View {
-        HStack(spacing: 14) {
+        HStack(spacing: 12) {
             artwork
             VStack(alignment: .leading, spacing: 6) {
                 Text(track.title ?? "Nada tocando")
@@ -37,6 +39,7 @@ struct ContentView: View {
                 controls
                     .frame(maxWidth: .infinity, alignment: .center)
             }
+            volumeSidebar
         }
         .padding(16)
         .frame(width: WidgetMetrics.width, height: WidgetMetrics.height)
@@ -110,11 +113,72 @@ struct ContentView: View {
         .foregroundStyle(.primary)
     }
 
+    /// Sidebar de volume fixa, na lateral direita do card: slider vertical com o
+    /// botão de mute abaixo. Controla o volume de saída do sistema (global) — ver
+    /// `SystemVolumeController`.
+    private var volumeSidebar: some View {
+        VStack(spacing: 8) {
+            VerticalVolumeSlider(value: volume.volume) { volume.setVolume($0) }
+                .frame(width: 20, height: 84)
+
+            Button { volume.toggleMute() } label: {
+                Image(systemName: speakerSymbol)
+                    .font(.system(size: 12, weight: .medium))
+                    .frame(height: 14)
+            }
+            .buttonStyle(.plain)
+        }
+        .foregroundStyle(.secondary)
+        .frame(width: 24)
+    }
+
+    private var speakerSymbol: String {
+        if volume.isMuted || volume.volume == 0 { return "speaker.slash.fill" }
+        switch volume.volume {
+        case ..<0.33: return "speaker.wave.1.fill"
+        case ..<0.66: return "speaker.wave.2.fill"
+        default: return "speaker.wave.3.fill"
+        }
+    }
+
     private func button(_ systemName: String, size: CGFloat, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             Image(systemName: systemName).font(.system(size: size, weight: .medium))
         }
         .buttonStyle(.plain)
+    }
+}
+
+/// `NSSlider` vertical nativo. Usado em vez de um `Slider` SwiftUI rotacionado:
+/// a rotação desloca a área de hit-test, fazendo o clique cair no "fundo" da
+/// janela (que é movível) em vez de no controle. O `NSSlider` mantém o
+/// hit-testing correto e marca sua área como não-movível.
+struct VerticalVolumeSlider: NSViewRepresentable {
+    var value: Double
+    var onChange: (Double) -> Void
+
+    func makeNSView(context: Context) -> NSSlider {
+        let slider = NSSlider(
+            value: value, minValue: 0, maxValue: 1,
+            target: context.coordinator,
+            action: #selector(Coordinator.changed(_:))
+        )
+        slider.isVertical = true
+        slider.controlSize = .mini
+        return slider
+    }
+
+    func updateNSView(_ slider: NSSlider, context: Context) {
+        context.coordinator.onChange = onChange
+        if slider.doubleValue != value { slider.doubleValue = value }
+    }
+
+    func makeCoordinator() -> Coordinator { Coordinator(onChange: onChange) }
+
+    final class Coordinator {
+        var onChange: (Double) -> Void
+        init(onChange: @escaping (Double) -> Void) { self.onChange = onChange }
+        @objc func changed(_ sender: NSSlider) { onChange(sender.doubleValue) }
     }
 }
 
