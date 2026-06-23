@@ -5,4 +5,5 @@ Formato: `YYYY-MM-DD · #NN — <objetivo> — <status>` → [arquivo](docs/sess
 
 ## 2026-06-22
 
+- 2026-06-22 · #02 — Recuperar ambiente e reconstrução de features (widget + .dmg) — parcial → [arquivo](docs/sessions/2026-06-22-02.md)
 - 2026-06-22 · #01 — Migração do projeto pro git/GitHub + setup do protocolo de sessões — concluída → [arquivo](docs/sessions/2026-06-22-01.md)

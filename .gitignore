@@ -1,6 +1,10 @@
 # Dependencies
 node_modules/
 
+# pnpm (projeto usa npm — evita reincidência do build script ignorado do Electron)
+pnpm-lock.yaml
+pnpm-workspace.yaml
+
 # Logs
 *.log
 npm-debug.log*
