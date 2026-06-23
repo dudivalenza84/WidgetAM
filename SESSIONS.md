@@ -3,6 +3,10 @@
 Uma linha por sessão. Apenas índice — nunca acumula conteúdo de sessão.
 Formato: `YYYY-MM-DD · #NN — <objetivo> — <status>` → [arquivo](docs/sessions/YYYY-MM-DD-NN.md)
 
+## 2026-06-23
+
+- 2026-06-23 · #01 — PoC de arquitetura: vira para Swift nativo controlando o app oficial via Now Playing — concluída → [arquivo](docs/sessions/2026-06-23-01.md)
+
 ## 2026-06-22
 
 - 2026-06-22 · #02 — Recuperar ambiente e reconstrução de features (widget + .dmg) — parcial → [arquivo](docs/sessions/2026-06-22-02.md)
