@@ -3,6 +3,22 @@
 Formato semver: MINOR por release cronológica, PATCH para hotfix.
 Entradas novas vão no topo.
 
+## [1.2.0] — 2026-06-23 · #02
+
+- **Base Electron removida** e projeto reescrito em **Swift nativo** (SPM, alvo executável +
+  bundle `.app` montado por `scripts/build-app.sh` com codesign ad-hoc). `CLAUDE.md` e `.gitignore`
+  migrados para a nova stack.
+- **Integração com o Now Playing** via `mediaremote-adapter` bundlado: stream JSON do
+  `com.amazon.music` (título, artista, capa, duração, posição, estado) e comandos de transporte
+  (`play`/`pause`/`next`/`prev`/`seek`). Validado end-to-end no app oficial.
+- **Widget de mesa**: `NSPanel` borderless em nível de mesa, todos os Spaces, não-ativante; UI no
+  padrão dos widgets nativos (card tonalizado pela capa, progresso animado, botões centralizados);
+  snap por ancoragem à borda + posição persistida em `UserDefaults`; bandeja com mostrar/ocultar,
+  abrir Amazon Music e **autostart no login** (`SMAppService`).
+- **Decisão — controle de volume:** adotada a opção 1 (volume do **sistema** via AppleScript). Volume
+  por-app é inviável sem driver de áudio virtual; o MediaRemote não expõe comando de volume.
+  Implementação fica como pendência.
+
 ## [1.1.0] — 2026-06-23 · #01
 
 - PoC de arquitetura. Provado que **embutir o web player do Amazon Music no Electron é

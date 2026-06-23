@@ -4,17 +4,19 @@ Instruções específicas deste projeto para o Claude Code. Tem precedência sob
 
 ## O que é o projeto
 
-Widget de desktop para macOS, com design premium (glassmorphism), que controla a reprodução do Amazon Music rodando no Google Chrome (instalado como PWA). Uso pessoal individual.
+Widget de desktop para macOS, com design premium (Liquid Glass), que **controla** o app oficial nativo `Amazon Music.app` via o Now Playing do macOS. O widget não reproduz áudio: o motor de reprodução é o próprio `Amazon Music.app` rodando em background. Uso pessoal individual.
+
+> Virada de arquitetura (2026-06-23 · #01): a abordagem anterior — Electron controlando o PWA no Chrome via AppleScript — foi descartada (a Amazon bloqueia navegador desconhecido e o requisito é não depender do Chrome). Histórico Electron preservado no git.
 
 ## Stack
 
-- **Runtime/janela**: Electron 31 (janela transparente, sem bordas, sempre no topo).
-- **Backend local**: Node.js no processo principal (`main.js`) + `preload.js` (bridge segura).
-- **UI**: HTML5 + Vanilla CSS + JavaScript (`index.html`, `style.css`, `renderer.js`).
-- **Integração com o player**: AppleScript executado periodicamente, localiza a aba do Amazon Music no Chrome, injeta JS para ler `navigator.mediaSession.metadata` e estado de áudio, e envia comandos de volta.
-- **Plataforma**: macOS Sonoma ou superior; requer Google Chrome e Node.js.
+- **Linguagem/UI**: Swift nativo — AppKit (janela widget, tray) + SwiftUI (UI Liquid Glass).
+- **Janela**: `NSWindow` em nível de desktop, sem bordas, presente em todos os Spaces, não-ativante, com snap à grade de widgets da mesa.
+- **Integração com o player**: `mediaremote-adapter` (fork Swift do `ejbills`) bundlado no app, usando `/usr/bin/perl` entitled para ler o Now Playing (capa, título, artista, progresso, estado) e enviar comandos de transporte (play/pause/next/prev/seek) ao `Amazon Music.app` (`com.amazon.music`).
+- **Build**: Swift Package Manager (alvo executável) + bundle `.app` montado à mão (`Info.plist` com `LSUIElement`) + codesign ad-hoc. Sem Xcode completo (apenas Command Line Tools).
+- **Plataforma**: macOS 26+; requer o `Amazon Music.app` oficial instalado.
 
-Versões fixadas são registradas em `package.json` à medida que cada dependência é instalada.
+Dependências e versões fixadas são registradas em `Package.swift`.
 
 ## Estrutura de governança das sessões
 
@@ -106,9 +108,18 @@ MacMediaWidget/
 │   └── sessions/
 │       ├── 2026-06-22-01.md
 │       └── ...            # um arquivo por sessão
-├── main.js                # processo principal Electron + AppleScript
-├── preload.js             # bridge segura
-├── renderer.js            # lógica da UI
-├── index.html
-└── style.css
+├── Package.swift          # manifesto SPM (alvo executável)
+├── Sources/
+│   └── MacMediaWidget/
+│       ├── App.swift              # @main, AppDelegate, ciclo de vida (LSUIElement)
+│       ├── WidgetWindow.swift     # NSWindow nível desktop, todos os Spaces, não-ativante
+│       ├── ContentView.swift      # UI SwiftUI Liquid Glass
+│       ├── NowPlayingController.swift  # stream/comandos via mediaremote-adapter
+│       └── TrayController.swift   # NSStatusItem (barra de menu)
+├── Resources/
+│   ├── Info.plist          # LSUIElement, bundle id, versão
+│   └── mediaremote-adapter/ # framework + perl bundlados (read/comando do Now Playing)
+├── scripts/
+│   └── build-app.sh        # monta o bundle .app a partir do binário SPM + codesign ad-hoc
+└── dist/                   # saída do .app montado (gitignored)
 ```

@@ -1,22 +1,18 @@
-# Dependencies
-node_modules/
+# Swift Package Manager
+.build/
+.swiftpm/
+Package.resolved
 
-# pnpm (projeto usa npm — evita reincidência do build script ignorado do Electron)
-pnpm-lock.yaml
-pnpm-workspace.yaml
-
-# Logs
-*.log
-npm-debug.log*
+# Build output (bundle .app montado à mão / dmg)
+dist/
+*.app/
 
 # macOS
 .DS_Store
 
-# Electron build output
-dist/
-out/
-build/
+# Logs
+*.log
 
-# Env
+# Env / segredos
 .env
 .env.local

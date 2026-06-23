@@ -10,33 +10,43 @@ Migração para `PENDENCIAS_CONCLUIDAS.md` só por pedido explícito.
 
 ## Alta
 
-- [ ] **Limpar a base Electron** na própria pasta: remover `main.js`, `preload.js`,
+- [x] **Limpar a base Electron** na própria pasta: remover `main.js`, `preload.js`,
   `renderer.js`, `index.html`, `style.css`, `package.json`, `package-lock.json` e
   `node_modules/`; ajustar `.gitignore` (tirar refs de pnpm/Electron, adicionar `.build/`).
-  Git preserva o histórico — sem perda. (#01 2026-06-23)
-- [ ] **Atualizar `CLAUDE.md`**: seção "Stack" (Electron → Swift/AppKit + SwiftUI) e
-  "Estrutura de arquivos esperada". (#01 2026-06-23)
-- [ ] **Setup do projeto Swift**: alvo executável via SPM + bundle `.app` montado à mão
-  (`Info.plist` com `LSUIElement`) + codesign ad-hoc. (#01 2026-06-23)
-- [ ] **Integrar mediaremote-adapter** (fork Swift do `ejbills`): bundlar
+  Git preserva o histórico — sem perda. (#01 2026-06-23 · feito #02)
+- [x] **Atualizar `CLAUDE.md`**: seção "Stack" (Electron → Swift/AppKit + SwiftUI) e
+  "Estrutura de arquivos esperada". (#01 2026-06-23 · feito #02)
+- [x] **Setup do projeto Swift**: alvo executável via SPM + bundle `.app` montado à mão
+  (`Info.plist` com `LSUIElement`) + codesign ad-hoc. (#01 2026-06-23 · feito #02)
+- [x] **Integrar mediaremote-adapter** (fork Swift do `ejbills`): bundlar
   `MediaRemoteAdapter.framework` + perl; rodar `stream`, parsear JSON, atualizar UI; enviar
-  comandos de transporte pelo mesmo canal. (#01 2026-06-23)
+  comandos de transporte pelo mesmo canal. (#01 2026-06-23 · feito #02)
 
 ## Média
 
-- [ ] **Janela widget de mesa**: `NSWindow` em nível de desktop, presente em todos os Spaces,
-  não-ativante, snap à grade com posição persistida. (#01 2026-06-23)
-- [ ] **UI Liquid Glass nativo** (macOS 26): capa, título, artista, barra de progresso e
-  botões play/pause/anterior/próxima/seek. (#01 2026-06-23)
-- [ ] **Tray na barra de menu** (`NSStatusItem`): mostrar/ocultar widget, preferências, sair. (#01 2026-06-23)
-- [ ] **Tela de configurações + autostart no login** via `SMAppService`. (#01 2026-06-23)
-- [ ] **Botão "abrir Amazon Music"** (`NSWorkspace`, bundle `com.amazon.music`). (#01 2026-06-23)
+- [x] **Janela widget de mesa**: `NSWindow` em nível de desktop, presente em todos os Spaces,
+  não-ativante, snap à grade com posição persistida. (#01 2026-06-23 · feito #02 — snap por
+  ancoragem à borda, não grade do sistema; ver decisão na sessão)
+- [~] **UI Liquid Glass nativo** (macOS 26): capa, título, artista, barra de progresso e
+  botões play/pause/anterior/próxima/seek. (#01 2026-06-23 — base entregue no #02: card
+  tonalizado pela capa + progresso animado; falta o `glassEffect` nativo do macOS 26)
+- [x] **Tray na barra de menu** (`NSStatusItem`): mostrar/ocultar widget, preferências, sair. (#01 2026-06-23 · feito #02)
+- [x] **Autostart no login** via `SMAppService`. (#01 2026-06-23 · feito #02 — toggle no menu da bandeja)
+- [ ] **Tela de configurações dedicada**: janela de preferências (margem/grade, etc.). Hoje as
+  ações vivem no menu da bandeja. (#02 2026-06-23)
+- [x] **Botão "abrir Amazon Music"** (`NSWorkspace`, bundle `com.amazon.music`). (#01 2026-06-23 · feito #02)
 
 ## Baixa
 
-- [ ] **Persistência** (posição da janela, preferências) em `UserDefaults`. (#01 2026-06-23)
+- [~] **Persistência** (posição da janela, preferências) em `UserDefaults`. (#01 2026-06-23 —
+  posição da janela feita no #02; preferências futuras quando houver tela de configurações)
 - [ ] **Empacotamento/distribuição** do `.app` (`.dmg` opcional; sem Apple Developer ID →
   contorno de Gatekeeper para uso pessoal). (#01 2026-06-23)
+- [ ] **Controle de volume — opção 1 (volume do sistema)**: ajustar o volume do macOS via
+  AppleScript (`set volume`). Decidido no #02: é global, não por-app; volume por-app real exige
+  driver de áudio virtual (fora de escopo) e o MediaRemote não tem comando de volume. (#02 2026-06-23)
+- [ ] **Calibrar `edgeMargin`** do snap horizontal para casar exatamente com a coluna dos widgets
+  nativos (hoje 16pt, ajuste empírico na tela). (#02 2026-06-23)
 
 ## Obsoletas — arquitetura Electron descartada (2026-06-23 · #01)
 
