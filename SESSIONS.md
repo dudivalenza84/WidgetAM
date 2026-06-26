@@ -3,6 +3,14 @@
 Uma linha por sessão. Apenas índice — nunca acumula conteúdo de sessão.
 Formato: `YYYY-MM-DD · #NN — <objetivo> — <status>` → [arquivo](docs/sessions/YYYY-MM-DD-NN.md)
 
+## 2026-06-26
+
+- 2026-06-26 · #01 — Fix da barra de progresso + preferências de snap (alinhar à grade + borda) — concluída → [arquivo](docs/sessions/2026-06-26-01.md)
+
+## 2026-06-24
+
+- 2026-06-24 · #01 — Verificação de Amazon Music não instalado (alerta + página de instalação) — parcial → [arquivo](docs/sessions/2026-06-24-01.md)
+
 ## 2026-06-23
 
 - 2026-06-23 · #05 — Fix: play com app fechado abria Apple Music em vez do Amazon Music — concluída → [arquivo](docs/sessions/2026-06-23-05.md)

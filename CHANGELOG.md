@@ -3,6 +3,25 @@
 Formato semver: MINOR por release cronológica, PATCH para hotfix.
 Entradas novas vão no topo.
 
+## [1.6.0] — 2026-06-26 · #01
+
+- **Fix: barra de progresso não preenchia.** O `Amazon Music.app` não popula `elapsedTime` no Now
+  Playing info — o stream do `mediaremote-adapter` só traz `timestamp`, `duration` e `playing`. O
+  cálculo passou a usar um cronômetro local ancorado no `timestamp`: semeia a posição ao entrar na
+  faixa, avança só enquanto toca e congela na pausa. Limitação: seek feito dentro do app só sincroniza
+  na troca de faixa.
+- **Preferências de snap.** Novo toggle "Alinhar à grade" (liga/desliga o snap; desligado, o widget
+  fica livre onde for solto) e picker de borda de ancoragem (Esquerda/Direita) na tela de
+  Preferências. Ambos aplicam ao vivo.
+
+## [1.5.0] — 2026-06-24 · #01
+
+- **Verificação de Amazon Music não instalado.** Ao apertar play (ou abrir o app pelo tray) sem o
+  `Amazon Music.app` instalado, o widget agora mostra um `NSAlert` ("Amazon Music não está
+  instalado") e oferece abrir a página oficial de instalação (link `am.app.link`), em vez
+  de falhar em silêncio. `openAmazonMusic()` passou a retornar `Bool`, e o `play()` aborta a espera
+  por Now Playing quando o app não existe. _(pendente de teste manual)_
+
 ## [1.4.1] — 2026-06-23 · #05
 
 - **Fix: play com Amazon Music fechado abria o Music.app da Apple.** Em instalação limpa pelo

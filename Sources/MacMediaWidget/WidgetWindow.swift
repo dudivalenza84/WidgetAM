@@ -44,9 +44,11 @@ final class WidgetWindow: NSPanel, NSWindowDelegate {
 
         // Reposiciona ao vivo quando a margem ou o passo da grade mudam nas
         // preferências (ignora a emissão do valor inicial com dropFirst).
-        Publishers.Merge(
-            settings.$edgeMargin.map { _ in () },
-            settings.$gridStepY.map { _ in () }
+        Publishers.MergeMany(
+            settings.$edgeMargin.map { _ in () }.eraseToAnyPublisher(),
+            settings.$gridStepY.map { _ in () }.eraseToAnyPublisher(),
+            settings.$snapToGrid.map { _ in () }.eraseToAnyPublisher(),
+            settings.$snapEdge.map { _ in () }.eraseToAnyPublisher()
         )
         .dropFirst()
         .sink { [weak self] in
@@ -88,20 +90,24 @@ final class WidgetWindow: NSPanel, NSWindowDelegate {
     }
 
     private func snapToGrid() {
+        // Snap desligado: o widget fica livre onde foi solto; só persiste a posição.
+        guard settings.snapToGrid else {
+            UserDefaults.standard.set(NSStringFromPoint(frame.origin), forKey: originDefaultsKey)
+            return
+        }
+
         guard let screen = screen ?? NSScreen.main else { return }
         let sf = screen.frame
         let margin = WidgetMetrics.shadowMargin // borda transparente da janela
         let origin = frame.origin
 
-        // Horizontal: ancora à borda da tela mais próxima do centro do card, de
-        // modo que a borda VISÍVEL do card fique a `edgeMargin` da borda da tela.
-        let cardCenterX = frame.midX
+        // Horizontal: ancora à borda escolhida nas preferências, de modo que a
+        // borda VISÍVEL do card fique a `edgeMargin` da borda da tela.
         let snappedX: CGFloat
-        if cardCenterX > sf.midX {
-            // Ancora à direita.
+        switch settings.snapEdge {
+        case .right:
             snappedX = sf.maxX - settings.edgeMargin + margin - frame.width
-        } else {
-            // Ancora à esquerda.
+        case .left:
             snappedX = sf.minX + settings.edgeMargin - margin
         }
 

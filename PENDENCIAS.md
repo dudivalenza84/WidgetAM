@@ -3,16 +3,15 @@
 Backlog vivo. Pendências resolvidas são marcadas com `[x]` (a linha permanece aqui).
 Migração para `PENDENCIAS_CONCLUIDAS.md` só por pedido explícito.
 
-> Todas as pendências de implementação foram concluídas e migradas para
-> `PENDENCIAS_CONCLUIDAS.md` na sessão 2026-06-23 · #04. Nenhuma pendência aberta no momento.
-
 ## Alta
 
-_(vazio)_
+- [ ] Testar fluxo de Amazon Music não instalado (mover/renomear o `.app`, apertar play; validar `NSAlert` + abertura do site) — `2026-06-24 · #01`
+- [x] Commit + push da verificação de app não instalado — feito junto ao encerramento da sessão `2026-06-26 · #01`
+- [x] Confirmar URL de instalação — `music.amazon.com/download` dava 404; trocada por `am.app.link/zb0Bk69BNub` — `2026-06-24 · #01`
 
 ## Média
 
-_(vazio)_
+- [ ] Barra de progresso não reflete seek feito dentro do Amazon Music até a faixa trocar (limitação do MediaRemote: o app não expõe a nova posição) — `2026-06-26 · #01`
 
 ## Baixa
 

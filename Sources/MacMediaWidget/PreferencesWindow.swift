@@ -40,6 +40,14 @@ struct PreferencesView: View {
     var body: some View {
         Form {
             Section("Posicionamento") {
+                Toggle("Alinhar à grade", isOn: $settings.snapToGrid)
+                Picker("Borda de alinhamento", selection: $settings.snapEdge) {
+                    ForEach(SnapEdge.allCases) { edge in
+                        Text(edge.label).tag(edge)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .disabled(!settings.snapToGrid)
                 LabeledContent("Margem da borda") {
                     HStack {
                         Slider(value: $settings.edgeMargin, in: 0...80)

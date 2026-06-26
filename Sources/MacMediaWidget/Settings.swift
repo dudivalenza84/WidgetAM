@@ -1,6 +1,14 @@
 import Foundation
 import Combine
 
+/// Borda da tela à qual o widget se ancora quando o snap à grade está ativo.
+enum SnapEdge: String, CaseIterable, Identifiable {
+    case left
+    case right
+    var id: String { rawValue }
+    var label: String { self == .left ? "Esquerda" : "Direita" }
+}
+
 /// Preferências do widget, respaldadas por `UserDefaults`. Singleton observável:
 /// a UI (card e tela de configurações) e a janela reagem às mudanças ao vivo via
 /// Combine, sem recompilar nem reiniciar.
@@ -17,6 +25,17 @@ final class AppSettings: ObservableObject {
     /// Passo do alinhamento vertical do snap, em pontos.
     @Published var gridStepY: CGFloat {
         didSet { defaults.set(Double(gridStepY), forKey: Keys.gridStepY) }
+    }
+
+    /// Quando ligado, o widget alinha-se à grade (borda + passo vertical) ao ser
+    /// solto. Desligado, fica livre na posição em que foi arrastado.
+    @Published var snapToGrid: Bool {
+        didSet { defaults.set(snapToGrid, forKey: Keys.snapToGrid) }
+    }
+
+    /// Borda da tela à qual ancorar quando o snap está ativo.
+    @Published var snapEdge: SnapEdge {
+        didSet { defaults.set(snapEdge.rawValue, forKey: Keys.snapEdge) }
     }
 
     /// Intensidade da tonalização da capa sobre o card (0…1).
@@ -36,6 +55,8 @@ final class AppSettings: ObservableObject {
         static let gridStepY = "settings.gridStepY"
         static let tintOpacity = "settings.tintOpacity"
         static let autoLaunchOnPlay = "settings.autoLaunchOnPlay"
+        static let snapToGrid = "settings.snapToGrid"
+        static let snapEdge = "settings.snapEdge"
     }
 
     private enum Defaults {
@@ -43,6 +64,8 @@ final class AppSettings: ObservableObject {
         static let gridStepY: CGFloat = 8
         static let tintOpacity: Double = 0.45
         static let autoLaunchOnPlay = true
+        static let snapToGrid = true
+        static let snapEdge = SnapEdge.right
     }
 
     private init(defaults: UserDefaults = .standard) {
@@ -52,10 +75,14 @@ final class AppSettings: ObservableObject {
             Keys.gridStepY: Double(Defaults.gridStepY),
             Keys.tintOpacity: Defaults.tintOpacity,
             Keys.autoLaunchOnPlay: Defaults.autoLaunchOnPlay,
+            Keys.snapToGrid: Defaults.snapToGrid,
+            Keys.snapEdge: Defaults.snapEdge.rawValue,
         ])
         edgeMargin = CGFloat(defaults.double(forKey: Keys.edgeMargin))
         gridStepY = CGFloat(defaults.double(forKey: Keys.gridStepY))
         tintOpacity = defaults.double(forKey: Keys.tintOpacity)
         autoLaunchOnPlay = defaults.bool(forKey: Keys.autoLaunchOnPlay)
+        snapToGrid = defaults.bool(forKey: Keys.snapToGrid)
+        snapEdge = SnapEdge(rawValue: defaults.string(forKey: Keys.snapEdge) ?? "") ?? Defaults.snapEdge
     }
 }

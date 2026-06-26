@@ -42,6 +42,23 @@ final class NowPlayingController: ObservableObject {
     private var buffer = Data()
     private var progressTimer: Timer?
 
+    // MARK: - Estimativa de posição
+    //
+    // O Amazon Music não popula `elapsedTime` no Now Playing info: o stream só
+    // traz `timestamp` (instante em que a faixa atual começou), `duration` e
+    // `playing`. Mantemos então um cronômetro local ancorado nesse timestamp,
+    // que só avança enquanto há reprodução e congela na pausa. `timestamp` semeia
+    // a posição quando uma faixa nova entra ou quando o widget abre no meio dela.
+
+    /// Posição (segundos) na âncora `anchorWall`.
+    private var anchorElapsed: Double = 0
+    /// Instante de parede correspondente a `anchorElapsed`.
+    private var anchorWall = Date()
+    /// Último `timestamp` recebido do stream, para detectar troca de faixa.
+    private var lastTimestamp: Date?
+
+    private static let isoFormatter = ISO8601DateFormatter()
+
     // MARK: - Caminhos dos recursos bundlados
 
     private static let perlPath = "/usr/bin/perl"
@@ -122,16 +139,16 @@ final class NowPlayingController: ObservableObject {
     }
 
     private func refreshDisplayedElapsed() {
-        guard let base = track.elapsedTime, let ts = track.timestamp else {
-            displayedElapsed = 0
-            return
-        }
-        var value = base
-        if track.isPlaying {
-            value += Date().timeIntervalSince(ts)
-        }
+        displayedElapsed = estimatedElapsed(at: Date(), playing: track.isPlaying)
+    }
+
+    /// Posição estimada num instante, dado o estado de reprodução: parte da âncora
+    /// e soma o tempo de parede decorrido apenas se estava tocando.
+    private func estimatedElapsed(at now: Date, playing: Bool) -> Double {
+        var value = anchorElapsed
+        if playing { value += now.timeIntervalSince(anchorWall) }
         if let dur = track.duration { value = min(value, dur) }
-        displayedElapsed = max(value, 0)
+        return max(value, 0)
     }
 
     /// Acumula bytes do stdout e processa linha a linha (cada linha = 1 JSON).
@@ -174,6 +191,23 @@ final class NowPlayingController: ObservableObject {
             t.artwork = image
         }
 
+        // Reancora o cronômetro local antes de adotar o novo estado.
+        let now = Date()
+        if let tsString = payload["timestamp"] as? String,
+           let ts = Self.isoFormatter.date(from: tsString),
+           ts != lastTimestamp {
+            // Faixa nova ou reposicionada: o timestamp marca o início; estimamos a
+            // posição atual pelo tempo de parede decorrido desde ele.
+            lastTimestamp = ts
+            anchorElapsed = max(0, now.timeIntervalSince(ts))
+            anchorWall = now
+        } else if payload["playing"] != nil, t.isPlaying != track.isPlaying {
+            // Transição play/pause sem novo timestamp: consolida o acumulado com o
+            // estado ANTIGO para congelar (ou retomar) na posição correta.
+            anchorElapsed = estimatedElapsed(at: now, playing: track.isPlaying)
+            anchorWall = now
+        }
+
         track = t
         refreshDisplayedElapsed()
     }
@@ -203,7 +237,9 @@ final class NowPlayingController: ObservableObject {
         // sessão de Now Playing.
         guard AppSettings.shared.autoLaunchOnPlay else { return }
         if !Self.isAmazonMusicRunning() {
-            Self.openAmazonMusic()
+            // App não instalado: openAmazonMusic já avisou o usuário; não adianta
+            // esperar pela sessão de Now Playing que nunca vai existir.
+            guard Self.openAmazonMusic() else { return }
         }
         waitForAmazonMusicThenPlay()
     }
@@ -254,14 +290,38 @@ final class NowPlayingController: ObservableObject {
         !NSRunningApplication.runningApplications(withBundleIdentifier: amazonMusicBundleId).isEmpty
     }
 
-    /// Abre (ou traz à frente) o app oficial do Amazon Music.
-    static func openAmazonMusic() {
+    /// URL oficial de download do Amazon Music para desktop.
+    static let amazonMusicDownloadURL = URL(string: "https://am.app.link/zb0Bk69BNub/?__branch_flow_type=qr_code")!
+
+    /// Abre (ou traz à frente) o app oficial do Amazon Music. Se o app não estiver
+    /// instalado, avisa o usuário, oferece abrir a página oficial de instalação e
+    /// retorna `false`. Retorna `true` quando o app existe e o launch foi disparado.
+    @discardableResult
+    static func openAmazonMusic() -> Bool {
         guard let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: amazonMusicBundleId) else {
             NSLog("MacMediaWidget: Amazon Music.app não encontrado (\(amazonMusicBundleId))")
-            return
+            promptInstallAmazonMusic()
+            return false
         }
         let config = NSWorkspace.OpenConfiguration()
         config.activates = true
         NSWorkspace.shared.openApplication(at: url, configuration: config)
+        return true
+    }
+
+    /// Mostra um alerta informando que o Amazon Music não está instalado e oferece
+    /// abrir a página oficial de download no navegador.
+    static func promptInstallAmazonMusic() {
+        DispatchQueue.main.async {
+            let alert = NSAlert()
+            alert.messageText = "Amazon Music não está instalado"
+            alert.informativeText = "O widget controla o app oficial do Amazon Music, que não foi encontrado neste Mac. Deseja abrir a página de instalação?"
+            alert.alertStyle = .warning
+            alert.addButton(withTitle: "Abrir instalação")
+            alert.addButton(withTitle: "Cancelar")
+            if alert.runModal() == .alertFirstButtonReturn {
+                NSWorkspace.shared.open(amazonMusicDownloadURL)
+            }
+        }
     }
 }
