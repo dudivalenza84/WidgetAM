@@ -3,6 +3,33 @@
 Formato semver: MINOR por release cronológica, PATCH para hotfix.
 Entradas novas vão no topo.
 
+## [1.7.0] — 2026-08-05 · #01
+
+- **Arrasto só pelo fundo do card.** Clicar num botão de transporte e mexer o mouse movia a janela
+  em vez de acionar o botão, porque `isMovableByWindowBackground` fazia o card inteiro virar alça.
+  Botões de transporte e sidebar de volume agora se excluem do arrasto via `NonDraggableArea`
+  (`WindowDragging.swift`); capa, textos e espaços vazios continuam arrastando. Os alvos de clique
+  dos botões passaram do glifo (15–18pt) para 28×28, com o espaçamento ajustado para manter o
+  visual idêntico.
+- **Fix: play com Amazon Music encerrado abria o Music.app da Apple.** O stream marca o fim da
+  sessão com um snapshot `diff: false` vazio, mas o parser ignorava o campo `diff` e tratava tudo
+  como incremental — o `bundleIdentifier` antigo ficava grudado e o play virava um
+  `togglePlayPause` global. Snapshot sem faixa agora zera o estado, e o toggle global só é enviado
+  com o app comprovadamente rodando. (A correção de `1.4.1` tratou o sintoma, não a causa.)
+- **Fix: barra de progresso travada em 100%.** O `timestamp` do Now Playing não é reemitido ao
+  pausar; numa faixa parada há horas, `now − timestamp` estourava a duração e a âncora era gravada
+  já clampada, travando a barra cheia até a troca de faixa.
+- **Seek dentro do Amazon Music: limitação confirmada e fechada.** Captura do stream prova que o
+  app publica apenas `{"playing": bool}` no seek — sem posição e sem `timestamp` novo. Não há
+  segunda fonte (o `get` traz os mesmos campos; o app não tem AppleScript). Registrado em
+  `DECISOES.md` para não se reinvestigar.
+- **Verificação de app não instalado, testada.** Novo flag de simulação (`simulateMissingApp` no
+  UserDefaults ou `MMW_SIMULATE_MISSING_APP` no ambiente) permite exercitar o fluxo sem mexer no
+  `Amazon Music.app`. O alerta ganhou `NSApp.activate()`: num app sem Dock, ele poderia nascer
+  atrás das outras janelas sem como ser resgatado.
+- **Versão do bundle sincronizada.** `CFBundleShortVersionString` estava parado em `0.1.0` desde o
+  início do projeto; agora acompanha o changelog.
+
 ## [1.6.0] — 2026-06-26 · #01
 
 - **Fix: barra de progresso não preenchia.** O `Amazon Music.app` não popula `elapsedTime` no Now

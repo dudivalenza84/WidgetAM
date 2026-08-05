@@ -95,8 +95,11 @@ struct ContentView: View {
         .animation(.linear(duration: 0.5), value: fraction)
     }
 
+    /// O espaçamento de 14 compensa o alvo de clique de 28pt de cada botão: os
+    /// centros ficam a ~42pt um do outro, como no espaçamento de 26 sobre os
+    /// glifos nus de antes.
     private var controls: some View {
-        HStack(spacing: 26) {
+        HStack(spacing: 14) {
             button("backward.fill", size: 15) { nowPlaying.send(.previousTrack) }
             button(track.isPlaying ? "pause.fill" : "play.fill", size: 18) {
                 nowPlaying.playPauseEnsuringApp()
@@ -104,6 +107,7 @@ struct ContentView: View {
             button("forward.fill", size: 15) { nowPlaying.send(.nextTrack) }
         }
         .foregroundStyle(.primary)
+        .nonDraggableWindowArea()
     }
 
     /// Sidebar de volume fixa, na lateral direita do card: slider vertical com o
@@ -117,12 +121,14 @@ struct ContentView: View {
             Button { volume.toggleMute() } label: {
                 Image(systemName: speakerSymbol)
                     .font(.system(size: 12, weight: .medium))
-                    .frame(height: 14)
+                    .frame(width: 24, height: 20)
+                    .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
         }
         .foregroundStyle(.secondary)
         .frame(width: 24)
+        .nonDraggableWindowArea()
     }
 
     private var speakerSymbol: String {
@@ -134,9 +140,14 @@ struct ContentView: View {
         }
     }
 
+    /// O `contentShape` vem depois do `frame` de propósito: é ele que faz o
+    /// clique valer nos 28×28 inteiros, e não apenas sobre o glifo.
     private func button(_ systemName: String, size: CGFloat, action: @escaping () -> Void) -> some View {
         Button(action: action) {
-            Image(systemName: systemName).font(.system(size: size, weight: .medium))
+            Image(systemName: systemName)
+                .font(.system(size: size, weight: .medium))
+                .frame(width: 28, height: 28)
+                .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
     }

@@ -31,6 +31,9 @@ final class WidgetWindow: NSPanel, NSWindowDelegate {
         // A sombra fica a cargo do SwiftUI (acompanha o card arredondado). A
         // sombra da NSWindow seria retangular e vazaria nos cantos.
         hasShadow = false
+        // Arrasto pelo fundo do card. As áreas de controle (transporte e sidebar
+        // de volume) se excluem do arrasto marcando a própria região com
+        // `NonDraggableArea` — ver WindowDragging.swift.
         isMovableByWindowBackground = true
         collectionBehavior = [.canJoinAllSpaces, .stationary, .ignoresCycle]
         // Necessário para o hover (slider de volume) funcionar mesmo com a janela

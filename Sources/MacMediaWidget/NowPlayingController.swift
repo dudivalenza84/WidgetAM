@@ -144,10 +144,14 @@ final class NowPlayingController: ObservableObject {
 
     /// Posição estimada num instante, dado o estado de reprodução: parte da âncora
     /// e soma o tempo de parede decorrido apenas se estava tocando.
-    private func estimatedElapsed(at now: Date, playing: Bool) -> Double {
+    ///
+    /// `clamped` limita o resultado à duração da faixa, o que é o certo para
+    /// exibir mas errado para gravar de volta na âncora: uma âncora clampada
+    /// fica presa no fim da faixa e a barra nunca mais anda.
+    private func estimatedElapsed(at now: Date, playing: Bool, clamped: Bool = true) -> Double {
         var value = anchorElapsed
         if playing { value += now.timeIntervalSince(anchorWall) }
-        if let dur = track.duration { value = min(value, dur) }
+        if clamped, let dur = track.duration { value = min(value, dur) }
         return max(value, 0)
     }
 
@@ -169,6 +173,22 @@ final class NowPlayingController: ObservableObject {
             let obj = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
             let payload = obj["payload"] as? [String: Any]
         else { return }
+
+        // `diff: false` é um snapshot completo do Now Playing. Um snapshot SEM
+        // faixa alguma significa que não existe mais sessão — o app de música foi
+        // encerrado. Nesse caso é preciso zerar o estado: mesclar (o que o código
+        // fazia sempre, por ignorar o campo `diff`) deixava o `bundleIdentifier`
+        // antigo grudado, e o play do widget virava um `togglePlayPause` global,
+        // que o macOS entrega ao Music.app da Apple — abrindo o app errado.
+        let isSnapshot = (obj["diff"] as? Bool) == false
+        if isSnapshot, payload["bundleIdentifier"] == nil, payload["title"] == nil {
+            track = TrackInfo()
+            lastTimestamp = nil
+            anchorElapsed = 0
+            anchorWall = Date()
+            refreshDisplayedElapsed()
+            return
+        }
 
         // O stream vem como diff por padrão: só campos alterados estão presentes.
         // Mesclamos sobre o estado atual.
@@ -196,15 +216,27 @@ final class NowPlayingController: ObservableObject {
         if let tsString = payload["timestamp"] as? String,
            let ts = Self.isoFormatter.date(from: tsString),
            ts != lastTimestamp {
-            // Faixa nova ou reposicionada: o timestamp marca o início; estimamos a
-            // posição atual pelo tempo de parede decorrido desde ele.
+            // Faixa nova: o timestamp marca o início dela, então a posição atual é
+            // o tempo de parede decorrido desde ele.
+            //
+            // Só que o Amazon Music não reemite o timestamp ao pausar: numa faixa
+            // parada há horas, esse cálculo dá um valor absurdo. Nesse caso a
+            // posição real é desconhecida e mostrar do início é melhor do que
+            // travar a barra cheia — que era o que acontecia, porque a âncora
+            // acabava fixada na duração e não saía mais de lá até trocar de faixa.
             lastTimestamp = ts
-            anchorElapsed = max(0, now.timeIntervalSince(ts))
+            let sinceStart = max(0, now.timeIntervalSince(ts))
+            if let dur = t.duration ?? track.duration, sinceStart > dur {
+                anchorElapsed = 0
+            } else {
+                anchorElapsed = sinceStart
+            }
             anchorWall = now
         } else if payload["playing"] != nil, t.isPlaying != track.isPlaying {
             // Transição play/pause sem novo timestamp: consolida o acumulado com o
-            // estado ANTIGO para congelar (ou retomar) na posição correta.
-            anchorElapsed = estimatedElapsed(at: now, playing: track.isPlaying)
+            // estado ANTIGO para congelar (ou retomar) na posição correta. Sem
+            // clamp, para não fixar a âncora no fim da faixa.
+            anchorElapsed = estimatedElapsed(at: now, playing: track.isPlaying, clamped: false)
             anchorWall = now
         }
 
@@ -223,9 +255,12 @@ final class NowPlayingController: ObservableObject {
     /// estiver rodando, abre o app antes de mandar o play — caso contrário o
     /// comando não teria sessão de Now Playing onde atuar.
     func playPauseEnsuringApp() {
-        // Se o Now Playing atual já é o Amazon Music, alterna normalmente — o
-        // comando tem uma sessão concreta onde atuar.
-        if track.bundleIdentifier == Self.amazonMusicBundleId {
+        // Se o Now Playing atual já é o Amazon Music E ele está mesmo rodando,
+        // alterna normalmente — o comando tem uma sessão concreta onde atuar.
+        // A checagem do processo é rede de segurança: um `togglePlayPause` é
+        // global, então mandá-lo sem o app vivo faria o macOS acordar o player
+        // padrão do sistema.
+        if track.bundleIdentifier == Self.amazonMusicBundleId, Self.isAmazonMusicRunning() {
             send(.togglePlayPause)
             return
         }
@@ -285,9 +320,12 @@ final class NowPlayingController: ObservableObject {
 
     static let amazonMusicBundleId = "com.amazon.music"
 
-    /// Indica se o `Amazon Music.app` está em execução no momento.
+    /// Indica se o `Amazon Music.app` está em execução no momento. Sob simulação
+    /// responde `false`: um app "não instalado" não pode estar rodando, e sem
+    /// isso o teste nunca alcançaria o caminho do alerta.
     static func isAmazonMusicRunning() -> Bool {
-        !NSRunningApplication.runningApplications(withBundleIdentifier: amazonMusicBundleId).isEmpty
+        if simulatesMissingApp { return false }
+        return !NSRunningApplication.runningApplications(withBundleIdentifier: amazonMusicBundleId).isEmpty
     }
 
     /// URL oficial de download do Amazon Music para desktop.
@@ -296,9 +334,24 @@ final class NowPlayingController: ObservableObject {
     /// Abre (ou traz à frente) o app oficial do Amazon Music. Se o app não estiver
     /// instalado, avisa o usuário, oferece abrir a página oficial de instalação e
     /// retorna `false`. Retorna `true` quando o app existe e o launch foi disparado.
+    /// Força o caminho de "app não instalado", para testar o alerta sem mexer no
+    /// `Amazon Music.app` de verdade. Ligar/desligar com:
+    ///
+    ///     defaults write com.dudivalenza.macmediawidget simulateMissingApp -bool YES
+    ///     defaults delete com.dudivalenza.macmediawidget simulateMissingApp
+    ///
+    /// A variável de ambiente serve para rodar o binário direto; a chave de
+    /// `UserDefaults` sobrevive ao relançamento do bundle pelo LaunchServices.
+    static var simulatesMissingApp: Bool {
+        ProcessInfo.processInfo.environment["MMW_SIMULATE_MISSING_APP"] != nil
+            || UserDefaults.standard.bool(forKey: "simulateMissingApp")
+    }
+
     @discardableResult
     static func openAmazonMusic() -> Bool {
-        guard let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: amazonMusicBundleId) else {
+        guard !simulatesMissingApp,
+              let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: amazonMusicBundleId)
+        else {
             NSLog("MacMediaWidget: Amazon Music.app não encontrado (\(amazonMusicBundleId))")
             promptInstallAmazonMusic()
             return false
@@ -319,6 +372,10 @@ final class NowPlayingController: ObservableObject {
             alert.alertStyle = .warning
             alert.addButton(withTitle: "Abrir instalação")
             alert.addButton(withTitle: "Cancelar")
+            // O app roda como `.accessory` (sem Dock): sem ativar explicitamente,
+            // o alerta pode nascer atrás das outras janelas e não haveria ícone
+            // no Dock para resgatá-lo.
+            NSApp.activate()
             if alert.runModal() == .alertFirstButtonReturn {
                 NSWorkspace.shared.open(amazonMusicDownloadURL)
             }
