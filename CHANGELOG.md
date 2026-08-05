@@ -3,6 +3,23 @@
 Formato semver: MINOR por release cronológica, PATCH para hotfix.
 Entradas novas vão no topo.
 
+## [1.8.0] — 2026-08-05 · #02
+
+- **Seek descartado como recurso: o `Amazon Music.app` ignora o comando de posicionamento do
+  MediaRemote.** Comprovado por teste observável — seek para 5s antes do fim da faixa, com o app
+  tocando, não fez a faixa terminar nem avançar (`Welcome to Paradise` 224s→219s e `Sultans Of
+  Swing` 348s→340s). Contraprova no QuickTime Player (arquivo de 127s, `seek 100s` → posição real
+  reportada de 101,35s) mostra que o comando e o adapter funcionam: quem não implementa o handler
+  é o Amazon Music. O `seek(toSeconds:)` foi removido — nunca teve chamador e nunca teria
+  funcionado —, e README/CLAUDE.md deixaram de anunciar `seek` entre os comandos suportados. A
+  barra de progresso é indicador, não controle. Ver `DECISOES.md`.
+- **Fix: o fallback de desenvolvimento quebraria no primeiro `brew upgrade`.** Fora do bundle
+  (`swift run`), o adapter era procurado em `Cellar/media-control/0.7.6/…` — caminho com a versão
+  no nome, que deixa de existir a cada atualização da fórmula. Como o `.app` instalado usa os
+  recursos bundlados e seguiria funcionando, a falha apareceria só em desenvolvimento. Agora usa
+  os symlinks `opt/` do brew, reapontados a cada upgrade, com o prefixo Intel além do Apple
+  Silicon — mesma resolução do `brew --prefix` já usado pelo `scripts/build-app.sh`.
+
 ## [1.7.0] — 2026-08-05 · #01
 
 - **Arrasto só pelo fundo do card.** Clicar num botão de transporte e mexer o mouse movia a janela

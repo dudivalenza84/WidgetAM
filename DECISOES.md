@@ -3,6 +3,39 @@
 Decisões com efeito além da sessão em que foram tomadas (ADR-lite). Entradas novas
 vão no topo. O que está aqui não se rediscute sem motivo novo.
 
+## 2026-08-05 · #02 — Não há seek: o Amazon Music ignora o comando de posicionamento
+
+**Contexto.** `NowPlayingController.seek(toSeconds:)` existia sem nenhum chamador, e
+README e CLAUDE.md anunciavam `seek` entre os comandos de transporte suportados. A
+pendência "tornar a barra de progresso ajustável pela UI" seguia aberta partindo do
+princípio de que bastaria ligar a função a um gesto na barra. Não bastava — a função
+nunca teria funcionado.
+
+**Evidência.** Teste desenhado para ser observável sem depender da posição publicada
+(que o app não publica): mandar o seek para poucos segundos antes do fim da faixa,
+com o app tocando. Se o comando fosse aceito, a faixa terminaria e o app avançaria
+para a próxima — e troca de faixa aparece no stream.
+
+- `Welcome to Paradise` (224s) → `seek 219s`, 20s tocando: faixa não terminou, não trocou.
+- `Sultans Of Swing` (348s) → `seek 340s`, 15s tocando: faixa não terminou, não trocou.
+- Contraprova em app neutro: QuickTime Player, arquivo local de 127s → `seek 100s`;
+  o próprio QuickTime reportou `current time = 101,35s`. **O comando funciona.**
+
+**Conclusão.** O `mediaremote-adapter` implementa o seek corretamente e o macOS o
+entrega. Quem não implementa o handler é o `Amazon Music.app`. Isso é escolha do app
+— nada no widget, no adapter ou na forma de chamar muda o resultado.
+
+**Decisão.** Não haverá seek enquanto o player for o Amazon Music. A barra de
+progresso é indicador, e não vira controle. O `seek(toSeconds:)` foi removido em vez
+de mantido como código morto, porque a sua presença é o que sustentava a suposição
+errada. README e CLAUDE.md corrigidos.
+
+**Relação com a decisão de #01.** São limitações distintas do mesmo app: `#01`
+concluiu que a *leitura* da posição após um seek feito dentro do app é irrecuperável;
+esta conclui que a *escrita* da posição também é impossível. O app não expõe posição
+em nenhuma direção. Reabrir só faz sentido se uma versão futura do Amazon Music
+passar a responder ao comando — verificável em um minuto repetindo o teste acima.
+
 ## 2026-08-05 · #01 — Arrasto da janela por deny-list de NSViews
 
 **Contexto.** O widget arrastava por qualquer ponto do card, porque

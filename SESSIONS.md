@@ -5,6 +5,7 @@ Formato: `YYYY-MM-DD · #NN — <objetivo> — <status>` → [arquivo](docs/sess
 
 ## 2026-08-05
 
+- 2026-08-05 · #02 — Seek pela UI: provar viabilidade e fechar pendências — concluída → [arquivo](docs/sessions/2026-08-05-02.md)
 - 2026-08-05 · #01 — Arrasto restrito ao fundo + fechar pendências abertas — concluída → [arquivo](docs/sessions/2026-08-05-01.md)
 
 ## 2026-06-26

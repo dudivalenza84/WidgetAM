@@ -63,8 +63,18 @@ final class NowPlayingController: ObservableObject {
 
     private static let perlPath = "/usr/bin/perl"
 
+    /// Prefixos do brew para o `media-control`, na ordem de tentativa. São os
+    /// symlinks `opt/`, que o brew reaponta a cada atualização da fórmula —
+    /// diferente de um caminho no `Cellar/`, que carrega a versão no nome e
+    /// deixa de existir no primeiro `brew upgrade`. Mesma resolução que o
+    /// `brew --prefix media-control` usado pelo `scripts/build-app.sh`.
+    private static let brewPrefixes = [
+        "/opt/homebrew/opt/media-control", // Apple Silicon
+        "/usr/local/opt/media-control",    // Intel
+    ]
+
     /// Diretório `mediaremote-adapter/` dentro de Resources do bundle.
-    /// Em desenvolvimento (rodando o binário SPM solto), cai no Cellar do brew.
+    /// Em desenvolvimento (rodando o binário SPM solto), cai na instalação do brew.
     private static func adapterDir() -> String {
         if let resource = Bundle.main.resourcePath {
             let bundled = resource + "/mediaremote-adapter"
@@ -73,7 +83,9 @@ final class NowPlayingController: ObservableObject {
             }
         }
         // Fallback de desenvolvimento.
-        return "/opt/homebrew/Cellar/media-control/0.7.6/lib/media-control"
+        let dev = brewPrefixes.map { $0 + "/lib/media-control" }
+        return dev.first { FileManager.default.fileExists(atPath: $0 + "/mediaremote-adapter.pl") }
+            ?? dev[0]
     }
 
     private static func frameworkPath() -> String {
@@ -83,7 +95,8 @@ final class NowPlayingController: ObservableObject {
                 return bundled
             }
         }
-        return "/opt/homebrew/Cellar/media-control/0.7.6/Frameworks/MediaRemoteAdapter.framework"
+        let dev = brewPrefixes.map { $0 + "/Frameworks/MediaRemoteAdapter.framework" }
+        return dev.first { FileManager.default.fileExists(atPath: $0) } ?? dev[0]
     }
 
     private static func scriptPath() -> String {
@@ -296,11 +309,14 @@ final class NowPlayingController: ObservableObject {
         }
     }
 
-    /// Seek para uma posição absoluta em segundos.
-    func seek(toSeconds seconds: Double) {
-        let micros = Int(seconds * 1_000_000)
-        runAdapter(["seek", String(micros)])
-    }
+    // Não existe seek. O `Amazon Music.app` ignora o comando de posicionamento do
+    // MediaRemote: comprovado mandando o seek para 5s antes do fim da faixa, com
+    // o app tocando — a faixa não terminou nem avançou (duas faixas testadas). O
+    // comando em si é funcional, o QuickTime obedece ao mesmo `seek`. Como o app
+    // também não publica a posição, não há nem leitura nem escrita de posição.
+    // Havia aqui um `seek(toSeconds:)` que nunca teve chamador e nunca teria
+    // funcionado; foi removido para não voltar a sugerir um recurso inexistente.
+    // Ver DECISOES.md · 2026-08-05 · #02.
 
     /// Executa o adapter de forma efêmera (comandos one-shot) e ignora a saída.
     private func runAdapter(_ extraArgs: [String]) {

@@ -10,8 +10,12 @@ Um app Swift nativo (AppKit + SwiftUI) roda como _accessory_ (sem ícone no Dock
 card de widget em nível de mesa, presente em todos os Spaces. A integração com o player usa o
 [`mediaremote-adapter`](https://github.com/ejbills/mediaremote-adapter) bundlado: um
 `/usr/bin/perl` entitled lê o stream do Now Playing (capa, título, artista, progresso, estado)
-e envia comandos de transporte (`play`/`pause`/`next`/`prev`/`seek`) ao `com.amazon.music`. O
+e envia comandos de transporte (`play`/`pause`/`next`/`prev`) ao `com.amazon.music`. O
 controle de volume atua no volume de saída do **sistema** (global), via AppleScript.
+
+A barra de progresso é **indicador, não controle**: o `Amazon Music.app` ignora o comando de
+posicionamento do MediaRemote e também não publica a posição da faixa, então o widget não
+consegue nem mover nem ler o ponto de reprodução. Ver `DECISOES.md`.
 
 ## Requisitos
 

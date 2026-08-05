@@ -12,8 +12,8 @@ Migração para `PENDENCIAS_CONCLUIDAS.md` só por pedido explícito.
 ## Média
 
 - [x] Barra de progresso não reflete seek feito dentro do Amazon Music — **não corrigível**, comprovado por captura do stream: no seek o app publica só `{"playing": bool}`, sem posição e sem `timestamp` novo; o `get` do adapter traz os mesmos campos e o app não tem AppleScript. O que era bug próprio (barra travando em 100% por timestamp obsoleto) foi corrigido. Ver `DECISOES.md` — `2026-08-05 · #01`
-- [ ] Barra de progresso não é ajustável pela UI: `NowPlayingController.seek(toSeconds:)` existe e nunca foi chamado, apesar de README e CLAUDE.md anunciarem "seek" como recurso. Se implementado, a barra vira controle e precisa de `.nonDraggableWindowArea()` — `2026-08-05 · #01`
+- [x] Barra de progresso não é ajustável pela UI — **não implementável**, comprovado por teste observável: seek para 5s antes do fim da faixa, com o app tocando, não fez a faixa terminar nem avançar (`Welcome to Paradise` 224s→219s e `Sultans Of Swing` 348s→340s). Contraprova no QuickTime (arquivo de 127s, seek para 100s → posição real 101,35s) mostra que o comando funciona: quem ignora é o `Amazon Music.app`. O `seek(toSeconds:)` foi removido e README/CLAUDE.md corrigidos, que anunciavam um recurso inexistente. Ver `DECISOES.md` — `2026-08-05 · #02`
 
 ## Baixa
 
-- [ ] Fallback de desenvolvimento em `NowPlayingController` aponta para `media-control/0.7.6` fixo, enquanto `build-app.sh` usa `brew --prefix`: atualizar o brew quebra o `swift run` fora do bundle — `2026-08-05 · #01`
+- [x] Fallback de desenvolvimento em `NowPlayingController` aponta para `media-control/0.7.6` fixo, enquanto `build-app.sh` usa `brew --prefix`: atualizar o brew quebra o `swift run` fora do bundle — resolvido trocando o caminho do `Cellar/` (que carrega a versão no nome) pelos symlinks `opt/` do brew, que a fórmula reaponta a cada upgrade; inclui o prefixo Intel além do Apple Silicon — `2026-08-05 · #02`
