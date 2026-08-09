@@ -1,10 +1,12 @@
 import AppKit
 import SwiftUI
 
-/// Dimensões do card, espelhando a proporção do widget de música nativo do macOS.
+/// Dimensões do card: as do widget *medium* nativo, medidas na grade real da
+/// mesa (célula de 180 pt, footprint de 360×180, inset interno de 5 pt —
+/// ver NativeWidgetGrid).
 enum WidgetMetrics {
-    static let width: CGFloat = 340
-    static let height: CGFloat = 140
+    static let width: CGFloat = 350
+    static let height: CGFloat = 170
     static let cornerRadius: CGFloat = 24
     /// Margem transparente ao redor do card, onde a sombra do SwiftUI é desenhada.
     static let shadowMargin: CGFloat = 18
@@ -29,7 +31,7 @@ struct ContentView: View {
             artwork
             VStack(alignment: .leading, spacing: 6) {
                 Text(track.title ?? "Nada tocando")
-                    .font(.system(size: 15, weight: .bold))
+                    .font(.system(size: 16, weight: .bold))
                     .lineLimit(1)
                 Text(track.artist ?? "—")
                     .font(.system(size: 13))
@@ -74,8 +76,8 @@ struct ContentView: View {
                     .background(.quaternary)
             }
         }
-        .frame(width: 88, height: 88)
-        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .frame(width: 108, height: 108)
+        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
         .shadow(color: .black.opacity(0.3), radius: 5, x: 0, y: 3)
     }
 
@@ -116,7 +118,7 @@ struct ContentView: View {
     private var volumeSidebar: some View {
         VStack(spacing: 8) {
             VerticalVolumeSlider(value: volume.volume) { volume.setVolume($0) }
-                .frame(width: 20, height: 84)
+                .frame(width: 20, height: 104)
 
             Button { volume.toggleMute() } label: {
                 Image(systemName: speakerSymbol)

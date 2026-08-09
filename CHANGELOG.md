@@ -3,6 +3,18 @@
 Formato semver: MINOR por release cronológica, PATCH para hotfix.
 Entradas novas vão no topo.
 
+## [1.9.0] — 2026-08-09 · #01 — Grade nativa de widgets + roadmap de produto
+
+- Snap reescrito: grade celular 2D idêntica à dos widgets nativos da mesa
+  (célula 180×180 pt), com âncora medida ao vivo via CGWindowList quando há
+  widget nativo visível e fallback replicado quando não há.
+- Card nas dimensões do widget *medium* nativo (350×170), capa e slider maiores;
+  janela no mesmo nível dos widgets nativos; realinha à grade ao exibir.
+- Preferências simplificadas: removidos borda de alinhamento, margem e passo
+  vertical; ficou o toggle "Alinhar à grade de widgets do macOS".
+- `ROADMAP.md` novo: plano de 5 fases até a venda direta (multi-player, QA,
+  identidade, infra de venda, lançamento) + decisões de produto em DECISOES.md.
+
 ## [1.8.0] — 2026-08-05 · #02
 
 - **Seek descartado como recurso: o `Amazon Music.app` ignora o comando de posicionamento do

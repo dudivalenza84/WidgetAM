@@ -40,34 +40,10 @@ struct PreferencesView: View {
     var body: some View {
         Form {
             Section("Posicionamento") {
-                Toggle("Alinhar à grade", isOn: $settings.snapToGrid)
-                Picker("Borda de alinhamento", selection: $settings.snapEdge) {
-                    ForEach(SnapEdge.allCases) { edge in
-                        Text(edge.label).tag(edge)
-                    }
-                }
-                .pickerStyle(.segmented)
-                .disabled(!settings.snapToGrid)
-                LabeledContent("Margem da borda") {
-                    HStack {
-                        Slider(value: $settings.edgeMargin, in: 0...80)
-                        Text("\(Int(settings.edgeMargin)) pt")
-                            .monospacedDigit()
-                            .foregroundStyle(.secondary)
-                            .frame(width: 48, alignment: .trailing)
-                    }
-                }
-                LabeledContent("Passo da grade vertical") {
-                    HStack {
-                        Stepper(value: $settings.gridStepY, in: 1...32, step: 1) {
-                            EmptyView()
-                        }
-                        Text("\(Int(settings.gridStepY)) pt")
-                            .monospacedDigit()
-                            .foregroundStyle(.secondary)
-                            .frame(width: 48, alignment: .trailing)
-                    }
-                }
+                Toggle("Alinhar à grade de widgets do macOS", isOn: $settings.snapToGrid)
+                Text("A grade é a mesma dos widgets nativos da mesa: com algum widget nativo visível, o alinhamento é medido por ele; sem nenhum, usa a geometria padrão do sistema.")
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
             }
 
             Section("Aparência") {

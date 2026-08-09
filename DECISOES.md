@@ -3,6 +3,50 @@
 Decisões com efeito além da sessão em que foram tomadas (ADR-lite). Entradas novas
 vão no topo. O que está aqui não se rediscute sem motivo novo.
 
+## 2026-08-09 · #01 — Rumo de produto: venda direta fora da App Store, Amazon Music inegociável
+
+**Contexto.** O app vai virar produto à venda. O MediaRemote é framework privado,
+acessado via perl entitled — inviável na Mac App Store (revisão rejeita API privada e
+o sandbox proíbe o mecanismo). A alternativa MAS exigiria abrir mão do Amazon Music.
+
+**Escolha.** (1) Suporte ao Amazon Music é **inegociável** — é o motivo do app existir.
+(2) Logo, distribuição é **venda direta fora da App Store**: Developer ID, hardened
+runtime, notarização, updates via Sparkle, checkout próprio. (3) O risco de a Apple
+fechar o acesso ao MediaRemote em updates do macOS é aceito e deve ser precificado no
+modelo de negócio (resposta rápida a quebras; ver ROADMAP.md). (4) Nome de trabalho:
+**MMC** ("Midia MacControl" na proposta original) — a forma final precisa de validação
+de marca: a diretriz da Apple veta "Mac" incorporado ao nome (permite "X for Mac"), e
+há colisão com a dependência open-source `media-control`. Escopo de produto ampliado:
+multi-player (Spotify, Deezer, browser/YouTube etc.) com seletor, mantendo MediaRemote
+como base e AppleScript como camada de capacidades extras por player (seek/volume
+por-app onde existir — Amazon Music não tem AppleScript, comprovado em 2026-08-09).
+
+**Alternativa descartada.** Reescrever só com APIs públicas para entrar na MAS:
+perderia o Amazon Music. Volume por-app universal via driver de áudio virtual:
+engenharia pesada e frágil, fora do escopo.
+
+## 2026-08-09 · #01 — Snap na grade celular dos widgets nativos, medida via CGWindowList
+
+**Contexto.** O snap anterior era "âncora na borda esquerda/direita + passo vertical
+livre" com margem e passo configuráveis — não correspondia à grade real dos widgets
+da mesa do macOS, que é celular e 2D.
+
+**Escolha.** Grade medida empiricamente (2026-08-09, macOS 26): célula de 180×180 pt
+sem gutter externo; o respiro entre cards é o inset interno de ~5 pt; um widget
+*medium* ocupa 2 células (footprint 360×180, card visível ~350×170). A âncora é lida
+ao vivo das janelas dos widgets nativos via `CGWindowListCopyWindowInfo` (nível
+`desktopIcon + 2`, tamanho múltiplo exato de 180 — o filtro de tamanho descarta o
+chrome de hover da Central de Notificações). Sem widget nativo na mesa, fallback
+replicado: coluna a 8 pt da borda direita, primeira linha 24 pt abaixo da menu bar.
+O card adota as dimensões *medium* (350×170) e a janela o mesmo nível dos nativos.
+As preferências `snapEdge`, `edgeMargin` e `gridStepY` foram removidas — a grade
+nativa não tem esses graus de liberdade; ficou só o toggle `snapToGrid`.
+
+**Alternativa descartada.** Manter constantes hardcoded sem medição ao vivo: quebraria
+em resolução/escala diferente e nunca alinharia pixel-perfect com widgets nativos
+presentes. A leitura via CGWindowList não exige permissão de gravação de tela para
+bounds/layer, então o custo é só uma consulta no momento do snap.
+
 ## 2026-08-05 · #02 — Não há seek: o Amazon Music ignora o comando de posicionamento
 
 **Contexto.** `NowPlayingController.seek(toSeconds:)` existia sem nenhum chamador, e

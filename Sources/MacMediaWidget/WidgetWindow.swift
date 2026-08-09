@@ -4,11 +4,10 @@ import SwiftUI
 
 /// Janela do widget de mesa: sem bordas, translúcida, em nível de mesa (atrás
 /// das janelas, como os widgets nativos), presente em todos os Spaces e
-/// não-ativante (não rouba foco). Ao ser arrastada, alinha-se a uma grade e
-/// persiste a posição em UserDefaults.
+/// não-ativante (não rouba foco). Ao ser arrastada, alinha-se à grade celular
+/// dos widgets nativos (ver NativeWidgetGrid) e persiste a posição.
 @MainActor
 final class WidgetWindow: NSPanel, NSWindowDelegate {
-    /// Margem da borda e passo da grade vêm das preferências (ajustáveis ao vivo).
     private let settings = AppSettings.shared
     private let originDefaultsKey = "widgetOrigin"
 
@@ -24,8 +23,9 @@ final class WidgetWindow: NSPanel, NSWindowDelegate {
         )
 
         isFloatingPanel = true
-        // Nível de mesa: acima dos ícones do desktop, atrás das janelas comuns.
-        level = NSWindow.Level(rawValue: Int(CGWindowLevelForKey(.desktopIconWindow)) + 1)
+        // Mesmo nível de janela dos widgets nativos da mesa (medido via
+        // CGWindowList): acima dos ícones do desktop, atrás das janelas comuns.
+        level = NSWindow.Level(rawValue: NativeWidgetGrid.nativeLevel)
         isOpaque = false
         backgroundColor = .clear
         // A sombra fica a cargo do SwiftUI (acompanha o card arredondado). A
@@ -45,19 +45,15 @@ final class WidgetWindow: NSPanel, NSWindowDelegate {
         host.autoresizingMask = [.width, .height]
         contentView = host
 
-        // Reposiciona ao vivo quando a margem ou o passo da grade mudam nas
-        // preferências (ignora a emissão do valor inicial com dropFirst).
-        Publishers.MergeMany(
-            settings.$edgeMargin.map { _ in () }.eraseToAnyPublisher(),
-            settings.$gridStepY.map { _ in () }.eraseToAnyPublisher(),
-            settings.$snapToGrid.map { _ in () }.eraseToAnyPublisher(),
-            settings.$snapEdge.map { _ in () }.eraseToAnyPublisher()
-        )
-        .dropFirst()
-        .sink { [weak self] in
-            Task { @MainActor in self?.snapToGrid() }
-        }
-        .store(in: &cancellables)
+        // Realinha ao vivo quando o snap é ligado nas preferências (ignora a
+        // emissão do valor inicial com dropFirst).
+        settings.$snapToGrid
+            .dropFirst()
+            .sink { [weak self] enabled in
+                guard enabled else { return }
+                Task { @MainActor in self?.snapToGrid() }
+            }
+            .store(in: &cancellables)
     }
 
     override var canBecomeKey: Bool { true }
@@ -69,6 +65,9 @@ final class WidgetWindow: NSPanel, NSWindowDelegate {
         } else {
             center()
         }
+        // Realinha à grade na exibição: posição salva por versão anterior (ou
+        // por outra tela) pode estar fora das células.
+        snapToGrid()
         orderFrontRegardless()
     }
 
@@ -100,26 +99,23 @@ final class WidgetWindow: NSPanel, NSWindowDelegate {
         }
 
         guard let screen = screen ?? NSScreen.main else { return }
-        let sf = screen.frame
         let margin = WidgetMetrics.shadowMargin // borda transparente da janela
-        let origin = frame.origin
+        let inset = NativeWidgetGrid.cardInset
+        let anchor = NativeWidgetGrid.anchor(for: screen)
 
-        // Horizontal: ancora à borda escolhida nas preferências, de modo que a
-        // borda VISÍVEL do card fique a `edgeMargin` da borda da tela.
-        let snappedX: CGFloat
-        switch settings.snapEdge {
-        case .right:
-            snappedX = sf.maxX - settings.edgeMargin + margin - frame.width
-        case .left:
-            snappedX = sf.minX + settings.edgeMargin - margin
-        }
+        // Footprint do card na grade nativa: as células que ele ocupa (o card
+        // visível mais o inset interno padrão dos widgets). Alinhamos o canto
+        // superior esquerdo do footprint à célula mais próxima nos dois eixos.
+        let footprintLeft = frame.minX + margin - inset
+        let footprintTop = frame.maxY - margin + inset
+        let snappedLeft = NativeWidgetGrid.snap(footprintLeft, to: anchor.x)
+        let snappedTop = NativeWidgetGrid.snap(footprintTop, to: anchor.topY)
 
-        // Vertical: grade fina, para ajuste de altura livre.
-        let stepY = max(settings.gridStepY, 1)
-        let snappedY = (origin.y / stepY).rounded() * stepY
-
-        let snapped = NSPoint(x: snappedX, y: snappedY)
-        if snapped != origin {
+        let snapped = NSPoint(
+            x: snappedLeft + inset - margin,
+            y: snappedTop - inset - WidgetMetrics.height - margin
+        )
+        if snapped != frame.origin {
             setFrameOrigin(snapped)
         }
         UserDefaults.standard.set(NSStringFromPoint(snapped), forKey: originDefaultsKey)

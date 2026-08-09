@@ -3,6 +3,10 @@
 Uma linha por sessão. Apenas índice — nunca acumula conteúdo de sessão.
 Formato: `YYYY-MM-DD · #NN — <objetivo> — <status>` → [arquivo](docs/sessions/YYYY-MM-DD-NN.md)
 
+## 2026-08-09
+
+- 2026-08-09 · #01 — Visual e grade de widget nativo do macOS + roadmap de produto — concluída → [arquivo](docs/sessions/2026-08-09-01.md)
+
 ## 2026-08-05
 
 - 2026-08-05 · #02 — Seek pela UI: provar viabilidade e fechar pendências — concluída → [arquivo](docs/sessions/2026-08-05-02.md)

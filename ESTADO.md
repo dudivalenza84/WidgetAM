@@ -1,38 +1,35 @@
 # Estado — MacMediaWidget
 
-Última sessão: 2026-08-05 · #02 — Seek pela UI: provar viabilidade e fechar pendências — concluída
+Última sessão: 2026-08-09 · #01 — Visual e grade de widget nativo + roadmap de produto — concluída
 
 ## Próximo passo
 
-Nada em aberto e nada bloqueado — `PENDENCIAS.md` está zerado. O widget está
-funcionalmente completo para o uso pretendido, então o próximo trabalho é escolha
-nova, não continuação. Candidatos: shuffle/repeat (o adapter expõe os dois comandos,
-nunca testados contra o Amazon Music — vale o mesmo método empírico de #02 antes de
-prometer o recurso) ou refinamento visual do card.
+Fase 1 do `ROADMAP.md` (multi-player): abstração `Player` — MediaRemote como base
+universal + AppleScript como camada por app (Spotify/Apple Music têm; Amazon não) —
+seletor de player preferido e matriz de compatibilidade empírica. Pré-requisito do
+usuário: instalar Spotify (e Deezer, se for suportar). Antes de codar, remontar o
+`.app` v1.9.0 (`scripts/build-app.sh`) — pendência Alta.
 
 ## Pendências abertas (prioridade)
 
-- (nenhuma)
+- [ ] Remontar `.app` v1.9.0 e substituir o de /Applications (roda binário de debug)
+- [ ] Fase 1 multi-player (ROADMAP) — depende de instalar Spotify/Deezer
+- [ ] Conferir licença do adapter ejbills + textos de atribuição (Fase 4)
 
 ## Decisões vigentes que restringem o trabalho
 
-- Não há seek: o Amazon Music ignora o comando de posicionamento do MediaRemote
-  (comprovado; o QuickTime obedece ao mesmo comando). A barra de progresso é
-  indicador, não controle — ver DECISOES.md · 2026-08-05 · #02.
-- Posição pós-seek feito dentro do Amazon Music é irrecuperável — não reinvestigar.
-  Somada à de cima: o app não expõe posição nem para leitura nem para escrita.
-- Arrasto da janela por deny-list: só NSViews reais podem se excluir do arrasto;
-  views SwiftUI puras não conseguem (ver DECISOES.md · 2026-08-05 · #01).
-- `togglePlayPause` é comando global: nunca enviar sem o Amazon Music rodando.
-- Volume é do sistema (global), não por-app: MediaRemote não tem comando de volume.
-- O `glassEffect` vai numa camada de fundo, nunca direto na stack.
+- Produto: Amazon Music inegociável → venda direta fora da App Store; MediaRemote
+  (privado) aceito como risco precificado. Nome de trabalho MMC pendente de validação.
+- Snap: grade celular nativa 180×180 medida via CGWindowList (ver DECISOES.md);
+  não recriar preferências de margem/passo — a grade nativa não tem esses graus.
+- Não há seek nem posição no Amazon Music; volume por-app impossível para ele
+  (sem AppleScript, comprovado). `togglePlayPause` é global. Volume atual é do sistema.
+- Arrasto por deny-list: só NSViews reais se excluem. `glassEffect` em camada de fundo.
+- Comando novo de adapter: testar contra o app real antes de prometer (aceita e ignora).
 
 ## Alertas
 
-- `swift build` OK.
-- **O `.app` em `/Applications` está na v1.7.0 e não foi remontado.** As mudanças de
-  #02 só afetam o `swift run` e o próximo `scripts/build-app.sh` — que é manual e não
-  roda no encerramento.
-- Antes de prometer qualquer comando novo do adapter (shuffle, repeat, speed),
-  testar contra o Amazon Music primeiro: ele aceita o comando sem erro e simplesmente
-  o ignora, então "não deu erro" não é evidência de que funcionou.
+- **O widget está rodando do binário de debug** (`nohup .build/debug/MacMediaWidget`,
+  iniciado em 2026-08-09) — proposital, para o usuário usar o visual novo; o `.app`
+  de /Applications segue na v1.7.0 sem as mudanças. Remontar é a primeira pendência.
+- `swift build` OK. Auditoria de segurança das mudanças da sessão: sem achados.
