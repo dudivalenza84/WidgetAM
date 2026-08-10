@@ -161,8 +161,15 @@ enum DebugFlags {
     ///
     /// A variável de ambiente serve para rodar o binário direto; a chave de
     /// `UserDefaults` sobrevive ao relançamento do bundle pelo LaunchServices.
+    /// Fora de debug é sempre `false`: uma chave de teste que altera o comportamento do
+    /// app e pode ser ligada por qualquer processo que escreva no domínio de
+    /// `UserDefaults` não tem por que existir num binário distribuído.
     static var simulatesMissingApp: Bool {
-        ProcessInfo.processInfo.environment["MMW_SIMULATE_MISSING_APP"] != nil
+        #if DEBUG
+        return ProcessInfo.processInfo.environment["MMW_SIMULATE_MISSING_APP"] != nil
             || UserDefaults.standard.bool(forKey: "simulateMissingApp")
+        #else
+        return false
+        #endif
     }
 }

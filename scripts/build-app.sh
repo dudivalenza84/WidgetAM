@@ -52,9 +52,55 @@ for lproj in "$ROOT"/Resources/*.lproj; do
     [[ -d "$lproj" ]] && cp -R "$lproj" "$CONTENTS/Resources/"
 done
 
-# 4. Assinatura ad-hoc (framework primeiro, depois o app inteiro).
-echo "==> codesign ad-hoc"
-codesign --force --sign - "$CONTENTS/Resources/mediaremote-adapter/MediaRemoteAdapter.framework"
-codesign --force --deep --sign - "$APP"
+# 4. Assinatura. Ad-hoc por padrão (uso pessoal); com Developer ID quando houver.
+#
+#    Para assinar de verdade — pré-requisito da venda direta (Fase 4 do ROADMAP):
+#      export MMW_SIGN_IDENTITY="Developer ID Application: Fulano (TEAMID)"
+#      scripts/build-app.sh
+#
+#    E para notarizar, depois de guardar as credenciais uma vez com
+#    `xcrun notarytool store-credentials`:
+#      export MMW_NOTARY_PROFILE="nome-do-perfil"
+#
+#    `notarytool` e `stapler` vêm nas Command Line Tools — notarizar não exige o Xcode
+#    completo (verificado em 2026-08-10).
+ENTITLEMENTS="$ROOT/Resources/$APP_NAME.entitlements"
+SIGN_IDENTITY="${MMW_SIGN_IDENTITY:-}"
+
+if [[ -n "$SIGN_IDENTITY" ]]; then
+    echo "==> codesign com Developer ID + hardened runtime"
+    # Sempre de dentro para fora: assinar o app antes do framework aninhado invalidaria
+    # a assinatura externa.
+    codesign --force --options runtime --timestamp \
+        --sign "$SIGN_IDENTITY" \
+        "$CONTENTS/Resources/mediaremote-adapter/MediaRemoteAdapter.framework"
+    # Sem --deep: a Apple o desaconselha há anos, porque ele reassina o que encontrar
+    # com as entitlements erradas. O framework já foi assinado acima.
+    codesign --force --options runtime --timestamp \
+        --entitlements "$ENTITLEMENTS" \
+        --sign "$SIGN_IDENTITY" \
+        "$APP"
+    codesign --verify --deep --strict --verbose=2 "$APP"
+else
+    echo "==> codesign ad-hoc (defina MMW_SIGN_IDENTITY para assinar com Developer ID)"
+    codesign --force --sign - "$CONTENTS/Resources/mediaremote-adapter/MediaRemoteAdapter.framework"
+    codesign --force --deep --sign - "$APP"
+fi
+
+# 5. Notarização (opcional, exige assinatura com Developer ID).
+if [[ -n "${MMW_NOTARY_PROFILE:-}" ]]; then
+    if [[ -z "$SIGN_IDENTITY" ]]; then
+        echo "MMW_NOTARY_PROFILE definido sem MMW_SIGN_IDENTITY: a Apple recusa binário ad-hoc." >&2
+        exit 1
+    fi
+    ZIP="$DIST/$APP_NAME-notarize.zip"
+    echo "==> notarizando (pode levar alguns minutos)"
+    ditto -c -k --keepParent "$APP" "$ZIP"
+    xcrun notarytool submit "$ZIP" --keychain-profile "$MMW_NOTARY_PROFILE" --wait
+    rm -f "$ZIP"
+    # O staple grava o ticket no bundle: sem ele, a primeira abertura offline falha.
+    xcrun stapler staple "$APP"
+    xcrun stapler validate "$APP"
+fi
 
 echo "==> pronto: $APP"

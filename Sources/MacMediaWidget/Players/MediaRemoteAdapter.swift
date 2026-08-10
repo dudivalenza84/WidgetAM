@@ -26,10 +26,22 @@ enum MediaRemoteAdapter {
     /// diferente de um caminho no `Cellar/`, que carrega a versão no nome e
     /// deixa de existir no primeiro `brew upgrade`. Mesma resolução que o
     /// `brew --prefix media-control` usado pelo `scripts/build-app.sh`.
+    ///
+    /// **Só existe em debug, e isso é uma decisão de segurança.** `/opt/homebrew` é
+    /// gravável pelo usuário comum no Apple Silicon: qualquer processo sem privilégio
+    /// pode escrever lá. Se o app distribuído aceitasse esse caminho como alternativa —
+    /// nem que fosse só quando o recurso bundlado sumisse —, bastaria plantar um
+    /// `mediaremote-adapter.pl` ali para executar código arbitrário **dentro** do
+    /// processo do widget, herdando as permissões dele, inclusive a de Automação sobre
+    /// os apps de música. Em release, o recurso do bundle é o único caminho aceito; se
+    /// ele não estiver lá, o app fica sem leitura e diz isso, que é o comportamento
+    /// seguro.
+    #if DEBUG
     private static let brewPrefixes = [
         "/opt/homebrew/opt/media-control", // Apple Silicon
         "/usr/local/opt/media-control",    // Intel
     ]
+    #endif
 
     /// Diretório `mediaremote-adapter/` dentro de Resources do bundle.
     /// Em desenvolvimento (rodando o binário SPM solto), cai na instalação do brew.
@@ -40,10 +52,16 @@ enum MediaRemoteAdapter {
                 return bundled
             }
         }
-        // Fallback de desenvolvimento.
+        #if DEBUG
         let dev = brewPrefixes.map { $0 + "/lib/media-control" }
         return dev.first { FileManager.default.fileExists(atPath: $0 + "/mediaremote-adapter.pl") }
             ?? dev[0]
+        #else
+        // Caminho inexistente: o subprocesso falha ao iniciar, a saúde do adapter vira
+        // `.unavailable` e o usuário é avisado — em vez de executarmos um script de
+        // procedência desconhecida.
+        return (Bundle.main.resourcePath ?? "") + "/mediaremote-adapter"
+        #endif
     }
 
     static func frameworkPath() -> String {
@@ -53,8 +71,12 @@ enum MediaRemoteAdapter {
                 return bundled
             }
         }
+        #if DEBUG
         let dev = brewPrefixes.map { $0 + "/Frameworks/MediaRemoteAdapter.framework" }
         return dev.first { FileManager.default.fileExists(atPath: $0) } ?? dev[0]
+        #else
+        return (Bundle.main.resourcePath ?? "") + "/mediaremote-adapter/MediaRemoteAdapter.framework"
+        #endif
     }
 
     static func scriptPath() -> String {

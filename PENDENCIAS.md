@@ -44,6 +44,12 @@ Migração para `PENDENCIAS_CONCLUIDAS.md` só por pedido explícito.
   tela e a recuperação de posição foram feitas por leitura de código, com testes
   sintéticos — não há segundo monitor aqui) — `2026-08-10 · #01`
 
+- [ ] **Fase 4 — assinar o Apple Developer Program (US$ 99/ano)**. É o único bloqueio
+  real do resto da fase: o pipeline de assinatura, hardened runtime, notarização e
+  staple já está pronto em `scripts/build-app.sh` (`MMW_SIGN_IDENTITY` e
+  `MMW_NOTARY_PROFILE`), só falta o certificado para exercitá-lo. Sem Developer ID
+  também não faz sentido montar o Sparkle — `2026-08-10 · #01`
+
 ## Média
 
 - [ ] Migrar `SelfTests.swift` para swift-testing **se** o Xcode entrar no projeto — as

@@ -272,9 +272,22 @@ final class NowPlayingController: ObservableObject {
         return max(value, 0)
     }
 
+    /// Teto do acumulador de linha. Uma linha real é grande — a capa vem como base64 no
+    /// mesmo JSON, o que dá centenas de KB —, mas não ilimitada. Sem teto, um stream que
+    /// despeje bytes sem nunca mandar `\n` (adapter em pânico, saída corrompida) faria o
+    /// buffer crescer até consumir a memória da máquina.
+    private static let maxBufferBytes = 8 * 1024 * 1024
+
     /// Acumula bytes do stdout e processa linha a linha (cada linha = 1 JSON).
     private func ingest(_ chunk: Data) {
         buffer.append(chunk)
+
+        if buffer.count > Self.maxBufferBytes {
+            NSLog("MacMediaWidget: linha do adapter passou de \(Self.maxBufferBytes) bytes sem terminar; descartando")
+            buffer.removeAll(keepingCapacity: false)
+            return
+        }
+
         let newline = UInt8(ascii: "\n")
         while let idx = buffer.firstIndex(of: newline) {
             let lineData = buffer[buffer.startIndex..<idx]

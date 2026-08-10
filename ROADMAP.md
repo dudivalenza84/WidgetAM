@@ -34,14 +34,22 @@ uma fonte de navegador, com a matriz documentada e sem regressão no Amazon Musi
 ## Fase 2 — Robustez e QA de produto
 
 O que separa "funciona na minha máquina" de produto.
+**Feita em `2026-08-10 · #01`**, exceto o que exige olho humano ou segundo monitor.
 
-- **Localização**: UI hoje é pt-BR; venda exige no mínimo inglês (String Catalog).
-- **Multi-tela e resoluções**: grade nativa e persistência de posição com 2+
-  monitores, troca de resolução/escala, notch/sem notch.
-- **Estados degradados**: adapter morre ou macOS quebra o mecanismo (detectar,
-  avisar o usuário, não travar); player fecha no meio; sem player instalado.
-- **Saúde do adapter**: sinalização visível quando o stream cai + retomada.
-- **Testes**: cobrir o que for testável sem UI (grade, parsing, settings).
+- ✅ **Localização**: inglês virou o idioma-base (a chave é o texto em inglês) e
+  `pt-BR.lproj` traz a tradução, com `scripts/verificar-traducoes.sh` guardando a
+  consistência. Falta revisar o texto traduzido na tela.
+- ✅ **Multi-tela e resoluções**: âncora da grade filtrada por tela, posição salva
+  validada contra as telas conectadas e recuperação em
+  `didChangeScreenParametersNotification`. Testado por asserções sintéticas — falta um
+  segundo monitor de verdade.
+- ✅ **Estados degradados**: `AdapterHealth` distingue "nada tocando" de "o mecanismo
+  parou", com aviso na UI; player fechado e player ausente já tratados.
+- ✅ **Saúde do adapter**: checagem de entitlement na abertura, reconexão com backoff
+  exponencial, sinalização visível. Verificado matando o subprocesso.
+- ✅ **Testes**: 53 verificações em `SelfTests.swift` (`swift run MacMediaWidget
+  --run-tests`) — não é `swift test` porque as CLT não trazem os frameworks de teste;
+  ver `DECISOES.md`.
 
 **Critério de saída**: app utilizável por um desconhecido, em inglês, sem assistência.
 
@@ -59,9 +67,13 @@ O que separa "funciona na minha máquina" de produto.
 
 ## Fase 4 — Infra de venda direta
 
-- **Apple Developer Program** (US$ 99/ano) → certificado Developer ID.
-- **Pipeline de release**: evoluir `scripts/build-app.sh` para assinar (hardened
-  runtime), notarizar (`notarytool`) e grampear (staple); DMG de distribuição.
+- **Apple Developer Program** (US$ 99/ano) → certificado Developer ID. **Depende do
+  dono do produto**: é o único bloqueio real do resto desta fase.
+- ✅ **Pipeline de release** (`2026-08-10 · #01`): `scripts/build-app.sh` assina com
+  hardened runtime e entitlements quando `MMW_SIGN_IDENTITY` existe, notariza e grampeia
+  quando `MMW_NOTARY_PROFILE` existe, e cai em ad-hoc sem nenhum dos dois. Só falta o
+  certificado para exercitar o caminho completo. Dado útil: **`notarytool` e `stapler`
+  vêm nas Command Line Tools** — esta fase não exige instalar o Xcode.
 - **Updates**: Sparkle (appcast + chaves EdDSA) — crítico pelo risco de update do
   macOS quebrar o MediaRemote: a resposta rápida É o produto.
 - **Licenciamento/checkout**: Paddle ou Lemon Squeezy (merchant of record — cuidam
@@ -70,8 +82,11 @@ O que separa "funciona na minha máquina" de produto.
   bundle — **feito** em `2026-08-10 · #01`: um único terceiro redistribuído, o
   `mediaremote-adapter` de `ungive` (BSD-3-Clause), com texto integral e obrigações em
   `Resources/THIRD-PARTY-LICENSES.md`, copiado para o bundle pelo `build-app.sh`.
-- **Auditoria de segurança completa do app** (não só diffs): subprocesso perl,
-  parsing do JSON do adapter, resolução de caminhos do bundle, UserDefaults.
+- ✅ **Auditoria de segurança completa do app** (`2026-08-10 · #01`): relatório em
+  `docs/auditoria-seguranca.md`. Três correções, uma delas de gravidade alta — o
+  fallback para `/opt/homebrew` (caminho gravável sem privilégio) permitiria executar
+  código dentro do processo do app. Refazer quando entrar o Sparkle: canal de update é
+  a superfície mais crítica de todas.
 - **Modelo de preço**: decidir compra única vs. assinatura considerando o risco
   estrutural (produto pode quebrar num update do macOS e exigir manutenção contínua).
 
