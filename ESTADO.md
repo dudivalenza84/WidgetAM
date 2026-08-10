@@ -42,7 +42,7 @@ resolvido alguma ao retomar, o caminho é direto:
 
 ## Alertas
 
-- **6 commits sem push** até o fechamento desta sessão (o push do encerramento resolve;
-  se falhar com 403, é o keychain entregando credencial que não é a `dudivalenza84`).
+- Nenhum. Remote em dia (7 commits empurrados no encerramento, sem o 403 do keychain
+  desta vez).
 - `swift build` OK · 53 verificações OK · traduções 37/37 OK.
 - O `.app` instalado em `/Applications` está na 1.11.0, igual ao código.
