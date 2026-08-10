@@ -12,7 +12,10 @@ Widget de desktop para macOS, com design premium (Liquid Glass), que **controla*
 
 - **Linguagem/UI**: Swift nativo — AppKit (janela widget, tray) + SwiftUI (UI Liquid Glass).
 - **Janela**: `NSWindow` em nível de desktop, sem bordas, presente em todos os Spaces, não-ativante, com snap à grade de widgets da mesa.
-- **Integração com o player**: `mediaremote-adapter` (de `ungive`/Jonas van den Berg, BSD-3-Clause, obtido via o pacote Homebrew `media-control` do mesmo autor) bundlado no app, usando `/usr/bin/perl` entitled para ler o Now Playing (capa, título, artista, progresso, estado) e enviar comandos de transporte (play/pause/next/prev) ao `Amazon Music.app` (`com.amazon.music`). Não há seek: o app ignora o comando de posicionamento do MediaRemote (ver `DECISOES.md`).
+- **Integração com o player**: duas camadas (ver `docs/fase1-multiplayer.md`).
+  1. **MediaRemote** — `mediaremote-adapter` (de `ungive`/Jonas van den Berg, BSD-3-Clause, obtido via o pacote Homebrew `media-control` do mesmo autor) bundlado no app, usando `/usr/bin/perl` entitled. Lê o Now Playing de qualquer fonte e envia transporte. **O comando não tem destinatário**: atua sobre a sessão ativa, sem parâmetro de bundle id.
+  2. **AppleScript por app** — onde existe dicionário (Apple Music sim, Amazon Music não): posição real, seek, volume por-app, shuffle/repeat e comando endereçado. Requer permissão de Automação; negada, as capacidades caem sozinhas em runtime.
+  No `Amazon Music.app` (`com.amazon.music`) não há seek nem posição: ele ignora o comando de posicionamento do MediaRemote e não publica `elapsedTime` (ver `DECISOES.md`). O que cada player aceita está apurado em `docs/compatibilidade-players.md` — **nada entra lá sem evidência observada**.
 - **Build**: Swift Package Manager (alvo executável) + bundle `.app` montado à mão (`Info.plist` com `LSUIElement`) + codesign ad-hoc. Sem Xcode completo (apenas Command Line Tools).
 - **Plataforma**: macOS 26+; requer o `Amazon Music.app` oficial instalado.
 
@@ -60,9 +63,18 @@ MacMediaWidget/
 │   └── MacMediaWidget/
 │       ├── App.swift              # @main, AppDelegate, ciclo de vida (LSUIElement)
 │       ├── WidgetWindow.swift     # NSWindow nível desktop, todos os Spaces, não-ativante
-│       ├── ContentView.swift      # UI SwiftUI Liquid Glass
-│       ├── NowPlayingController.swift  # stream/comandos via mediaremote-adapter
-│       └── TrayController.swift   # NSStatusItem (barra de menu)
+│       ├── ContentView.swift      # UI SwiftUI Liquid Glass (condicional por capacidade)
+│       ├── NowPlayingController.swift  # stream do Now Playing + roteamento de comando
+│       ├── VolumeRouter.swift     # decide entre volume por-app e volume do sistema
+│       ├── TrayController.swift   # NSStatusItem (barra de menu)
+│       └── Players/
+│           ├── Player.swift            # protocolo + PlayerCapabilities
+│           ├── MediaRemoteAdapter.swift # caminhos e execução do adapter perl
+│           ├── MediaRemotePlayer.swift  # player genérico (só transporte)
+│           ├── AmazonMusicPlayer.swift  # sem AppleScript; URL de instalação
+│           ├── AppleScriptPlayer.swift  # base da camada AppleScript
+│           ├── AppleMusicPlayer.swift   # seek, volume por-app, shuffle/repeat
+│           └── PlayerRegistry.swift     # bundle id -> Player
 ├── Resources/
 │   ├── Info.plist          # LSUIElement, bundle id, versão
 │   └── mediaremote-adapter/ # framework + perl bundlados (read/comando do Now Playing)

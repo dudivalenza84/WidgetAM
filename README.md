@@ -1,26 +1,45 @@
 # MacMediaWidget
 
-Widget de mesa para macOS, com design Liquid Glass nativo, que **controla** o app oficial
-`Amazon Music.app` pelo Now Playing do macOS. O widget não reproduz áudio — o motor de
-reprodução é o próprio `Amazon Music.app` rodando em background. Uso pessoal.
+Widget de mesa para macOS, com design Liquid Glass nativo, que **controla** os apps de
+música pelo Now Playing do macOS — com o `Amazon Music.app` como alvo principal. O widget
+não reproduz áudio: o motor de reprodução é sempre o app de música rodando em background.
 
 ## Como funciona
 
 Um app Swift nativo (AppKit + SwiftUI) roda como _accessory_ (sem ícone no Dock) e exibe um
-card de widget em nível de mesa, presente em todos os Spaces. A integração com o player usa o
-[`mediaremote-adapter`](https://github.com/ungive/mediaremote-adapter) bundlado: um
-`/usr/bin/perl` entitled lê o stream do Now Playing (capa, título, artista, progresso, estado)
-e envia comandos de transporte (`play`/`pause`/`next`/`prev`) ao `com.amazon.music`. O
-controle de volume atua no volume de saída do **sistema** (global), via AppleScript.
+card de widget em nível de mesa, presente em todos os Spaces.
 
-A barra de progresso é **indicador, não controle**: o `Amazon Music.app` ignora o comando de
-posicionamento do MediaRemote e também não publica a posição da faixa, então o widget não
-consegue nem mover nem ler o ponto de reprodução. Ver `DECISOES.md`.
+A integração tem **duas camadas**, e a divisão não é estética — é imposta pela plataforma:
+
+1. **MediaRemote (universal).** O [`mediaremote-adapter`](https://github.com/ungive/mediaremote-adapter)
+   bundlado roda sob `/usr/bin/perl` entitled e lê o stream do Now Playing (capa, título,
+   artista, estado) de **qualquer** fonte, além de enviar comandos de transporte. O limite:
+   esse comando **não tem destinatário** — ele atua sobre a sessão de Now Playing do
+   sistema, seja ela qual for.
+2. **AppleScript (por app, opcional).** Onde o player tem dicionário — Apple Music tem,
+   Amazon Music não —, o widget ganha posição real, seek, volume do próprio app,
+   shuffle/repeat e, principalmente, **comando endereçado**: dá para controlar aquele app
+   mesmo com outro tocando.
+
+Daí as duas preferências: o **player preferido** (o que o widget abre no play) e o **modo
+de controle** — automático, que espelha quem está tocando, ou fixo, que fica preso ao
+player escolhido. No modo fixo com um player sem AppleScript, o play abre o app e os
+demais controles ficam inativos enquanto ele não for a sessão; a alternativa seria mandar
+um comando global que cairia no app errado.
+
+A UI se adapta ao que a fonte permite: a barra de progresso só é arrastável onde o seek
+foi comprovado, e o slider de volume diz se está mexendo no app ou no sistema. O que cada
+player aceita, com evidência, está em [`docs/compatibilidade-players.md`](docs/compatibilidade-players.md).
+
+No `Amazon Music.app` especificamente a barra é **indicador, não controle**: ele ignora o
+comando de posicionamento do MediaRemote e não publica a posição da faixa. Ver `DECISOES.md`.
 
 ## Requisitos
 
 - macOS 26 ou superior.
-- `Amazon Music.app` oficial instalado.
+- Ao menos um player suportado instalado (`Amazon Music.app` ou Apple Music).
+- Permissão de Automação para o player, quando se usa a camada AppleScript. O macOS pede
+  na primeira vez; negar não quebra o app, só rebaixa os recursos extras.
 - Command Line Tools (Swift 6) e [`media-control`](https://github.com/ungive/media-control)
   via Homebrew (`brew install media-control`) — para montar o bundle.
 

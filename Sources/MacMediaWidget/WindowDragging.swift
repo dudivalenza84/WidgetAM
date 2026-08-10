@@ -45,3 +45,23 @@ extension View {
         background { NonDraggableArea() }
     }
 }
+
+/// Exclui a área do arrasto apenas sob condição.
+///
+/// Existe por causa da barra de progresso, que é interativa em umas fontes e só
+/// indicador em outras: onde ela não busca nada, deve continuar servindo de alça para
+/// mover o widget, como qualquer outro pedaço do card.
+struct NonDraggableIf: ViewModifier {
+    let isActive: Bool
+
+    init(_ isActive: Bool) { self.isActive = isActive }
+
+    @ViewBuilder
+    func body(content: Content) -> some View {
+        if isActive {
+            content.nonDraggableWindowArea()
+        } else {
+            content
+        }
+    }
+}

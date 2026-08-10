@@ -26,8 +26,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         widgetWindow.showWidget()
 
         tray = TrayController(
+            preferredPlayerName: { [weak self] in self?.nowPlaying.preferredPlayer.displayName },
             onToggleWidget: { [weak self] in self?.widgetWindow.toggleVisibility() },
-            onOpenAmazonMusic: { NowPlayingController.openAmazonMusic() },
+            onOpenPreferredPlayer: { [weak self] in self?.nowPlaying.preferredPlayer.launch() },
             onOpenPreferences: { [weak self] in self?.preferences.show() },
             onQuit: { NSApp.terminate(nil) }
         )

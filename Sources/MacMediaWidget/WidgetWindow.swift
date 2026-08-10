@@ -9,12 +9,14 @@ import SwiftUI
 @MainActor
 final class WidgetWindow: NSPanel, NSWindowDelegate {
     private let settings = AppSettings.shared
+    private let nowPlaying: NowPlayingController
     private let originDefaultsKey = "widgetOrigin"
 
     private var snapTimer: Timer?
     private var cancellables = Set<AnyCancellable>()
 
     init(nowPlaying: NowPlayingController) {
+        self.nowPlaying = nowPlaying
         super.init(
             contentRect: NSRect(x: 0, y: 0, width: WidgetMetrics.windowWidth, height: WidgetMetrics.windowHeight),
             styleMask: [.borderless, .nonactivatingPanel],
@@ -69,6 +71,7 @@ final class WidgetWindow: NSPanel, NSWindowDelegate {
         // por outra tela) pode estar fora das células.
         snapToGrid()
         orderFrontRegardless()
+        nowPlaying.isWidgetVisible = true
     }
 
     func toggleVisibility() {
@@ -77,6 +80,9 @@ final class WidgetWindow: NSPanel, NSWindowDelegate {
         } else {
             orderFrontRegardless()
         }
+        // A leitura de posição real custa um subprocesso por segundo: não faz sentido
+        // pagá-lo por uma barra que ninguém está vendo.
+        nowPlaying.isWidgetVisible = isVisible
     }
 
     // MARK: - Snap à grade + persistência

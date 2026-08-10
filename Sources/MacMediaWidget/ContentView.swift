@@ -21,19 +21,22 @@ enum WidgetMetrics {
 struct ContentView: View {
     @ObservedObject var nowPlaying: NowPlayingController
     @ObservedObject private var settings = AppSettings.shared
-    @StateObject private var volume = SystemVolumeController()
+    @StateObject private var volume = VolumeRouter()
     @State private var tint: Color = .clear
+    /// Posição sob o dedo durante o arraste da barra; `nil` fora do gesto.
+    @State private var dragFraction: Double?
 
-    private var track: TrackInfo { nowPlaying.track }
+    /// A faixa que o card mostra — não necessariamente a sessão de Now Playing: no modo
+    /// fixo, com o player escolhido parado, o card fica vazio em vez de exibir o que
+    /// outro app está tocando (ver `NowPlayingController.displayedTrack`).
+    private var track: TrackInfo { nowPlaying.displayedTrack }
 
     var body: some View {
         HStack(spacing: 12) {
             artwork
             VStack(alignment: .leading, spacing: 6) {
-                Text(track.title ?? "Nada tocando")
-                    .font(.system(size: 16, weight: .bold))
-                    .lineLimit(1)
-                Text(track.artist ?? "—")
+                titleRow
+                Text(track.artist ?? subtitlePlaceholder)
                     .font(.system(size: 13))
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
@@ -57,6 +60,39 @@ struct ContentView: View {
                 tint = .clear
             }
         }
+        // O alvo do volume acompanha o player controlado: trocar de fonte pode trocar
+        // o volume do app pelo do sistema.
+        .task(id: nowPlaying.controlledPlayer.bundleIdentifier) {
+            volume.retarget(to: nowPlaying.controlledPlayer)
+        }
+    }
+
+    /// Título da faixa com o ícone da fonte ativa à direita — é como o widget diz de
+    /// qual app ele está falando, agora que pode ser qualquer um.
+    private var titleRow: some View {
+        HStack(spacing: 6) {
+            Text(track.title ?? "Nada tocando")
+                .font(.system(size: 16, weight: .bold))
+                .lineLimit(1)
+            Spacer(minLength: 4)
+            if let icon = sourcePlayer?.icon {
+                Image(nsImage: icon)
+                    .resizable()
+                    .frame(width: 15, height: 15)
+                    .opacity(0.85)
+                    .help(sourcePlayer?.displayName ?? "")
+            }
+        }
+    }
+
+    /// Player cuja identidade o card está exibindo.
+    private var sourcePlayer: Player? {
+        settings.controlMode == .fixed ? nowPlaying.controlledPlayer : nowPlaying.activePlayer
+    }
+
+    /// Sem faixa, a segunda linha explica o porquê em vez de mostrar um travessão mudo.
+    private var subtitlePlaceholder: String {
+        nowPlaying.transportUnavailableReason ?? "—"
     }
 
     // MARK: - Componentes
@@ -81,40 +117,92 @@ struct ContentView: View {
         .shadow(color: .black.opacity(0.3), radius: 5, x: 0, y: 3)
     }
 
+    /// A barra é indicador ou controle conforme a fonte: só vira arrastável onde o seek
+    /// foi comprovado (`DECISOES.md · 2026-08-10 · #01`). No Amazon Music arrastar não
+    /// faria nada — o app aceita o comando de posicionamento e o ignora —, então lá ela
+    /// continua sendo só leitura.
+    private var isSeekable: Bool {
+        nowPlaying.canControlTransport
+            && nowPlaying.controlledPlayer.capabilities.contains(.seek)
+            && (track.duration ?? 0) > 0
+    }
+
     private var progressBar: some View {
-        let fraction: Double = {
-            guard let dur = track.duration, dur > 0 else { return 0 }
-            return min(max(nowPlaying.displayedElapsed / dur, 0), 1)
+        let duration = track.duration ?? 0
+        let playbackFraction: Double = {
+            guard duration > 0 else { return 0 }
+            return min(max(nowPlaying.displayedElapsed / duration, 0), 1)
         }()
+        // Enquanto o dedo está na barra, quem manda é o dedo: esperar o eco do player
+        // deixaria o preenchimento pulando para trás durante o arraste.
+        let fraction = dragFraction ?? playbackFraction
+
         return GeometryReader { geo in
             ZStack(alignment: .leading) {
                 Capsule().fill(.primary.opacity(0.18))
-                Capsule().fill(.primary.opacity(0.7))
+                Capsule().fill(.primary.opacity(isSeekable && dragFraction != nil ? 0.9 : 0.7))
                     .frame(width: geo.size.width * fraction)
             }
+            .frame(height: 4)
+            // Alvo de toque de ~14pt sem alterar o layout: infla o frame, define a
+            // área sensível e recolhe de volta com padding negativo.
+            .padding(.vertical, 5)
+            .contentShape(Rectangle())
+            .padding(.vertical, -5)
+            .gesture(seekGesture(width: geo.size.width, duration: duration), isEnabled: isSeekable)
         }
         .frame(height: 4)
-        .animation(.linear(duration: 0.5), value: fraction)
+        .animation(.linear(duration: 0.5), value: playbackFraction)
+        // Área interativa precisa se excluir do arrasto da janela — caso contrário
+        // arrastar para buscar move o widget (`DECISOES.md · 2026-08-05 · #01`).
+        .modifier(NonDraggableIf(isSeekable))
+        .help(isSeekable ? "Arraste para mudar a posição" : "")
+    }
+
+    private func seekGesture(width: CGFloat, duration: Double) -> some Gesture {
+        DragGesture(minimumDistance: 0)
+            .onChanged { value in
+                dragFraction = min(max(value.location.x / max(width, 1), 0), 1)
+            }
+            .onEnded { value in
+                let fraction = min(max(value.location.x / max(width, 1), 0), 1)
+                nowPlaying.seek(to: fraction * duration)
+                dragFraction = nil
+            }
     }
 
     /// O espaçamento de 14 compensa o alvo de clique de 28pt de cada botão: os
     /// centros ficam a ~42pt um do outro, como no espaçamento de 26 sobre os
     /// glifos nus de antes.
     private var controls: some View {
-        HStack(spacing: 14) {
-            button("backward.fill", size: 15) { nowPlaying.send(.previousTrack) }
+        // Prev/next só existem sobre uma sessão viva; o play não, porque é ele que
+        // abre o player e cria a sessão. Desabilitar em vez de mandar às cegas evita
+        // que o comando global caia no app errado.
+        let canTransport = nowPlaying.canControlTransport
+        let reason = nowPlaying.transportUnavailableReason ?? ""
+
+        return HStack(spacing: 14) {
+            button("backward.fill", size: 15) { nowPlaying.previous() }
+                .disabled(!canTransport)
+                .help(reason)
             button(track.isPlaying ? "pause.fill" : "play.fill", size: 18) {
-                nowPlaying.playPauseEnsuringApp()
+                nowPlaying.playPause()
             }
-            button("forward.fill", size: 15) { nowPlaying.send(.nextTrack) }
+            button("forward.fill", size: 15) { nowPlaying.next() }
+                .disabled(!canTransport)
+                .help(reason)
         }
         .foregroundStyle(.primary)
         .nonDraggableWindowArea()
     }
 
     /// Sidebar de volume fixa, na lateral direita do card: slider vertical com o
-    /// botão de mute abaixo. Controla o volume de saída do sistema (global) — ver
-    /// `SystemVolumeController`.
+    /// botão de mute abaixo.
+    ///
+    /// O alvo depende da fonte — volume do próprio app onde existe AppleScript, volume
+    /// de saída do sistema no resto (ver `VolumeRouter`). Como o mesmo controle muda de
+    /// significado, o alvo é dito no tooltip; sem isso o usuário não teria como saber
+    /// por que às vezes o volume do Mac inteiro se mexe e às vezes não.
     private var volumeSidebar: some View {
         VStack(spacing: 8) {
             VerticalVolumeSlider(value: volume.volume) { volume.setVolume($0) }
@@ -130,6 +218,7 @@ struct ContentView: View {
         }
         .foregroundStyle(.secondary)
         .frame(width: 24)
+        .help(volume.target.label)
         .nonDraggableWindowArea()
     }
 

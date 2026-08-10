@@ -1,25 +1,29 @@
 import AppKit
 
 /// Ícone na barra de menu (NSStatusItem) com ações básicas: mostrar/ocultar o
-/// widget, abrir o Amazon Music, alternar o autostart no login e sair.
+/// widget, abrir o player preferido, alternar o autostart no login e sair.
 @MainActor
 final class TrayController: NSObject, NSMenuDelegate {
     private let statusItem: NSStatusItem
+    private let preferredPlayerName: () -> String?
     private let onToggleWidget: () -> Void
-    private let onOpenAmazonMusic: () -> Void
+    private let onOpenPreferredPlayer: () -> Void
     private let onOpenPreferences: () -> Void
     private let onQuit: () -> Void
 
     private var loginItemMenuItem: NSMenuItem!
+    private var openPlayerMenuItem: NSMenuItem!
 
     init(
+        preferredPlayerName: @escaping () -> String?,
         onToggleWidget: @escaping () -> Void,
-        onOpenAmazonMusic: @escaping () -> Void,
+        onOpenPreferredPlayer: @escaping () -> Void,
         onOpenPreferences: @escaping () -> Void,
         onQuit: @escaping () -> Void
     ) {
+        self.preferredPlayerName = preferredPlayerName
         self.onToggleWidget = onToggleWidget
-        self.onOpenAmazonMusic = onOpenAmazonMusic
+        self.onOpenPreferredPlayer = onOpenPreferredPlayer
         self.onOpenPreferences = onOpenPreferences
         self.onQuit = onQuit
         self.statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
@@ -35,7 +39,8 @@ final class TrayController: NSObject, NSMenuDelegate {
         let menu = NSMenu()
         menu.delegate = self
         menu.addItem(menuItem("Mostrar/ocultar widget", #selector(toggleWidget)))
-        menu.addItem(menuItem("Abrir Amazon Music", #selector(openAmazonMusic)))
+        openPlayerMenuItem = menuItem("Abrir player", #selector(openPreferredPlayer))
+        menu.addItem(openPlayerMenuItem)
         menu.addItem(.separator())
         menu.addItem(menuItem("Preferências…", #selector(openPreferences)))
         loginItemMenuItem = menuItem("Abrir no login", #selector(toggleLoginItem))
@@ -51,13 +56,16 @@ final class TrayController: NSObject, NSMenuDelegate {
         return item
     }
 
-    /// Mantém o checkmark do autostart em sincronia ao abrir o menu.
+    /// Mantém o checkmark do autostart e o nome do player em sincronia ao abrir o menu.
+    /// O player preferido é preferência do usuário e muda em runtime, então o título
+    /// não pode ser fixado na construção do menu.
     func menuWillOpen(_ menu: NSMenu) {
         loginItemMenuItem.state = LoginItem.isEnabled ? .on : .off
+        openPlayerMenuItem.title = preferredPlayerName().map { "Abrir \($0)" } ?? "Abrir player"
     }
 
     @objc private func toggleWidget() { onToggleWidget() }
-    @objc private func openAmazonMusic() { onOpenAmazonMusic() }
+    @objc private func openPreferredPlayer() { onOpenPreferredPlayer() }
     @objc private func openPreferences() { onOpenPreferences() }
     @objc private func quit() { onQuit() }
 

@@ -18,19 +18,14 @@ struct TrackInfo: Equatable {
     }
 }
 
-/// IDs de comando do MediaRemote (MRCommand). Repassados ao adapter via `send`.
-enum MediaCommand: Int {
-    case play = 0
-    case pause = 1
-    case togglePlayPause = 2
-    case nextTrack = 4
-    case previousTrack = 5
-}
-
-/// Faz a ponte com o app oficial `Amazon Music.app` (ou qualquer fonte do Now
-/// Playing) através do `mediaremote-adapter`: roda o `mediaremote-adapter.pl`
-/// via `/usr/bin/perl` (entitled) como subprocesso, lê o stream JSON e envia
-/// comandos de transporte pelo mesmo mecanismo.
+/// Lê o Now Playing do macOS pelo `mediaremote-adapter` e roteia os comandos do widget
+/// para o `Player` certo.
+///
+/// A leitura é sempre universal: o stream do MediaRemote enxerga qualquer fonte, então
+/// é ele — e só ele — que alimenta o `TrackInfo`. Já o comando **não** é universal: o
+/// `Player` resolvido a partir do `bundleIdentifier` da sessão decide se o caminho é
+/// MediaRemote (transporte na sessão ativa) ou AppleScript (endereçado, com seek e
+/// volume por-app). Ver `docs/fase1-multiplayer.md`.
 @MainActor
 final class NowPlayingController: ObservableObject {
     @Published private(set) var track = TrackInfo()
@@ -57,50 +52,72 @@ final class NowPlayingController: ObservableObject {
     /// Último `timestamp` recebido do stream, para detectar troca de faixa.
     private var lastTimestamp: Date?
 
+    /// Quando a fonte sabe dizer a posição real (`.realPosition`), o cronômetro local
+    /// deixa de ser um chute e passa a ser só interpolação entre leituras verdadeiras.
+    private var lastPositionPoll = Date.distantPast
+    /// Polling é subprocesso: não roda com o widget escondido, onde ninguém veria.
+    var isWidgetVisible = true
+
     private static let isoFormatter = ISO8601DateFormatter()
 
-    // MARK: - Caminhos dos recursos bundlados
+    // MARK: - Players
 
-    private static let perlPath = "/usr/bin/perl"
-
-    /// Prefixos do brew para o `media-control`, na ordem de tentativa. São os
-    /// symlinks `opt/`, que o brew reaponta a cada atualização da fórmula —
-    /// diferente de um caminho no `Cellar/`, que carrega a versão no nome e
-    /// deixa de existir no primeiro `brew upgrade`. Mesma resolução que o
-    /// `brew --prefix media-control` usado pelo `scripts/build-app.sh`.
-    private static let brewPrefixes = [
-        "/opt/homebrew/opt/media-control", // Apple Silicon
-        "/usr/local/opt/media-control",    // Intel
-    ]
-
-    /// Diretório `mediaremote-adapter/` dentro de Resources do bundle.
-    /// Em desenvolvimento (rodando o binário SPM solto), cai na instalação do brew.
-    private static func adapterDir() -> String {
-        if let resource = Bundle.main.resourcePath {
-            let bundled = resource + "/mediaremote-adapter"
-            if FileManager.default.fileExists(atPath: bundled + "/mediaremote-adapter.pl") {
-                return bundled
-            }
-        }
-        // Fallback de desenvolvimento.
-        let dev = brewPrefixes.map { $0 + "/lib/media-control" }
-        return dev.first { FileManager.default.fileExists(atPath: $0 + "/mediaremote-adapter.pl") }
-            ?? dev[0]
+    /// Player que controla a sessão de Now Playing atual, se houver alguma.
+    var activePlayer: Player? {
+        PlayerRegistry.shared.player(for: track.bundleIdentifier)
     }
 
-    private static func frameworkPath() -> String {
-        if let resource = Bundle.main.resourcePath {
-            let bundled = resource + "/mediaremote-adapter/MediaRemoteAdapter.framework"
-            if FileManager.default.fileExists(atPath: bundled) {
-                return bundled
-            }
-        }
-        let dev = brewPrefixes.map { $0 + "/Frameworks/MediaRemoteAdapter.framework" }
-        return dev.first { FileManager.default.fileExists(atPath: $0) } ?? dev[0]
+    /// Player escolhido pelo usuário como preferido — o que o widget abre no play
+    /// quando não há nada tocando, e o único que ele controla no modo fixo.
+    var preferredPlayer: Player {
+        PlayerRegistry.shared.player(for: AppSettings.shared.preferredPlayerBundleId)
+            ?? AmazonMusicPlayer()
     }
 
-    private static func scriptPath() -> String {
-        adapterDir() + "/mediaremote-adapter.pl"
+    /// O player que o widget considera "seu" agora, conforme o modo de controle.
+    var controlledPlayer: Player {
+        switch AppSettings.shared.controlMode {
+        case .automatic: return activePlayer ?? preferredPlayer
+        case .fixed: return preferredPlayer
+        }
+    }
+
+    /// A sessão de Now Playing pertence ao player controlado?
+    var isControlledPlayerActive: Bool {
+        guard let id = track.bundleIdentifier else { return false }
+        return id == controlledPlayer.bundleIdentifier
+    }
+
+    /// Faixa a exibir no card.
+    ///
+    /// No modo fixo, quando o player escolhido não é a sessão ativa, o widget mostraria
+    /// a faixa de **outro** app enquanto controla o escolhido — incoerente. Nesse caso
+    /// exibe vazio: se o player escolhido não é a sessão, é porque ele não está tocando.
+    var displayedTrack: TrackInfo {
+        if AppSettings.shared.controlMode == .fixed, !isControlledPlayerActive {
+            return TrackInfo()
+        }
+        return track
+    }
+
+    /// Se next/previous/seek têm onde atuar.
+    ///
+    /// Sem a sessão ativa, só um player com `.directedControl` (isto é, com AppleScript)
+    /// consegue receber o comando. Para os outros, mandar assim seria mandar para quem
+    /// estiver tocando — o vazamento de comando global de `DECISOES.md · 2026-08-05 · #01`.
+    var canControlTransport: Bool {
+        if isControlledPlayerActive { return true }
+        return controlledPlayer.capabilities.contains(.directedControl) && controlledPlayer.isRunning
+    }
+
+    /// Por que o transporte está indisponível, para a UI mostrar em vez de só apagar
+    /// os botões.
+    var transportUnavailableReason: String? {
+        guard !canControlTransport else { return nil }
+        let name = controlledPlayer.displayName
+        if !controlledPlayer.isInstalled { return "\(name) não está instalado" }
+        if !controlledPlayer.isRunning { return "\(name) está fechado" }
+        return "\(name) não está tocando"
     }
 
     // MARK: - Stream
@@ -108,13 +125,8 @@ final class NowPlayingController: ObservableObject {
     func start() {
         guard streamProcess == nil else { return }
 
-        let process = Process()
-        process.executableURL = URL(fileURLWithPath: Self.perlPath)
-        process.arguments = [Self.scriptPath(), Self.frameworkPath(), "stream"]
-
-        let stdout = Pipe()
-        process.standardOutput = stdout
-        process.standardError = Pipe()
+        let process = MediaRemoteAdapter.makeStreamProcess()
+        guard let stdout = process.standardOutput as? Pipe else { return }
 
         stdout.fileHandleForReading.readabilityHandler = { [weak self] handle in
             let chunk = handle.availableData
@@ -153,6 +165,31 @@ final class NowPlayingController: ObservableObject {
 
     private func refreshDisplayedElapsed() {
         displayedElapsed = estimatedElapsed(at: Date(), playing: track.isPlaying)
+        pollRealPositionIfNeeded()
+    }
+
+    /// Nas fontes que expõem posição real, relê 1×/s e **reancora** o cronômetro local
+    /// com o valor verdadeiro. Assim a barra continua andando suave a 2 Hz sem custar
+    /// dois subprocessos por segundo, e um seek feito dentro do player aparece no
+    /// widget em até um segundo — o que no Amazon Music é impossível
+    /// (`DECISOES.md · 2026-08-05 · #01`).
+    private func pollRealPositionIfNeeded() {
+        guard isWidgetVisible,
+              let player = activePlayer,
+              player.capabilities.contains(.realPosition)
+        else { return }
+
+        let now = Date()
+        guard now.timeIntervalSince(lastPositionPoll) >= 1 else { return }
+        lastPositionPoll = now
+
+        Task { [weak self] in
+            guard let value = await player.position() else { return }
+            guard let self else { return }
+            self.anchorElapsed = value
+            self.anchorWall = Date()
+            self.displayedElapsed = self.estimatedElapsed(at: Date(), playing: self.track.isPlaying)
+        }
     }
 
     /// Posição estimada num instante, dado o estado de reprodução: parte da âncora
@@ -259,142 +296,77 @@ final class NowPlayingController: ObservableObject {
 
     // MARK: - Comandos
 
-    func send(_ command: MediaCommand) {
-        runAdapter(["send", String(command.rawValue)])
+    func next() {
+        guard canControlTransport else { return }
+        controlledPlayer.next()
     }
 
-    /// Aciona play/pause a partir do botão central do widget. Se a preferência
-    /// `autoLaunchOnPlay` estiver ligada, está pausado e o `Amazon Music.app` não
-    /// estiver rodando, abre o app antes de mandar o play — caso contrário o
-    /// comando não teria sessão de Now Playing onde atuar.
-    func playPauseEnsuringApp() {
-        // Se o Now Playing atual já é o Amazon Music E ele está mesmo rodando,
-        // alterna normalmente — o comando tem uma sessão concreta onde atuar.
-        // A checagem do processo é rede de segurança: um `togglePlayPause` é
-        // global, então mandá-lo sem o app vivo faria o macOS acordar o player
-        // padrão do sistema.
-        if track.bundleIdentifier == Self.amazonMusicBundleId, Self.isAmazonMusicRunning() {
-            send(.togglePlayPause)
+    func previous() {
+        guard canControlTransport else { return }
+        controlledPlayer.previous()
+    }
+
+    /// Move a posição da faixa. Só age onde a capacidade existe — no Amazon Music o
+    /// comando seria aceito e ignorado, e a barra andaria mentindo.
+    func seek(to seconds: Double) {
+        guard canControlTransport else { return }
+        let player = controlledPlayer
+        guard player.capabilities.contains(.seek) else { return }
+        player.seek(to: seconds)
+        // Reancora na hora: esperar o próximo poll deixaria a barra pular de volta
+        // por até um segundo depois de o usuário soltar o dedo.
+        anchorElapsed = seconds
+        anchorWall = Date()
+        lastPositionPoll = Date()
+        refreshDisplayedElapsed()
+    }
+
+    /// Aciona play/pause a partir do botão central do widget.
+    ///
+    /// É o único comando que pode **abrir** um app: quando não há sessão onde atuar,
+    /// o widget assume o player controlado em vez de mandar um comando global às
+    /// cegas — que o macOS entregaria ao player padrão do sistema, abrindo o app
+    /// errado (`DECISOES.md · 2026-08-05 · #01`).
+    func playPause() {
+        let target = controlledPlayer
+
+        // Caminho normal: o alvo é a sessão de Now Playing e está mesmo vivo. A
+        // checagem do processo é rede de segurança — `togglePlayPause` é global.
+        if isControlledPlayerActive, target.isRunning {
+            target.playPause()
             return
         }
 
-        // Sessão ainda não é o Amazon Music (app fechado, ou aberto mas sem nada
-        // tocando). Um `togglePlayPause` global aqui vazaria para o player padrão
-        // do sistema (Music.app da Apple), que abriria indevidamente. Em vez
-        // disso, garante o Amazon Music e só manda o play quando ele virar a
-        // sessão de Now Playing.
-        guard AppSettings.shared.autoLaunchOnPlay else { return }
-        if !Self.isAmazonMusicRunning() {
-            // App não instalado: openAmazonMusic já avisou o usuário; não adianta
-            // esperar pela sessão de Now Playing que nunca vai existir.
-            guard Self.openAmazonMusic() else { return }
+        // Alvo endereçável por AppleScript: o comando chega nele mesmo com outro app
+        // ocupando a sessão de Now Playing. É o que faz o modo fixo valer a pena.
+        if target.capabilities.contains(.directedControl), target.isRunning {
+            target.playPause()
+            return
         }
-        waitForAmazonMusicThenPlay()
+
+        // Sobrou o caso sem sessão utilizável: abre o alvo e só manda o play quando
+        // ele virar a sessão.
+        guard AppSettings.shared.autoLaunchOnPlay else { return }
+        // App não instalado: `launch()` já avisou o usuário; não adianta esperar
+        // por uma sessão de Now Playing que nunca vai existir.
+        guard target.launch() else { return }
+        waitForSessionThenPlay(target)
     }
 
-    /// Após abrir o Amazon Music, aguarda ele virar a sessão de Now Playing antes
-    /// de mandar o play. Um `play` global enviado cedo demais vaza para o app de
-    /// música padrão do sistema (Music.app da Apple), que então abre indevidamente.
-    /// Só dispara o comando quando o Now Playing já é o Amazon Music; se não virar
-    /// dentro do tempo, desiste sem enviar nada.
-    private func waitForAmazonMusicThenPlay(attempt: Int = 0) {
+    /// Após abrir o player, aguarda ele virar a sessão de Now Playing antes de mandar
+    /// o play. Um `play` global enviado cedo demais vaza para o app de música padrão
+    /// do sistema (Music.app da Apple), que então abre indevidamente. Só dispara o
+    /// comando quando o Now Playing já é o player esperado; se não virar dentro do
+    /// tempo, desiste sem enviar nada.
+    private func waitForSessionThenPlay(_ player: Player, attempt: Int = 0) {
         let maxAttempts = 30 // ~15s (0,5s por tentativa)
-        if track.bundleIdentifier == Self.amazonMusicBundleId {
-            if !track.isPlaying { send(.play) }
+        if track.bundleIdentifier == player.bundleIdentifier {
+            if !track.isPlaying { player.play() }
             return
         }
         guard attempt < maxAttempts else { return }
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-            self?.waitForAmazonMusicThenPlay(attempt: attempt + 1)
-        }
-    }
-
-    // Não existe seek. O `Amazon Music.app` ignora o comando de posicionamento do
-    // MediaRemote: comprovado mandando o seek para 5s antes do fim da faixa, com
-    // o app tocando — a faixa não terminou nem avançou (duas faixas testadas). O
-    // comando em si é funcional, o QuickTime obedece ao mesmo `seek`. Como o app
-    // também não publica a posição, não há nem leitura nem escrita de posição.
-    // Havia aqui um `seek(toSeconds:)` que nunca teve chamador e nunca teria
-    // funcionado; foi removido para não voltar a sugerir um recurso inexistente.
-    // Ver DECISOES.md · 2026-08-05 · #02.
-
-    /// Executa o adapter de forma efêmera (comandos one-shot) e ignora a saída.
-    private func runAdapter(_ extraArgs: [String]) {
-        let process = Process()
-        process.executableURL = URL(fileURLWithPath: Self.perlPath)
-        process.arguments = [Self.scriptPath(), Self.frameworkPath()] + extraArgs
-        process.standardOutput = Pipe()
-        process.standardError = Pipe()
-        do {
-            try process.run()
-        } catch {
-            NSLog("MacMediaWidget: falha ao enviar comando ao adapter: \(error)")
-        }
-    }
-
-    // MARK: - Util
-
-    static let amazonMusicBundleId = "com.amazon.music"
-
-    /// Indica se o `Amazon Music.app` está em execução no momento. Sob simulação
-    /// responde `false`: um app "não instalado" não pode estar rodando, e sem
-    /// isso o teste nunca alcançaria o caminho do alerta.
-    static func isAmazonMusicRunning() -> Bool {
-        if simulatesMissingApp { return false }
-        return !NSRunningApplication.runningApplications(withBundleIdentifier: amazonMusicBundleId).isEmpty
-    }
-
-    /// URL oficial de download do Amazon Music para desktop.
-    static let amazonMusicDownloadURL = URL(string: "https://am.app.link/zb0Bk69BNub/?__branch_flow_type=qr_code")!
-
-    /// Abre (ou traz à frente) o app oficial do Amazon Music. Se o app não estiver
-    /// instalado, avisa o usuário, oferece abrir a página oficial de instalação e
-    /// retorna `false`. Retorna `true` quando o app existe e o launch foi disparado.
-    /// Força o caminho de "app não instalado", para testar o alerta sem mexer no
-    /// `Amazon Music.app` de verdade. Ligar/desligar com:
-    ///
-    ///     defaults write com.dudivalenza.macmediawidget simulateMissingApp -bool YES
-    ///     defaults delete com.dudivalenza.macmediawidget simulateMissingApp
-    ///
-    /// A variável de ambiente serve para rodar o binário direto; a chave de
-    /// `UserDefaults` sobrevive ao relançamento do bundle pelo LaunchServices.
-    static var simulatesMissingApp: Bool {
-        ProcessInfo.processInfo.environment["MMW_SIMULATE_MISSING_APP"] != nil
-            || UserDefaults.standard.bool(forKey: "simulateMissingApp")
-    }
-
-    @discardableResult
-    static func openAmazonMusic() -> Bool {
-        guard !simulatesMissingApp,
-              let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: amazonMusicBundleId)
-        else {
-            NSLog("MacMediaWidget: Amazon Music.app não encontrado (\(amazonMusicBundleId))")
-            promptInstallAmazonMusic()
-            return false
-        }
-        let config = NSWorkspace.OpenConfiguration()
-        config.activates = true
-        NSWorkspace.shared.openApplication(at: url, configuration: config)
-        return true
-    }
-
-    /// Mostra um alerta informando que o Amazon Music não está instalado e oferece
-    /// abrir a página oficial de download no navegador.
-    static func promptInstallAmazonMusic() {
-        DispatchQueue.main.async {
-            let alert = NSAlert()
-            alert.messageText = "Amazon Music não está instalado"
-            alert.informativeText = "O widget controla o app oficial do Amazon Music, que não foi encontrado neste Mac. Deseja abrir a página de instalação?"
-            alert.alertStyle = .warning
-            alert.addButton(withTitle: "Abrir instalação")
-            alert.addButton(withTitle: "Cancelar")
-            // O app roda como `.accessory` (sem Dock): sem ativar explicitamente,
-            // o alerta pode nascer atrás das outras janelas e não haveria ícone
-            // no Dock para resgatá-lo.
-            NSApp.activate()
-            if alert.runModal() == .alertFirstButtonReturn {
-                NSWorkspace.shared.open(amazonMusicDownloadURL)
-            }
+            self?.waitForSessionThenPlay(player, attempt: attempt + 1)
         }
     }
 }

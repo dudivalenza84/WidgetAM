@@ -41,6 +41,11 @@ O **único** jeito de mandar um comando para um app específico que não é a se
 AppleScript — que só existe em alguns players. Isso torna o comportamento
 inerentemente assimétrico, e a UI precisa refletir isso em vez de esconder.
 
+> **Estado em 2026-08-10 · #01, pós-implementação:** as etapas 1 a 7 da seção 4 estão
+> feitas e a tabela abaixo foi substituída pela apuração real em
+> `docs/compatibilidade-players.md` — que é a fonte de verdade. O que segue aqui é o
+> raciocínio que levou ao desenho, mantido porque explica o *porquê* das escolhas.
+
 ## 2. O que cada fonte permite
 
 | Fonte | Leitura (Now Playing) | Transporte | Posição real | Seek | Volume por-app | Shuffle/Repeat |

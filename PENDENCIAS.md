@@ -5,12 +5,24 @@ Migração para `PENDENCIAS_CONCLUIDAS.md` só por pedido explícito.
 
 ## Alta
 
-- [ ] **Fase 1 do ROADMAP — multi-player.** Levantamento, arquitetura e decisões
-  fechados em `docs/fase1-multiplayer.md` (seção 0 = contrato; seção 4 = ordem de
-  implementação em 8 etapas). Pronto para codar sem novas perguntas. Escopo desta
-  rodada: Amazon Music + Apple Music + navegador; Spotify/Deezer entram depois da
-  instalação, sem retrabalho de arquitetura — `2026-08-09 · #01`, replanejada em
+- [ ] **Fase 1 — fechar o critério de saída do ROADMAP:** instalar Spotify (e decidir
+  sobre o Deezer) e rodar `scripts/testar-player.sh com.spotify.client Spotify` para
+  preencher a coluna na matriz. A arquitetura já comporta: basta um `SpotifyPlayer`
+  espelhando o `AppleMusicPlayer`, com capacidades declaradas **só depois** do teste —
   `2026-08-10 · #01`
+- [ ] **Testes manuais que dependem de interação humana**, listados no fim de
+  `docs/compatibilidade-players.md`: (a) fonte de navegador — exige dar play num vídeo
+  à mão, porque autoplay com som é bloqueado; (b) gesto de arraste na barra do widget
+  com o Apple Music tocando; (c) negar a permissão de Automação em Ajustes do Sistema e
+  conferir se as capacidades caem como previsto — `2026-08-10 · #01`
+
+- [x] **Fase 1 do ROADMAP — multi-player.** Implementada em `2026-08-10 · #01`:
+  abstração `Player` + `PlayerCapabilities`, camada AppleScript (`AppleMusicPlayer` com
+  posição real, seek, volume por-app, shuffle/repeat), `PlayerRegistry`, modos de
+  controle automático/fixo, UI condicional por capacidade (ícone da fonte, barra
+  arrastável só onde há seek, alvo do volume explícito) e matriz empírica em
+  `docs/compatibilidade-players.md`. Sem regressão no Amazon Music (verificado) —
+  `2026-08-09 · #01`
 - [ ] Verificar no menu da bandeja se "Abrir no login" continua ligado — o bundle de
   `/Applications` foi substituído inteiro em `2026-08-10 · #01` e o registro do
   `SMAppService` pode não ter sobrevivido à troca — `2026-08-10 · #01`
