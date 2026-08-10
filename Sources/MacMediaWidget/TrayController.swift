@@ -38,15 +38,15 @@ final class TrayController: NSObject, NSMenuDelegate {
 
         let menu = NSMenu()
         menu.delegate = self
-        menu.addItem(menuItem("Mostrar/ocultar widget", #selector(toggleWidget)))
-        openPlayerMenuItem = menuItem("Abrir player", #selector(openPreferredPlayer))
+        menu.addItem(menuItem(L10n.showHideWidget, #selector(toggleWidget)))
+        openPlayerMenuItem = menuItem(L10n.openPlayerGeneric, #selector(openPreferredPlayer))
         menu.addItem(openPlayerMenuItem)
         menu.addItem(.separator())
-        menu.addItem(menuItem("Preferências…", #selector(openPreferences)))
-        loginItemMenuItem = menuItem("Abrir no login", #selector(toggleLoginItem))
+        menu.addItem(menuItem(L10n.preferences, #selector(openPreferences)))
+        loginItemMenuItem = menuItem(L10n.openAtLogin, #selector(toggleLoginItem))
         menu.addItem(loginItemMenuItem)
         menu.addItem(.separator())
-        menu.addItem(menuItem("Sair", #selector(quit)))
+        menu.addItem(menuItem(L10n.quit, #selector(quit)))
         statusItem.menu = menu
     }
 
@@ -61,7 +61,7 @@ final class TrayController: NSObject, NSMenuDelegate {
     /// não pode ser fixado na construção do menu.
     func menuWillOpen(_ menu: NSMenu) {
         loginItemMenuItem.state = LoginItem.isEnabled ? .on : .off
-        openPlayerMenuItem.title = preferredPlayerName().map { "Abrir \($0)" } ?? "Abrir player"
+        openPlayerMenuItem.title = preferredPlayerName().map(L10n.openPlayer) ?? L10n.openPlayerGeneric
     }
 
     @objc private func toggleWidget() { onToggleWidget() }

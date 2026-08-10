@@ -12,6 +12,15 @@
     <string>MacMediaWidget</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
+    <!-- Idioma-base do código é inglês: as chaves de localização são o próprio texto em
+         inglês, e pt-BR.lproj traz a tradução. -->
+    <key>CFBundleDevelopmentRegion</key>
+    <string>en</string>
+    <key>CFBundleLocalizations</key>
+    <array>
+        <string>en</string>
+        <string>pt-BR</string>
+    </array>
     <key>CFBundleShortVersionString</key>
     <string>1.10.0</string>
     <key>CFBundleVersion</key>

@@ -56,15 +56,43 @@ final class WidgetWindow: NSPanel, NSWindowDelegate {
                 Task { @MainActor in self?.snapToGrid() }
             }
             .store(in: &cancellables)
+
+        // Monitor desconectado, resolução trocada, Mac que dormiu acoplado e acordou
+        // sozinho: a posição atual pode deixar de existir enquanto o app roda. Sem isto
+        // o widget fica fora de qualquer tela e não há como resgatá-lo — ele não tem
+        // ícone no Dock, e a bandeja só oculta e mostra no mesmo lugar invisível.
+        NotificationCenter.default
+            .publisher(for: NSApplication.didChangeScreenParametersNotification)
+            .sink { [weak self] _ in
+                Task { @MainActor in self?.recoverIfOffscreen() }
+            }
+            .store(in: &cancellables)
+    }
+
+    /// Traz o widget de volta se a configuração de telas mudou e ele ficou fora.
+    private func recoverIfOffscreen() {
+        guard !Self.isOnSomeScreen(origin: frame.origin, size: frame.size) else {
+            // Ainda visível, mas a grade pode ter mudado de lugar com a resolução.
+            snapToGrid()
+            return
+        }
+        center()
+        snapToGrid()
+        NSLog("MacMediaWidget: telas mudaram e o widget ficou fora; recentralizado")
     }
 
     override var canBecomeKey: Bool { true }
     override var canBecomeMain: Bool { false }
 
     func showWidget() {
-        if let saved = savedOrigin() {
+        if let saved = savedOrigin(), Self.isOnSomeScreen(origin: saved, size: frame.size) {
             setFrameOrigin(saved)
         } else {
+            // Sem posição salva — ou com uma que não existe mais. A segunda situação é
+            // o monitor externo desconectado, a resolução trocada, o Mac que dormiu
+            // acoplado e acordou sozinho: restaurar a posição às cegas colocaria o
+            // widget fora de qualquer tela, invisível e sem como resgatar (ele não tem
+            // ícone no Dock, e mostrar/ocultar pela bandeja não o traz de volta).
             center()
         }
         // Realinha à grade na exibição: posição salva por versão anterior (ou
@@ -131,5 +159,26 @@ final class WidgetWindow: NSPanel, NSWindowDelegate {
         guard let raw = UserDefaults.standard.string(forKey: originDefaultsKey) else { return nil }
         let point = NSPointFromString(raw)
         return point == .zero ? nil : point
+    }
+
+    /// A janela, nessa posição, apareceria em alguma tela conectada agora?
+    ///
+    /// Exige interseção com folga de meio card: encostar um canto de 1 pt numa tela
+    /// conta como "visível" para o AppKit, mas para o usuário é um widget sumido.
+    /// `screenFrames` é injetável para poder ser exercitado sem depender do monitor
+    /// que estiver plugado na máquina de quem roda os testes.
+    static func isOnSomeScreen(
+        origin: NSPoint,
+        size: NSSize,
+        screenFrames: [NSRect]? = nil
+    ) -> Bool {
+        let frames = screenFrames ?? NSScreen.screens.map(\.frame)
+        let frame = NSRect(origin: origin, size: size)
+        let minimoVisivel = NSSize(width: size.width / 2, height: size.height / 2)
+        return frames.contains { screenFrame in
+            let interseção = screenFrame.intersection(frame)
+            return interseção.width >= minimoVisivel.width
+                && interseção.height >= minimoVisivel.height
+        }
     }
 }

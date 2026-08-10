@@ -38,7 +38,20 @@ Migração para `PENDENCIAS_CONCLUIDAS.md` só por pedido explícito.
 - [x] Commit + push da verificação de app não instalado — feito junto ao encerramento da sessão `2026-06-26 · #01`
 - [x] Confirmar URL de instalação — `music.amazon.com/download` dava 404; trocada por `am.app.link/zb0Bk69BNub` — `2026-06-24 · #01`
 
+- [ ] **Fase 2 — o que ficou de fora desta rodada:** revisar a tradução pt-BR com o app
+  aberto (as strings foram traduzidas mas só a consistência de chaves foi verificada por
+  script, não o texto na tela); testar multi-monitor de verdade (a correção da grade por
+  tela e a recuperação de posição foram feitas por leitura de código, com testes
+  sintéticos — não há segundo monitor aqui) — `2026-08-10 · #01`
+
 ## Média
+
+- [ ] Migrar `SelfTests.swift` para swift-testing **se** o Xcode entrar no projeto — as
+  funções já são independentes, é mecânico. Enquanto não houver, `swift test` é
+  impossível (CLT não trazem os frameworks; ver `DECISOES.md`) — `2026-08-10 · #01`
+- [ ] Avaliar se `verificar-traducoes.sh` e `--run-tests` devem entrar no
+  `fechar-sessao.sh` — hoje o encerramento só roda `swift build`, então uma chave de
+  tradução quebrada ou uma asserção falhando passariam batido — `2026-08-10 · #01`
 
 - [x] Conferir o texto exato da licença do adapter e preparar os textos de atribuição
   para o bundle de venda — feito em `2026-08-10 · #01`. As duas premissas da pendência

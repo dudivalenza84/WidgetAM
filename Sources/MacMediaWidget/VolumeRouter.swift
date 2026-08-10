@@ -18,8 +18,8 @@ final class VolumeRouter: ObservableObject {
 
         var label: String {
             switch self {
-            case .system: return "Volume do sistema"
-            case .app(let name): return "Volume do \(name)"
+            case .system: return L10n.systemVolume
+            case .app(let name): return L10n.appVolume(name)
             }
         }
     }

@@ -133,13 +133,13 @@ extension Player {
         let url = installURL
         DispatchQueue.main.async {
             let alert = NSAlert()
-            alert.messageText = "\(name) não está instalado"
+            alert.messageText = L10n.notInstalledTitle(name)
             alert.informativeText = url == nil
-                ? "O widget controla o app \(name), que não foi encontrado neste Mac."
-                : "O widget controla o app oficial do \(name), que não foi encontrado neste Mac. Deseja abrir a página de instalação?"
+                ? L10n.notInstalledBody(name)
+                : L10n.notInstalledBodyWithLink(name)
             alert.alertStyle = .warning
-            if url != nil { alert.addButton(withTitle: "Abrir instalação") }
-            alert.addButton(withTitle: url == nil ? "OK" : "Cancelar")
+            if url != nil { alert.addButton(withTitle: L10n.openInstallPage) }
+            alert.addButton(withTitle: url == nil ? L10n.ok : L10n.cancel)
             // O app roda como `.accessory` (sem Dock): sem ativar explicitamente,
             // o alerta pode nascer atrás das outras janelas e não haveria ícone
             // no Dock para resgatá-lo.

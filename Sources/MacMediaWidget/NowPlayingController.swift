@@ -18,6 +18,25 @@ struct TrackInfo: Equatable {
     }
 }
 
+/// Situação do canal de leitura do Now Playing.
+///
+/// O widget inteiro depende de um subprocesso perl falando com um framework privado da
+/// Apple. Quando isso para de funcionar — o processo morre, ou um update do macOS fecha
+/// o acesso ao MediaRemote — o sintoma para o usuário é um card eternamente vazio, que
+/// se confunde com "não estou ouvindo nada". Este estado existe para que o app saiba a
+/// diferença e possa dizê-la.
+enum AdapterHealth: Equatable {
+    case starting
+    case healthy
+    /// O stream caiu e está sendo reaberto. `attempt` conta as tentativas seguidas.
+    case reconnecting(attempt: Int)
+    /// O mecanismo não está disponível nesta máquina/versão de macOS. Não adianta
+    /// reconectar: é quebra estrutural, e o usuário precisa saber que o app está cego.
+    case unavailable(String)
+
+    var isHealthy: Bool { self == .healthy || self == .starting }
+}
+
 /// Lê o Now Playing do macOS pelo `mediaremote-adapter` e roteia os comandos do widget
 /// para o `Player` certo.
 ///
@@ -33,9 +52,17 @@ final class NowPlayingController: ObservableObject {
     /// do stream para a barra de progresso animar suavemente.
     @Published private(set) var displayedElapsed: Double = 0
 
+    /// Estado do canal de leitura, para a UI poder avisar em vez de fingir normalidade.
+    @Published private(set) var health: AdapterHealth = .starting
+
     private var streamProcess: Process?
     private var buffer = Data()
     private var progressTimer: Timer?
+
+    /// Distingue o encerramento pedido por nós (`stop()`) da morte inesperada do
+    /// subprocesso — sem isso, sair do app dispararia uma tentativa de reconexão.
+    private var isStopping = false
+    private var reconnectAttempt = 0
 
     // MARK: - Estimativa de posição
     //
@@ -57,8 +84,6 @@ final class NowPlayingController: ObservableObject {
     private var lastPositionPoll = Date.distantPast
     /// Polling é subprocesso: não roda com o widget escondido, onde ninguém veria.
     var isWidgetVisible = true
-
-    private static let isoFormatter = ISO8601DateFormatter()
 
     // MARK: - Players
 
@@ -115,15 +140,42 @@ final class NowPlayingController: ObservableObject {
     var transportUnavailableReason: String? {
         guard !canControlTransport else { return nil }
         let name = controlledPlayer.displayName
-        if !controlledPlayer.isInstalled { return "\(name) não está instalado" }
-        if !controlledPlayer.isRunning { return "\(name) está fechado" }
-        return "\(name) não está tocando"
+        if !controlledPlayer.isInstalled { return L10n.playerNotInstalled(name) }
+        if !controlledPlayer.isRunning { return L10n.playerNotRunning(name) }
+        return L10n.playerNotPlaying(name)
     }
 
     // MARK: - Stream
 
     func start() {
-        guard streamProcess == nil else { return }
+        isStopping = false
+        startProgressTimer()
+
+        // A checagem de entitlement é um subprocesso curto; fora da main thread para
+        // não segurar a abertura do widget.
+        Task.detached {
+            let entitled = MediaRemoteAdapter.isEntitled()
+            await MainActor.run {
+                guard !entitled else {
+                    self.openStream()
+                    return
+                }
+                self.health = .unavailable(L10n.mechanismUnavailable)
+                NSLog("MacMediaWidget: adapter sem entitlement do MediaRemote — leitura indisponível")
+            }
+        }
+    }
+
+    func stop() {
+        isStopping = true
+        progressTimer?.invalidate()
+        progressTimer = nil
+        streamProcess?.terminate()
+        streamProcess = nil
+    }
+
+    private func openStream() {
+        guard streamProcess == nil, !isStopping else { return }
 
         let process = MediaRemoteAdapter.makeStreamProcess()
         guard let stdout = process.standardOutput as? Pipe else { return }
@@ -136,21 +188,36 @@ final class NowPlayingController: ObservableObject {
             }
         }
 
+        // O perl morrer é o modo de falha esperado, não o excepcional: qualquer coisa
+        // que o mate (crash, mudança de sessão, atualização do brew em desenvolvimento)
+        // deixaria o widget congelado na última faixa para sempre.
+        process.terminationHandler = { [weak self] _ in
+            Task { @MainActor in self?.handleStreamTermination() }
+        }
+
         do {
             try process.run()
             streamProcess = process
         } catch {
             NSLog("MacMediaWidget: falha ao iniciar o stream do adapter: \(error)")
+            handleStreamTermination()
         }
-
-        startProgressTimer()
     }
 
-    func stop() {
-        progressTimer?.invalidate()
-        progressTimer = nil
-        streamProcess?.terminate()
+    private func handleStreamTermination() {
         streamProcess = nil
+        guard !isStopping else { return }
+
+        reconnectAttempt += 1
+        health = .reconnecting(attempt: reconnectAttempt)
+
+        // Backoff exponencial com teto de 30s: se a causa for permanente, não faz
+        // sentido gastar um subprocesso por segundo pelo resto da sessão.
+        let delay = min(30, pow(2, Double(min(reconnectAttempt, 5))))
+        NSLog("MacMediaWidget: stream do adapter caiu; reabrindo em \(Int(delay))s (tentativa \(reconnectAttempt))")
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
+            self?.openStream()
+        }
     }
 
     /// Recalcula a posição estimada a cada 0,5s enquanto há reprodução.
@@ -219,79 +286,54 @@ final class NowPlayingController: ObservableObject {
     }
 
     private func handleLine(_ data: Data) {
-        guard
-            let obj = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-            let payload = obj["payload"] as? [String: Any]
-        else { return }
+        // Linha válida chegando é a prova de que o canal está de pé.
+        if health != .healthy {
+            health = .healthy
+            reconnectAttempt = 0
+        }
 
-        // `diff: false` é um snapshot completo do Now Playing. Um snapshot SEM
-        // faixa alguma significa que não existe mais sessão — o app de música foi
-        // encerrado. Nesse caso é preciso zerar o estado: mesclar (o que o código
-        // fazia sempre, por ignorar o campo `diff`) deixava o `bundleIdentifier`
-        // antigo grudado, e o play do widget virava um `togglePlayPause` global,
-        // que o macOS entrega ao Music.app da Apple — abrindo o app errado.
-        let isSnapshot = (obj["diff"] as? Bool) == false
-        if isSnapshot, payload["bundleIdentifier"] == nil, payload["title"] == nil {
+        switch NowPlayingParser.parse(data, mergingInto: track, lastTimestamp: lastTimestamp) {
+        case .ignored:
+            return
+
+        case .reset:
             track = TrackInfo()
             lastTimestamp = nil
             anchorElapsed = 0
             anchorWall = Date()
             refreshDisplayedElapsed()
-            return
-        }
 
-        // O stream vem como diff por padrão: só campos alterados estão presentes.
-        // Mesclamos sobre o estado atual.
-        var t = track
-
-        if let v = payload["bundleIdentifier"] as? String { t.bundleIdentifier = v }
-        if let v = payload["title"] as? String { t.title = v }
-        if let v = payload["artist"] as? String { t.artist = v }
-        if let v = payload["album"] as? String { t.album = v }
-        if let v = payload["duration"] as? Double { t.duration = v }
-        if let v = payload["elapsedTime"] as? Double {
-            t.elapsedTime = v
-            t.timestamp = Date()
-        }
-        if let v = payload["playing"] as? Bool { t.isPlaying = v }
-
-        if let b64 = payload["artworkData"] as? String,
-           let imgData = Data(base64Encoded: b64),
-           let image = NSImage(data: imgData) {
-            t.artwork = image
-        }
-
-        // Reancora o cronômetro local antes de adotar o novo estado.
-        let now = Date()
-        if let tsString = payload["timestamp"] as? String,
-           let ts = Self.isoFormatter.date(from: tsString),
-           ts != lastTimestamp {
-            // Faixa nova: o timestamp marca o início dela, então a posição atual é
-            // o tempo de parede decorrido desde ele.
-            //
-            // Só que o Amazon Music não reemite o timestamp ao pausar: numa faixa
-            // parada há horas, esse cálculo dá um valor absurdo. Nesse caso a
-            // posição real é desconhecida e mostrar do início é melhor do que
-            // travar a barra cheia — que era o que acontecia, porque a âncora
-            // acabava fixada na duração e não saía mais de lá até trocar de faixa.
-            lastTimestamp = ts
-            let sinceStart = max(0, now.timeIntervalSince(ts))
-            if let dur = t.duration ?? track.duration, sinceStart > dur {
-                anchorElapsed = 0
-            } else {
-                anchorElapsed = sinceStart
+        case .update(let t, let newTimestamp):
+            // Reancora o cronômetro local antes de adotar o novo estado.
+            let now = Date()
+            if let ts = newTimestamp {
+                // Faixa nova: o timestamp marca o início dela, então a posição atual é
+                // o tempo de parede decorrido desde ele.
+                //
+                // Só que o Amazon Music não reemite o timestamp ao pausar: numa faixa
+                // parada há horas, esse cálculo dá um valor absurdo. Nesse caso a
+                // posição real é desconhecida e mostrar do início é melhor do que
+                // travar a barra cheia — que era o que acontecia, porque a âncora
+                // acabava fixada na duração e não saía mais de lá até trocar de faixa.
+                lastTimestamp = ts
+                let sinceStart = max(0, now.timeIntervalSince(ts))
+                if let dur = t.duration ?? track.duration, sinceStart > dur {
+                    anchorElapsed = 0
+                } else {
+                    anchorElapsed = sinceStart
+                }
+                anchorWall = now
+            } else if t.isPlaying != track.isPlaying {
+                // Transição play/pause sem novo timestamp: consolida o acumulado com o
+                // estado ANTIGO para congelar (ou retomar) na posição correta. Sem
+                // clamp, para não fixar a âncora no fim da faixa.
+                anchorElapsed = estimatedElapsed(at: now, playing: track.isPlaying, clamped: false)
+                anchorWall = now
             }
-            anchorWall = now
-        } else if payload["playing"] != nil, t.isPlaying != track.isPlaying {
-            // Transição play/pause sem novo timestamp: consolida o acumulado com o
-            // estado ANTIGO para congelar (ou retomar) na posição correta. Sem
-            // clamp, para não fixar a âncora no fim da faixa.
-            anchorElapsed = estimatedElapsed(at: now, playing: track.isPlaying, clamped: false)
-            anchorWall = now
-        }
 
-        track = t
-        refreshDisplayedElapsed()
+            track = t
+            refreshDisplayedElapsed()
+        }
     }
 
     // MARK: - Comandos

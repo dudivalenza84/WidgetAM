@@ -80,6 +80,23 @@ enum MediaRemoteAdapter {
         run(["send", String(command.rawValue)])
     }
 
+    /// Pergunta ao adapter se ele ainda consegue falar com o MediaRemote.
+    ///
+    /// É a checagem que distingue "nenhuma música tocando" de "o mecanismo do app parou
+    /// de existir" — o risco estrutural do produto, já que o MediaRemote é framework
+    /// privado e a Apple pode fechar o acesso num update do macOS. Sem isto, uma quebra
+    /// dessas apareceria para o usuário como um widget eternamente vazio.
+    nonisolated static func isEntitled() -> Bool {
+        let process = makeProcess(["test"])
+        do {
+            try process.run()
+            process.waitUntilExit()
+            return process.terminationStatus == 0
+        } catch {
+            return false
+        }
+    }
+
     private static func makeProcess(_ arguments: [String]) -> Process {
         let process = Process()
         process.executableURL = URL(fileURLWithPath: perlPath)

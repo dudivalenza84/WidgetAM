@@ -33,6 +33,16 @@ daqui:
 - **Verificação de qualidade:** `swift build`. O `fechar-sessao.sh` detecta o
   `Package.swift` e roda sozinho — mas o bundle `.app` só é montado por
   `scripts/build-app.sh`, que **não** roda no encerramento. Testar o `.app` é manual.
+- **Suíte de testes:** `swift run MacMediaWidget --run-tests` (sai 0/1). Não é
+  `swift test`: as Command Line Tools não trazem XCTest nem swift-testing, então as
+  asserções vivem em `SelfTests.swift`, no próprio módulo, sob `#if DEBUG`. Ver
+  `DECISOES.md`.
+- **Traduções:** `scripts/verificar-traducoes.sh` confere que as chaves do `L10n.swift`
+  batem com cada `.lproj`. Rodar sempre que mexer em string de UI — chave errada cai no
+  inglês em silêncio.
+- **Matriz de players:** `scripts/testar-player.sh <bundle-id> [nome-applescript]`.
+  Requer o player tocando uma fila com 3+ faixas, senão o teste de `next` dá falso
+  negativo.
 
 ## Regras técnicas
 

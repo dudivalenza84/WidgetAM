@@ -17,8 +17,8 @@ enum ControlMode: String, CaseIterable, Identifiable {
 
     var label: String {
         switch self {
-        case .automatic: return "Controlar o que estiver tocando"
-        case .fixed: return "Controlar sempre o player escolhido"
+        case .automatic: return L10n.controlModeAutomatic
+        case .fixed: return L10n.controlModeFixed
         }
     }
 }

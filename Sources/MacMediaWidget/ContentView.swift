@@ -71,11 +71,18 @@ struct ContentView: View {
     /// qual app ele está falando, agora que pode ser qualquer um.
     private var titleRow: some View {
         HStack(spacing: 6) {
-            Text(track.title ?? "Nada tocando")
+            Text(track.title ?? L10n.nothingPlaying)
                 .font(.system(size: 16, weight: .bold))
                 .lineLimit(1)
             Spacer(minLength: 4)
-            if let icon = sourcePlayer?.icon {
+            // O aviso de canal degradado toma o lugar do ícone da fonte: nesse estado
+            // não há fonte confiável para identificar, e o alerta é o que importa.
+            if let healthMessage {
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .font(.system(size: 13))
+                    .foregroundStyle(.orange)
+                    .help(healthMessage)
+            } else if let icon = sourcePlayer?.icon {
                 Image(nsImage: icon)
                     .resizable()
                     .frame(width: 15, height: 15)
@@ -92,7 +99,20 @@ struct ContentView: View {
 
     /// Sem faixa, a segunda linha explica o porquê em vez de mostrar um travessão mudo.
     private var subtitlePlaceholder: String {
-        nowPlaying.transportUnavailableReason ?? "—"
+        healthMessage ?? nowPlaying.transportUnavailableReason ?? L10n.noArtist
+    }
+
+    /// Aviso de canal degradado, quando há um. Precede qualquer outra explicação: se o
+    /// widget está cego, dizer "nada tocando" seria mentira — ele não tem como saber.
+    private var healthMessage: String? {
+        switch nowPlaying.health {
+        case .starting, .healthy:
+            return nil
+        case .reconnecting:
+            return L10n.reconnecting
+        case .unavailable(let reason):
+            return reason
+        }
     }
 
     // MARK: - Componentes
@@ -156,7 +176,7 @@ struct ContentView: View {
         // Área interativa precisa se excluir do arrasto da janela — caso contrário
         // arrastar para buscar move o widget (`DECISOES.md · 2026-08-05 · #01`).
         .modifier(NonDraggableIf(isSeekable))
-        .help(isSeekable ? "Arraste para mudar a posição" : "")
+        .help(isSeekable ? L10n.dragToSeek : "")
     }
 
     private func seekGesture(width: CGFloat, duration: Double) -> some Gesture {

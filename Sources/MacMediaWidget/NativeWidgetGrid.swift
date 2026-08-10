@@ -25,16 +25,21 @@ enum NativeWidgetGrid {
     }
 
     static func anchor(for screen: NSScreen) -> Anchor {
-        if let measured = measuredAnchor() { return measured }
+        if let measured = measuredAnchor(for: screen) { return measured }
         let sf = screen.frame
         return Anchor(x: sf.maxX - 8 - pitch, topY: screen.visibleFrame.maxY - 28)
     }
 
-    /// Procura uma janela de widget nativo (nível e tamanho característicos) e
-    /// converte a posição dela em âncora. Tamanhos de widget são múltiplos
+    /// Procura uma janela de widget nativo (nível e tamanho característicos) **na tela
+    /// informada** e converte a posição dela em âncora. Tamanhos de widget são múltiplos
     /// exatos da célula — o filtro descarta o chrome de hover da Central de
     /// Notificações, que vive em outro nível e com tamanho quebrado.
-    private static func measuredAnchor() -> Anchor? {
+    ///
+    /// O recorte por tela não é detalhe: cada monitor tem a própria grade, ancorada na
+    /// borda direita dele. Sem o filtro, um widget nativo no monitor secundário viraria
+    /// a âncora do widget que está no principal, e o alinhamento sairia deslocado por
+    /// um valor arbitrário — o resto da divisão entre as duas origens.
+    private static func measuredAnchor(for screen: NSScreen) -> Anchor? {
         guard let mainHeight = NSScreen.screens.first?.frame.height,
               let list = CGWindowListCopyWindowInfo([.optionOnScreenOnly], kCGNullWindowID)
                 as? [[String: Any]] else { return nil }
@@ -48,8 +53,19 @@ enum NativeWidgetGrid {
                   width.truncatingRemainder(dividingBy: Double(pitch)) == 0,
                   height.truncatingRemainder(dividingBy: Double(pitch)) == 0
             else { continue }
-            // CGWindow tem origem no canto superior esquerdo; Cocoa, no inferior.
-            return Anchor(x: CGFloat(x), topY: mainHeight - CGFloat(y))
+
+            // CGWindow tem origem no canto superior esquerdo da tela principal e cresce
+            // para baixo; Cocoa tem origem no canto inferior esquerdo dela e cresce para
+            // cima. A conversão usa sempre a altura da tela principal, mesmo para janelas
+            // em outros monitores, porque o espaço de coordenadas é global.
+            let cocoaTop = mainHeight - CGFloat(y)
+            let cocoaFrame = NSRect(
+                x: CGFloat(x), y: cocoaTop - CGFloat(height),
+                width: CGFloat(width), height: CGFloat(height)
+            )
+            guard screen.frame.intersects(cocoaFrame) else { continue }
+
+            return Anchor(x: CGFloat(x), topY: cocoaTop)
         }
         return nil
     }

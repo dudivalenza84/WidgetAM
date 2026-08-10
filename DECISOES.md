@@ -3,6 +3,53 @@
 Decisões com efeito além da sessão em que foram tomadas (ADR-lite). Entradas novas
 vão no topo. O que está aqui não se rediscute sem motivo novo.
 
+## 2026-08-10 · #01 — Testes rodam dentro do binário, porque as CLT não têm framework de teste
+
+**Contexto.** A Fase 2 do ROADMAP pede cobertura do que é testável sem UI. O caminho
+normal — `testTarget` no `Package.swift` com swift-testing ou XCTest — **não compila
+neste projeto**: as Command Line Tools não trazem nenhum dos dois frameworks (só o Xcode
+completo traz). `swift test` morre em `no such module 'Testing'` antes da primeira linha,
+e `/Library/Developer/CommandLineTools/Library/Frameworks/` só tem `Python3.framework`.
+
+**Escolha.** As asserções vivem em `Sources/MacMediaWidget/SelfTests.swift`, dentro do
+próprio módulo, atrás de `#if DEBUG`, e rodam com `swift run MacMediaWidget --run-tests`
+(saída 0/1, contagem e lista de falhas). Estar no mesmo módulo dá acesso ao escopo
+interno de graça — a alternativa seria tornar pública metade da API só para poder
+testá-la. `#if DEBUG` mantém tudo isso fora do `.app` de release.
+
+**Alternativas descartadas.** (1) Exigir o Xcode completo: ~10 GB e uma dependência nova
+de ambiente, decisão que é do dono do projeto e não de uma sessão de trabalho. (2) Quebrar
+o app em biblioteca + executável fino para que um alvo de testes pudesse importá-lo:
+refactor estrutural cuja única motivação seria contornar a ausência do framework, e que
+ainda exigiria `public` em tudo que os testes tocam.
+
+**Quando revisitar.** Se o Xcode entrar no projeto (a Fase 4 precisa dele para
+notarização? não — `notarytool` vem nas CLT), migrar para swift-testing é mecânico: as
+funções já são independentes. Está em `PENDENCIAS.md`.
+
+## 2026-08-10 · #01 — Idioma-base do código passa a ser inglês
+
+**Contexto.** A Fase 2 exige a UI em inglês para vender fora do Brasil. O código tinha as
+strings em pt-BR literais, espalhadas por nove arquivos.
+
+**Escolha.** Inglês vira o idioma-base: a **chave** de cada string é o próprio texto em
+inglês, e `Resources/pt-BR.lproj/Localizable.strings` traz a tradução. Todas as strings
+ficam centralizadas em `L10n.swift`. Duas consequências boas: rodando o binário solto em
+desenvolvimento (sem bundle, sem `.lproj`), o fallback é a chave — ou seja, inglês legível
+em vez de identificadores crus; e traduzir vira ler um arquivo, não caçar literais.
+
+**O risco que isso cria, e a mitigação.** `String(localized:)` cai no inglês **em
+silêncio** quando a chave não existe: um typo não quebra o build, não gera aviso e não
+aparece em teste — só na tela de quem usa em português. Como o `genstrings` não enxerga
+`String(localized:)` e não há Xcode aqui, criei `scripts/verificar-traducoes.sh`, que
+extrai as chaves do `L10n.swift` e compara com cada `.lproj` nos dois sentidos (sem
+tradução / órfãs). É por isso que centralizar as strings num arquivo só deixou de ser
+estilo e virou requisito: a verificação depende disso.
+
+**Isto não muda a regra de idioma do projeto.** Explicação, commit, comentário de código,
+arquivo de sessão, pendência e decisão continuam em pt-BR. O que passou para inglês é a
+*interface do produto* e as chaves de localização.
+
 ## 2026-08-10 · #01 — Arquitetura da Fase 1: duas camadas, dois modos de controle
 
 **Contexto.** Levantamento completo em `docs/fase1-multiplayer.md`. O fato que determina

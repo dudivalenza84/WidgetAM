@@ -6,6 +6,14 @@ import AppKit
 @main
 enum App {
     static func main() {
+        // `swift run MacMediaWidget --run-tests` roda a suíte e sai, sem abrir janela.
+        // Só existe em debug — ver SelfTests.swift para o porquê de não ser um testTarget.
+        #if DEBUG
+        if CommandLine.arguments.contains("--run-tests") {
+            exit(MainActor.assumeIsolated { SelfTests.run() })
+        }
+        #endif
+
         let app = NSApplication.shared
         let delegate = AppDelegate()
         app.delegate = delegate
