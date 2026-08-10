@@ -3,6 +3,94 @@
 Decisões com efeito além da sessão em que foram tomadas (ADR-lite). Entradas novas
 vão no topo. O que está aqui não se rediscute sem motivo novo.
 
+## 2026-08-10 · #01 — Arquitetura da Fase 1: duas camadas, dois modos de controle
+
+**Contexto.** Levantamento completo em `docs/fase1-multiplayer.md`. O fato que determina
+tudo: **o comando do MediaRemote não tem destinatário** — o adapter só atua sobre a
+sessão de Now Playing do sistema, sem parâmetro de bundle id (verificado no `help` do
+adapter). Direcionar comando a um app específico só é possível via AppleScript, que
+Apple Music tem (`.sdef` de 44,7 KB com `player position` gravável, `sound volume`,
+`shuffle`, `repeat`) e o Amazon Music não tem (reconfirmado hoje). Chrome e Safari têm
+AppleScript, mas **zero** capacidade de mídia — para navegador só existe MediaRemote.
+
+**Escolhas.**
+
+1. **Duas camadas.** MediaRemote continua a única fonte de leitura e o transporte padrão
+   (funciona com qualquer fonte, inclusive imprevista). AppleScript entra como camada
+   opcional por app, só para o que o MediaRemote não dá: posição real, seek, volume
+   por-app, shuffle/repeat e comando direcionado.
+2. **Dois modos de controle, com chave nas preferências.** Automático (espelha quem está
+   tocando) como padrão; fixo (controla sempre o player escolhido) como opção.
+3. **No modo fixo, com player sem AppleScript fora da sessão ativa:** o play abre o app e
+   espera ele virar a sessão antes de enviar o comando (mecânica que já existe para o
+   Amazon Music); next/prev/seek ficam **desabilitados com o motivo à vista**. Comando
+   global nunca sai às cegas — é o bug de `2026-08-05 · #01`, e a generalização não pode
+   reintroduzi-lo.
+4. **Volume por-app onde existir**, sistema no resto, com a UI indicando o alvo. Volume
+   por-app é uma das duas razões de existir da camada AppleScript.
+5. **Escopo da Fase 1 sem esperar instalação:** desenvolve com Amazon Music + Apple Music
+   + navegador. Apple Music é o player mais capaz da lista e valida a camada inteira.
+   Spotify/Deezer entram como "mais um adaptador", sem retrabalho. O critério de saída do
+   ROADMAP (que exige Spotify) só fecha depois de instalado.
+6. **Capacidade declarada é degradável em runtime.** Tabela de capacidades não é
+   confiança: automação negada faz o AppleScript falhar em silêncio, então a capacidade
+   cai sozinha. E nada entra na matriz como "presumido" — comando aceito sem erro ≠
+   comando funcionando (lição do seek do Amazon).
+
+**Alternativas descartadas.** Só modo automático: perderia o controle direcionado que o
+AppleScript viabiliza em Apple Music/Spotify. Só modo fixo: no Amazon Music o mesmo
+controle se comportaria diferente sem explicação. Volume sempre do sistema: jogaria fora
+metade do ganho do AppleScript. JavaScript injetado para controlar mídia em navegador:
+depende de uma opção do menu Desenvolvedor ligada à mão — inviável como produto.
+
+**Custo aceito.** A Fase 1 introduz o prompt de permissão de Automação (um por app-alvo),
+que o app hoje não dispara — o `set volume` fala com o sistema, não com um app. Exige
+`NSAppleEventsUsageDescription` no `Info.plist` e, na Fase 4 com hardened runtime, a
+entitlement `com.apple.security.automation.apple-events`.
+
+## 2026-08-10 · #01 — Barra de progresso volta a ser controle onde o seek funciona
+
+**Contexto.** `2026-08-05 · #02` decidiu que "a barra de progresso é indicador, e não vira
+controle". A decisão foi correta, mas o contexto era mono-player: o Amazon Music ignora o
+comando de posicionamento. No Apple Music o seek funciona (`player position` é gravável
+via AppleScript).
+
+**Decisão.** A decisão anterior fica **delimitada ao Amazon Music e a qualquer fonte sem
+seek comprovado**. A barra vira controle arrastável apenas onde a capacidade `.seek`
+existir e tiver sido verificada empiricamente; nas outras continua indicador. O
+`seek(toSeconds:)` removido não volta pelo caminho do MediaRemote — volta pela camada
+AppleScript do player que o suporta.
+
+**Consequência de implementação.** A barra passa a ser área interativa, logo precisa de
+`.nonDraggableWindowArea()`, senão arrasta a janela (`2026-08-05 · #01`).
+
+## 2026-08-10 · #01 — Único terceiro redistribuído: mediaremote-adapter (ungive), BSD-3-Clause
+
+**Contexto.** A pendência de licenças partia de duas premissas erradas: que o adapter
+bundlado era "o fork do ejbills" e que a licença seria "MIT presumida"; e tratava
+`media-control` e o adapter como dois terceiros distintos.
+
+**Apuração.** Pela API do GitHub: `ungive/mediaremote-adapter` é a **origem**
+(BSD-3-Clause, `Copyright (c) 2025, Jonas van den Berg and contributors`);
+`ejbills/mediaremote-adapter` é **fork** dela, sem licença própria. `ungive/media-control`
+é o CLI construído sobre o adapter, que ele incorpora como submódulo git, do mesmo autor
+e da mesma licença (declarada no README; a fórmula do Homebrew registra BSD-3-Clause).
+O `build-app.sh` copia **apenas** `mediaremote-adapter.pl` e
+`MediaRemoteAdapter.framework` — o executável `media-control` não é redistribuído.
+
+**Decisão.** Há **um** terceiro no bundle, não dois: o `mediaremote-adapter` de `ungive`,
+BSD-3-Clause. Texto integral e obrigações práticas em `Resources/THIRD-PARTY-LICENSES.md`,
+que o `build-app.sh` passa a copiar para dentro do `.app` — a cláusula 2 exige que o aviso
+acompanhe a redistribuição binária, e um arquivo só no repositório não cumpre isso. A
+cláusula 3 proíbe usar o nome do autor para endossar o produto: material de venda pode
+descrever o mecanismo, não sugerir aval. Sem copyleft — o código do app segue fechado.
+README e CLAUDE.md, que citavam o ejbills, foram corrigidos.
+
+**Nota de método.** A leitura da página HTML do repositório afirmou um arquivo `LICENSE`
+na raiz do `media-control` que **não existe** lá (a listagem de conteúdo da API não o
+traz). O dado bom veio da API e do cabeçalho do próprio `.pl` bundlado. Resumo de página
+não é evidência.
+
 ## 2026-08-09 · #01 — Rumo de produto: venda direta fora da App Store, Amazon Music inegociável
 
 **Contexto.** O app vai virar produto à venda. O MediaRemote é framework privado,

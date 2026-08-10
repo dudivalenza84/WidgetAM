@@ -67,7 +67,9 @@ O que separa "funciona na minha máquina" de produto.
 - **Licenciamento/checkout**: Paddle ou Lemon Squeezy (merchant of record — cuidam
   de imposto internacional) vs. Gumroad (mais simples). Chave de licença no app.
 - **Jurídico**: EULA, política de privacidade, textos de licença de terceiros no
-  bundle (media-control BSD-3-Clause; adapter do ejbills — conferir texto exato).
+  bundle — **feito** em `2026-08-10 · #01`: um único terceiro redistribuído, o
+  `mediaremote-adapter` de `ungive` (BSD-3-Clause), com texto integral e obrigações em
+  `Resources/THIRD-PARTY-LICENSES.md`, copiado para o bundle pelo `build-app.sh`.
 - **Auditoria de segurança completa do app** (não só diffs): subprocesso perl,
   parsing do JSON do adapter, resolução de caminhos do bundle, UserDefaults.
 - **Modelo de preço**: decidir compra única vs. assinatura considerando o risco
