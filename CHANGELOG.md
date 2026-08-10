@@ -3,6 +3,42 @@
 Formato semver: MINOR por release cronológica, PATCH para hotfix.
 Entradas novas vão no topo.
 
+## [1.11.0] — 2026-08-10 · #01 — Robustez de produto, inglês e auditoria de segurança
+
+- **Saúde do adapter.** O widget deixa de congelar quando o canal de leitura cai:
+  checagem de entitlement na abertura, reconexão com backoff exponencial e aviso na UI.
+  Antes, um subprocesso morto deixava o card parado na última faixa para sempre, o que
+  o usuário não tinha como distinguir de "nada tocando".
+- **Interface em inglês**, com pt-BR como tradução e `scripts/verificar-traducoes.sh`
+  para impedir que uma chave errada caia no inglês em silêncio.
+- **53 verificações automatizadas** (`swift run MacMediaWidget --run-tests`), cobrindo
+  parsing do stream, grade de snap, capacidades de player e posição entre telas.
+- **Multi-tela:** âncora da grade filtrada por tela e posição salva validada contra as
+  telas conectadas — antes, desconectar um monitor deixava o widget invisível e sem como
+  resgatar, já que o app não tem ícone no Dock.
+- **Auditoria de segurança** (`docs/auditoria-seguranca.md`) com três correções. A mais
+  séria: o fallback do adapter para `/opt/homebrew` — diretório gravável sem privilégio —
+  ia junto para o binário de release, o que permitiria executar código dentro do processo
+  do app com as permissões de Automação dele.
+- **Pipeline de release** pronto para Developer ID: hardened runtime, entitlements,
+  notarização e staple, tudo opcional por variável de ambiente.
+
+## [1.10.0] — 2026-08-10 · #01 — Multi-player
+
+- O widget deixa de ser mono-app. Duas camadas: MediaRemote como base universal (lê e
+  controla qualquer fonte de Now Playing) e AppleScript como camada por app, onde
+  existir — no Apple Music isso dá posição real, seek, volume do próprio app,
+  shuffle/repeat e controle mesmo com outro app tocando.
+- **Player preferido** e **modo de controle** (automático ou fixo) nas preferências. No
+  modo fixo com um player sem AppleScript, o play abre o app e os demais controles ficam
+  inativos com o motivo à vista — mandar o comando assim cairia no app errado.
+- UI adaptada ao que a fonte permite: ícone da fonte ativa, barra arrastável só onde o
+  seek foi comprovado, alvo do volume explícito.
+- **Matriz de compatibilidade** (`docs/compatibilidade-players.md`) levantada com
+  `scripts/testar-player.sh`, só com o que foi observado.
+- Atribuição BSD-3-Clause do `mediaremote-adapter` agora acompanha o bundle, como a
+  licença exige.
+
 ## [1.9.0] — 2026-08-09 · #01 — Grade nativa de widgets + roadmap de produto
 
 - Snap reescrito: grade celular 2D idêntica à dos widgets nativos da mesa

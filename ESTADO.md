@@ -1,35 +1,48 @@
 # Estado — MacMediaWidget
 
-Última sessão: 2026-08-09 · #01 — Visual e grade de widget nativo + roadmap de produto — concluída
+Última sessão: 2026-08-10 · #01 — Pendências independentes, Fase 1 (multi-player) e Fase 2 (robustez) — concluída
 
 ## Próximo passo
 
-Fase 1 do `ROADMAP.md` (multi-player): abstração `Player` — MediaRemote como base
-universal + AppleScript como camada por app (Spotify/Apple Music têm; Amazon não) —
-seletor de player preferido e matriz de compatibilidade empírica. Pré-requisito do
-usuário: instalar Spotify (e Deezer, se for suportar). Antes de codar, remontar o
-`.app` v1.9.0 (`scripts/build-app.sh`) — pendência Alta.
+Nenhum trabalho de código está bloqueado esperando outro trabalho de código: as Fases 1
+e 2 do `ROADMAP.md` estão feitas e os itens da Fase 4 que não dependem de compra também.
+O que resta trava em três decisões do dono do produto (ver pendências). Se ele já tiver
+resolvido alguma ao retomar, o caminho é direto:
+
+- **Developer Program assinado** → exercitar o pipeline com
+  `MMW_SIGN_IDENTITY` / `MMW_NOTARY_PROFILE` em `scripts/build-app.sh`, depois Sparkle.
+- **Spotify instalado** → `scripts/testar-player.sh com.spotify.client Spotify` e criar
+  `SpotifyPlayer` espelhando `AppleMusicPlayer`, declarando capacidades **só depois** do
+  teste.
+- **Nome decidido** → Fase 3 (validação de marca, ícone, materiais).
 
 ## Pendências abertas (prioridade)
 
-- [ ] Remontar `.app` v1.9.0 e substituir o de /Applications (roda binário de debug)
-- [ ] Fase 1 multi-player (ROADMAP) — depende de instalar Spotify/Deezer
-- [ ] Conferir licença do adapter ejbills + textos de atribuição (Fase 4)
+- [ ] Assinar o Apple Developer Program (US$ 99/ano) — gargalo do resto da Fase 4
+- [ ] Instalar o Spotify — fecha o critério de saída da Fase 1
+- [ ] Testes manuais: tradução pt-BR na tela, arraste da barra no Apple Music, multi-monitor real, automação negada
+- [ ] Conferir se "Abrir no login" sobreviveu à troca do bundle
+- [ ] Avaliar se `--run-tests` e `verificar-traducoes.sh` entram no `fechar-sessao.sh`
 
 ## Decisões vigentes que restringem o trabalho
 
-- Produto: Amazon Music inegociável → venda direta fora da App Store; MediaRemote
-  (privado) aceito como risco precificado. Nome de trabalho MMC pendente de validação.
-- Snap: grade celular nativa 180×180 medida via CGWindowList (ver DECISOES.md);
-  não recriar preferências de margem/passo — a grade nativa não tem esses graus.
-- Não há seek nem posição no Amazon Music; volume por-app impossível para ele
-  (sem AppleScript, comprovado). `togglePlayPause` é global. Volume atual é do sistema.
-- Arrasto por deny-list: só NSViews reais se excluem. `glassEffect` em camada de fundo.
-- Comando novo de adapter: testar contra o app real antes de prometer (aceita e ignora).
+- **O comando do MediaRemote não tem destinatário** — atua na sessão de Now Playing, sem
+  bundle id. Só AppleScript endereça um app. É o fato que sustenta a arquitetura inteira.
+- Nada entra na matriz de compatibilidade sem evidência observada: comando aceito sem
+  erro ≠ comando funcionando (lição do seek do Amazon Music).
+- Idioma-base do código é **inglês** (chave = texto em inglês); pt-BR é tradução.
+  Explicação, commit, doc e comentário seguem em pt-BR.
+- Testes rodam com `swift run MacMediaWidget --run-tests` — as CLT não têm XCTest nem
+  swift-testing, e instalar o Xcode é decisão do dono.
+- Em release, o adapter só é aceito do bundle: caminho do brew é gravável sem
+  privilégio e viraria execução de código no processo do app.
+- Toda área interativa nova da UI precisa de `.nonDraggableWindowArea()`, senão arrasta
+  a janela.
+- Amazon Music: sem seek, sem posição, sem AppleScript, sem volume por-app.
 
 ## Alertas
 
-- **O widget está rodando do binário de debug** (`nohup .build/debug/MacMediaWidget`,
-  iniciado em 2026-08-09) — proposital, para o usuário usar o visual novo; o `.app`
-  de /Applications segue na v1.7.0 sem as mudanças. Remontar é a primeira pendência.
-- `swift build` OK. Auditoria de segurança das mudanças da sessão: sem achados.
+- **6 commits sem push** até o fechamento desta sessão (o push do encerramento resolve;
+  se falhar com 403, é o keychain entregando credencial que não é a `dudivalenza84`).
+- `swift build` OK · 53 verificações OK · traduções 37/37 OK.
+- O `.app` instalado em `/Applications` está na 1.11.0, igual ao código.

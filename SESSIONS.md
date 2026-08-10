@@ -5,7 +5,7 @@ Formato: `YYYY-MM-DD · #NN — <objetivo> — <status>` → [arquivo](docs/sess
 
 ## 2026-08-10
 
-- 2026-08-10 · #01 — Pendências independentes + levantamento da Fase 1 (multi-player) — em-andamento → [arquivo](docs/sessions/2026-08-10-01.md)
+- 2026-08-10 · #01 — Pendências independentes, Fase 1 (multi-player) e Fase 2 (robustez) — concluída → [arquivo](docs/sessions/2026-08-10-01.md)
 
 ## 2026-08-09
 
