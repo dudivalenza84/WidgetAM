@@ -40,6 +40,10 @@ cp "$BIN" "$CONTENTS/MacOS/$APP_NAME"
 cp "$ROOT/Resources/Info.plist" "$CONTENTS/Info.plist"
 cp "$ADAPTER_PL" "$CONTENTS/Resources/mediaremote-adapter/"
 cp -R "$ADAPTER_FRAMEWORK" "$CONTENTS/Resources/mediaremote-adapter/"
+# A licença BSD-3-Clause do mediaremote-adapter exige (cláusula 2) que o aviso de
+# copyright acompanhe a redistribuição binária — logo o arquivo vai no bundle, não
+# só no repositório.
+cp "$ROOT/Resources/THIRD-PARTY-LICENSES.md" "$CONTENTS/Resources/"
 
 # 4. Assinatura ad-hoc (framework primeiro, depois o app inteiro).
 echo "==> codesign ad-hoc"

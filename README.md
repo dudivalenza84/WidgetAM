@@ -8,7 +8,7 @@ reprodução é o próprio `Amazon Music.app` rodando em background. Uso pessoal
 
 Um app Swift nativo (AppKit + SwiftUI) roda como _accessory_ (sem ícone no Dock) e exibe um
 card de widget em nível de mesa, presente em todos os Spaces. A integração com o player usa o
-[`mediaremote-adapter`](https://github.com/ejbills/mediaremote-adapter) bundlado: um
+[`mediaremote-adapter`](https://github.com/ungive/mediaremote-adapter) bundlado: um
 `/usr/bin/perl` entitled lê o stream do Now Playing (capa, título, artista, progresso, estado)
 e envia comandos de transporte (`play`/`pause`/`next`/`prev`) ao `com.amazon.music`. O
 controle de volume atua no volume de saída do **sistema** (global), via AppleScript.
