@@ -1,127 +1,297 @@
 {
-  "/Users/dudivalenza/Projetos IA/Pessoal/MacMediaWidget/.claude/settings.local.json": {
-    "mtime": 1782230868.8052728,
-    "ast_hash": "b535b3e151cc5db8ffea11e07ee40766",
-    "semantic_hash": "b535b3e151cc5db8ffea11e07ee40766"
+  ".claude/settings.local.json": {
+    "mtime": 1786271288.2485487,
+    "ast_hash": "5c5f4d916fdda4b43ea87c5e3a85ef52",
+    "semantic_hash": ""
   },
-  "/Users/dudivalenza/Projetos IA/Pessoal/MacMediaWidget/Package.swift": {
-    "mtime": 1782211219.3072457,
+  "Package.swift": {
+    "mtime": 1786402185.9668736,
     "ast_hash": "949f0c0ec4c77ef6e99da3a287d83cf2",
     "semantic_hash": "949f0c0ec4c77ef6e99da3a287d83cf2"
   },
-  "/Users/dudivalenza/Projetos IA/Pessoal/MacMediaWidget/Sources/MacMediaWidget/App.swift": {
-    "mtime": 1782231772.0590923,
-    "ast_hash": "7c0940e1828ac185e0766d148e29b9f5",
-    "semantic_hash": "7c0940e1828ac185e0766d148e29b9f5"
+  "Sources/MacMediaWidget/App.swift": {
+    "mtime": 1786446935.4825165,
+    "ast_hash": "74b60041a8f14ea6abfac013a0dbf8c8",
+    "semantic_hash": ""
   },
-  "/Users/dudivalenza/Projetos IA/Pessoal/MacMediaWidget/Sources/MacMediaWidget/ContentView.swift": {
-    "mtime": 1782232038.9040797,
-    "ast_hash": "8c1b2ca02f686bb8b62d22dd016b6e81",
-    "semantic_hash": "8c1b2ca02f686bb8b62d22dd016b6e81"
+  "Sources/MacMediaWidget/ContentView.swift": {
+    "mtime": 1786402350.0118818,
+    "ast_hash": "db802d9ba5d789910122a41c884a5dc8",
+    "semantic_hash": ""
   },
-  "/Users/dudivalenza/Projetos IA/Pessoal/MacMediaWidget/Sources/MacMediaWidget/LoginItem.swift": {
+  "Sources/MacMediaWidget/LoginItem.swift": {
     "mtime": 1782213651.9990532,
     "ast_hash": "05e1c2f10e5c1f040c68bb481519d804",
     "semantic_hash": "05e1c2f10e5c1f040c68bb481519d804"
   },
-  "/Users/dudivalenza/Projetos IA/Pessoal/MacMediaWidget/Sources/MacMediaWidget/NowPlayingController.swift": {
-    "mtime": 1782232174.3574076,
-    "ast_hash": "947aa3878efc8e72c312650836bfe772",
-    "semantic_hash": "947aa3878efc8e72c312650836bfe772"
+  "Sources/MacMediaWidget/NowPlayingController.swift": {
+    "mtime": 1786446908.1830297,
+    "ast_hash": "0278caa1df92f3bb390c41da2fc7b097",
+    "semantic_hash": ""
   },
-  "/Users/dudivalenza/Projetos IA/Pessoal/MacMediaWidget/Sources/MacMediaWidget/SystemVolumeController.swift": {
+  "Sources/MacMediaWidget/SystemVolumeController.swift": {
     "mtime": 1782215175.1421878,
     "ast_hash": "52e14074e3264691679582ee638e822d",
     "semantic_hash": "52e14074e3264691679582ee638e822d"
   },
-  "/Users/dudivalenza/Projetos IA/Pessoal/MacMediaWidget/Sources/MacMediaWidget/TrayController.swift": {
-    "mtime": 1782231764.4146378,
-    "ast_hash": "394d94cfed122316c3fa8e2edfa829ed",
-    "semantic_hash": "394d94cfed122316c3fa8e2edfa829ed"
+  "Sources/MacMediaWidget/TrayController.swift": {
+    "mtime": 1786446860.7397466,
+    "ast_hash": "7a3c357d3ce23adb316a6dcf8d482322",
+    "semantic_hash": ""
   },
-  "/Users/dudivalenza/Projetos IA/Pessoal/MacMediaWidget/Sources/MacMediaWidget/WidgetWindow.swift": {
-    "mtime": 1782231709.911123,
-    "ast_hash": "3f59cc11be848eaba2ac6d659079e589",
-    "semantic_hash": "3f59cc11be848eaba2ac6d659079e589"
+  "Sources/MacMediaWidget/WidgetWindow.swift": {
+    "mtime": 1786446901.7790709,
+    "ast_hash": "9898fbf9d54ad8ecde8e28610cb9c533",
+    "semantic_hash": ""
   },
-  "/Users/dudivalenza/Projetos IA/Pessoal/MacMediaWidget/scripts/build-app.sh": {
-    "mtime": 1782211320.8418736,
-    "ast_hash": "91d82a82999a1c5d15e7286062e75216",
-    "semantic_hash": "91d82a82999a1c5d15e7286062e75216"
+  "scripts/build-app.sh": {
+    "mtime": 1786402993.5555913,
+    "ast_hash": "a08d5cc847e15ac5c035f036486a6416",
+    "semantic_hash": ""
   },
-  "/Users/dudivalenza/Projetos IA/Pessoal/MacMediaWidget/CHANGELOG.md": {
-    "mtime": 1782232563.0801182,
-    "ast_hash": "65b393ad0a3c2f810cce5dcb411a16a6",
-    "semantic_hash": "65b393ad0a3c2f810cce5dcb411a16a6"
+  "CHANGELOG.md": {
+    "mtime": 1786447320.8541179,
+    "ast_hash": "4a46d934c31160244a137849a4790e01",
+    "semantic_hash": ""
   },
-  "/Users/dudivalenza/Projetos IA/Pessoal/MacMediaWidget/CLAUDE.md": {
-    "mtime": 1782211091.6281383,
-    "ast_hash": "20634b69399c3795a73120f2ab34f907",
-    "semantic_hash": "20634b69399c3795a73120f2ab34f907"
+  "CLAUDE.md": {
+    "mtime": 1786402743.7117999,
+    "ast_hash": "b8b323a084929475245e38dd5334c1ac",
+    "semantic_hash": ""
   },
-  "/Users/dudivalenza/Projetos IA/Pessoal/MacMediaWidget/PENDENCIAS.md": {
-    "mtime": 1782232551.2134242,
-    "ast_hash": "27d4c675f929491f7a50898d5ea08654",
-    "semantic_hash": "27d4c675f929491f7a50898d5ea08654"
+  "PENDENCIAS.md": {
+    "mtime": 1786447306.313728,
+    "ast_hash": "234705d55ec3b1a1fd5c5319add0d944",
+    "semantic_hash": ""
   },
-  "/Users/dudivalenza/Projetos IA/Pessoal/MacMediaWidget/PENDENCIAS_CONCLUIDAS.md": {
-    "mtime": 1782167687.3701618,
-    "ast_hash": "9f964be68e4be43ce6b213ce082f07b8",
-    "semantic_hash": "9f964be68e4be43ce6b213ce082f07b8"
+  "PENDENCIAS_CONCLUIDAS.md": {
+    "mtime": 1782233219.1794317,
+    "ast_hash": "e153f73c3ecfb1d62db10c55fd05691d",
+    "semantic_hash": ""
   },
-  "/Users/dudivalenza/Projetos IA/Pessoal/MacMediaWidget/README.md": {
-    "mtime": 1782232490.4343076,
-    "ast_hash": "05b73eb6d16c48adf0cc342d90498249",
-    "semantic_hash": "05b73eb6d16c48adf0cc342d90498249"
+  "README.md": {
+    "mtime": 1786401152.3375726,
+    "ast_hash": "3e5cbc78255879f9693c73261c1cca0b",
+    "semantic_hash": ""
   },
-  "/Users/dudivalenza/Projetos IA/Pessoal/MacMediaWidget/SESSIONS.md": {
-    "mtime": 1782232526.5652308,
-    "ast_hash": "71b94adf06db07b84139be5cccf25b72",
-    "semantic_hash": "71b94adf06db07b84139be5cccf25b72"
+  "SESSIONS.md": {
+    "mtime": 1786447301.4151978,
+    "ast_hash": "f30e533164d65097059ea0a2e3dd4acd",
+    "semantic_hash": ""
   },
-  "/Users/dudivalenza/Projetos IA/Pessoal/MacMediaWidget/docs/sessions/2026-06-22-01.md": {
+  "docs/sessions/2026-06-22-01.md": {
     "mtime": 1782167697.6994314,
     "ast_hash": "1d2a80b9cd279bf3e139139204388e69",
     "semantic_hash": "1d2a80b9cd279bf3e139139204388e69"
   },
-  "/Users/dudivalenza/Projetos IA/Pessoal/MacMediaWidget/docs/sessions/2026-06-22-02.md": {
+  "docs/sessions/2026-06-22-02.md": {
     "mtime": 1782170200.209589,
     "ast_hash": "cf830a61f4859446b1f393824bc6e7df",
     "semantic_hash": "cf830a61f4859446b1f393824bc6e7df"
   },
-  "/Users/dudivalenza/Projetos IA/Pessoal/MacMediaWidget/docs/sessions/2026-06-23-01.md": {
+  "docs/sessions/2026-06-23-01.md": {
     "mtime": 1782210579.1557176,
     "ast_hash": "1ae650b7e9981f05b0e44bfe38955e04",
     "semantic_hash": "1ae650b7e9981f05b0e44bfe38955e04"
   },
-  "/Users/dudivalenza/Projetos IA/Pessoal/MacMediaWidget/docs/sessions/2026-06-23-02.md": {
+  "docs/sessions/2026-06-23-02.md": {
     "mtime": 1782214324.5459023,
     "ast_hash": "d1cb74a6fcc4b4756328ad9094549bb2",
     "semantic_hash": "d1cb74a6fcc4b4756328ad9094549bb2"
   },
-  "/Users/dudivalenza/Projetos IA/Pessoal/MacMediaWidget/docs/sessions/2026-06-23-03.md": {
+  "docs/sessions/2026-06-23-03.md": {
     "mtime": 1782215882.8419564,
     "ast_hash": "5cf2b5673c667d4ff2f34d1b4d3f0ab5",
     "semantic_hash": "5cf2b5673c667d4ff2f34d1b4d3f0ab5"
   },
-  "/Users/dudivalenza/Projetos IA/Pessoal/MacMediaWidget/docs/sessions/2026-06-23-04.md": {
+  "docs/sessions/2026-06-23-04.md": {
     "mtime": 1782232517.7279773,
     "ast_hash": "0699a54955485d7e6db75aaaa38fe662",
     "semantic_hash": "0699a54955485d7e6db75aaaa38fe662"
   },
-  "/Users/dudivalenza/Projetos IA/Pessoal/MacMediaWidget/Sources/MacMediaWidget/PreferencesWindow.swift": {
-    "mtime": 1782231734.071048,
-    "ast_hash": "791adcb93d2935358630eecdbdf46bc5",
-    "semantic_hash": "791adcb93d2935358630eecdbdf46bc5"
+  "Sources/MacMediaWidget/PreferencesWindow.swift": {
+    "mtime": 1786446955.591167,
+    "ast_hash": "814659cf1f6c1ebacccaaedc9dd19280",
+    "semantic_hash": ""
   },
-  "/Users/dudivalenza/Projetos IA/Pessoal/MacMediaWidget/Sources/MacMediaWidget/Settings.swift": {
-    "mtime": 1782231180.5093598,
-    "ast_hash": "76ab207437647ea540fc9796989eb54a",
-    "semantic_hash": "76ab207437647ea540fc9796989eb54a"
+  "Sources/MacMediaWidget/Settings.swift": {
+    "mtime": 1786446924.2458634,
+    "ast_hash": "12c55a1319d5e6c11a489bd75aa13c94",
+    "semantic_hash": ""
   },
-  "/Users/dudivalenza/Projetos IA/Pessoal/MacMediaWidget/scripts/package-dmg.sh": {
+  "scripts/package-dmg.sh": {
     "mtime": 1782232434.031166,
     "ast_hash": "1c0956385c6e44cde302decb5fe04e6a",
     "semantic_hash": "1c0956385c6e44cde302decb5fe04e6a"
+  },
+  "Sources/MacMediaWidget/AppMenuController.swift": {
+    "mtime": 1786446855.4982429,
+    "ast_hash": "2513d53452a96353d9085840a5f87305",
+    "semantic_hash": ""
+  },
+  "Sources/MacMediaWidget/AppVersion.swift": {
+    "mtime": 1786446818.7644694,
+    "ast_hash": "5b6f55e621e38b7f8443a3377d745e10",
+    "semantic_hash": ""
+  },
+  "Sources/MacMediaWidget/GlobalHotKey.swift": {
+    "mtime": 1786446991.7708306,
+    "ast_hash": "a62a437e60e9559a0cb106fa556ebf8b",
+    "semantic_hash": ""
+  },
+  "Sources/MacMediaWidget/L10n.swift": {
+    "mtime": 1786446945.8854234,
+    "ast_hash": "5f287d807b2f1edbd42403b95c37533d",
+    "semantic_hash": ""
+  },
+  "Sources/MacMediaWidget/NativeWidgetGrid.swift": {
+    "mtime": 1786402628.4147213,
+    "ast_hash": "f4f76399cfdb58f724b8e5fe90255c2a",
+    "semantic_hash": ""
+  },
+  "Sources/MacMediaWidget/NowPlayingParser.swift": {
+    "mtime": 1786402057.743657,
+    "ast_hash": "ee60b0a8d79d9d3f7fcfb161ccf0a529",
+    "semantic_hash": ""
+  },
+  "Sources/MacMediaWidget/Players/AmazonMusicPlayer.swift": {
+    "mtime": 1786400043.930424,
+    "ast_hash": "8b20d5abf61d8cf685d418f3cdeb61da",
+    "semantic_hash": ""
+  },
+  "Sources/MacMediaWidget/Players/AppleMusicPlayer.swift": {
+    "mtime": 1786400154.6236017,
+    "ast_hash": "a21d2f0fdd9e0d12324a83243c468df4",
+    "semantic_hash": ""
+  },
+  "Sources/MacMediaWidget/Players/AppleScriptPlayer.swift": {
+    "mtime": 1786400239.466077,
+    "ast_hash": "196f1acb6eba755a4a0410ee80ee3ed2",
+    "semantic_hash": ""
+  },
+  "Sources/MacMediaWidget/Players/AppleScriptRunner.swift": {
+    "mtime": 1786400114.2185903,
+    "ast_hash": "a9084d6a4f79708537f46f18d7d8280d",
+    "semantic_hash": ""
+  },
+  "Sources/MacMediaWidget/Players/MediaRemoteAdapter.swift": {
+    "mtime": 1786402873.2178023,
+    "ast_hash": "d37323cf57216d7128efbfb0028d9f85",
+    "semantic_hash": ""
+  },
+  "Sources/MacMediaWidget/Players/MediaRemotePlayer.swift": {
+    "mtime": 1786400123.1038346,
+    "ast_hash": "99f5bab37aab46e2cbc773b43b6fb087",
+    "semantic_hash": ""
+  },
+  "Sources/MacMediaWidget/Players/Player.swift": {
+    "mtime": 1786402894.3070543,
+    "ast_hash": "a2772661d9033ab81c90f0e23a08a73c",
+    "semantic_hash": ""
+  },
+  "Sources/MacMediaWidget/Players/PlayerRegistry.swift": {
+    "mtime": 1786400163.9775302,
+    "ast_hash": "c8bc05cd95a9b7670f79345fac8c5c2e",
+    "semantic_hash": ""
+  },
+  "Sources/MacMediaWidget/SelfTests.swift": {
+    "mtime": 1786402697.256027,
+    "ast_hash": "e04d063f0038944ff981458d9346c751",
+    "semantic_hash": ""
+  },
+  "Sources/MacMediaWidget/VolumeRouter.swift": {
+    "mtime": 1786402357.3187287,
+    "ast_hash": "50ad8687c559e68efa8f22f64f3e5dd7",
+    "semantic_hash": ""
+  },
+  "Sources/MacMediaWidget/WindowDragging.swift": {
+    "mtime": 1786400516.8471706,
+    "ast_hash": "96450ae54035404213c9314cbbe778a6",
+    "semantic_hash": ""
+  },
+  "scripts/testar-player.sh": {
+    "mtime": 1786400717.7789073,
+    "ast_hash": "29d37a3054bc00a96f9a12e0031a92da",
+    "semantic_hash": ""
+  },
+  "scripts/verificar-traducoes.sh": {
+    "mtime": 1786402543.201384,
+    "ast_hash": "f450f53f4b5b81ac7a4574168d18dd2e",
+    "semantic_hash": ""
+  },
+  "DECISOES.md": {
+    "mtime": 1786447315.5243263,
+    "ast_hash": "e7861e814922fab5b72e39c2f7654b1a",
+    "semantic_hash": ""
+  },
+  "ESTADO.md": {
+    "mtime": 1786447330.2439342,
+    "ast_hash": "48cf866e97824f120bc347025c951cc1",
+    "semantic_hash": ""
+  },
+  "ROADMAP.md": {
+    "mtime": 1786403049.0238905,
+    "ast_hash": "fcb6f1585cd8c25b590e4497f5b30ef1",
+    "semantic_hash": ""
+  },
+  "Resources/THIRD-PARTY-LICENSES.md": {
+    "mtime": 1786398355.3289063,
+    "ast_hash": "48514e49617e970891de8d04eff859e5",
+    "semantic_hash": ""
+  },
+  "docs/auditoria-seguranca.md": {
+    "mtime": 1786402944.5540047,
+    "ast_hash": "0e358e4a2ad22dfd3726b06c59422647",
+    "semantic_hash": ""
+  },
+  "docs/compatibilidade-players.md": {
+    "mtime": 1786401111.204389,
+    "ast_hash": "82d8e97017ce10f7c4b5181439f886ff",
+    "semantic_hash": ""
+  },
+  "docs/fase1-multiplayer.md": {
+    "mtime": 1786401127.4124026,
+    "ast_hash": "03b2faa79bb1da44364f33c3f24524a8",
+    "semantic_hash": ""
+  },
+  "docs/sessions/2026-06-23-05.md": {
+    "mtime": 1782247985.7817824,
+    "ast_hash": "9c4d798368aa5fb3dedadd422f2f7b78",
+    "semantic_hash": ""
+  },
+  "docs/sessions/2026-06-24-01.md": {
+    "mtime": 1782300425.8335826,
+    "ast_hash": "cb9704ef5a12744fe1a531dedc014ae5",
+    "semantic_hash": ""
+  },
+  "docs/sessions/2026-06-26-01.md": {
+    "mtime": 1782505459.7271984,
+    "ast_hash": "2625dd195cb0e208eb98c484f6d78dee",
+    "semantic_hash": ""
+  },
+  "docs/sessions/2026-08-05-01.md": {
+    "mtime": 1785951778.4250937,
+    "ast_hash": "0f6db369f3868344d7a0fe6e4b71fb32",
+    "semantic_hash": ""
+  },
+  "docs/sessions/2026-08-05-02.md": {
+    "mtime": 1785967180.4343855,
+    "ast_hash": "af2525ae4ada6202c0c62bc0c169b1ac",
+    "semantic_hash": ""
+  },
+  "docs/sessions/2026-08-09-01.md": {
+    "mtime": 1786273808.796957,
+    "ast_hash": "6769a369106c2b2a617238290ea3507c",
+    "semantic_hash": ""
+  },
+  "docs/sessions/2026-08-10-01.md": {
+    "mtime": 1786403996.1580925,
+    "ast_hash": "9e1aec393c87be4ecd687d7ec6cffb84",
+    "semantic_hash": ""
+  },
+  "docs/sessions/2026-08-11-01.md": {
+    "mtime": 1786447299.5776985,
+    "ast_hash": "b4233799bdcf8272154ff498722de99d",
+    "semantic_hash": ""
   }
 }
