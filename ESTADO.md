@@ -1,12 +1,16 @@
 # Estado — MacMediaWidget
 
-Última sessão: 2026-08-11 · #01 — Interações do widget: duplo clique, menu de contexto, trocar app, sempre no topo, atalho global — concluída
+Última sessão: 2026-08-11 · #02 — Verificar toggle do atalho global ⌃⌥⌘M — concluída
 
 ## Próximo passo
 
-Nenhum trabalho de código bloqueado por outro código. As interações novas (1.12.0)
-estão instaladas e validadas pelo dono. O que resta trava nas mesmas três decisões de
-produto:
+Nenhuma mudança de código nesta sessão: o toggle do ⌃⌥⌘M (2º aperto rebaixa) já
+existia e foi validado ao vivo (nível da janela medido por CGWindowList alternando
+`.floating` ↔ nível de mesa). Se o usuário reproduzir a "falha" com uma janela
+cobrindo o widget e ainda discordar do comportamento, o ajuste é em
+`WidgetWindow.bringToFront()` / `windowDidResignKey`.
+
+O que resta trava nas mesmas três decisões de produto:
 
 - **Developer Program assinado** → exercitar `MMW_SIGN_IDENTITY` / `MMW_NOTARY_PROFILE`
   em `scripts/build-app.sh`, depois Sparkle.
@@ -35,5 +39,5 @@ produto:
 
 ## Alertas
 
-- Nenhum. `swift build` OK · 53 verificações OK · traduções 42/42 OK.
-- O `.app` de `/Applications` está na 1.12.0, igual ao código, rodando.
+- Nenhum. `swift build` OK. Sem mudança de código nesta sessão; o `.app` de
+  `/Applications` segue na 1.12.0, igual ao código, rodando.
