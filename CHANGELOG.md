@@ -3,6 +3,17 @@
 Formato semver: MINOR por release cronológica, PATCH para hotfix.
 Entradas novas vão no topo.
 
+## [1.12.0] — 2026-08-11 · #01 — Interações do widget e atalho global
+
+- Duplo clique no card abre o player que o widget está exibindo.
+- Clique direito no card abre o mesmo menu da bandeja (construção unificada no novo
+  `AppMenuController`).
+- Submenu "Trocar app" nos dois menus: troca o player preferido e abre o app escolhido.
+- Preferência nova em Posicionamento: manter o widget sobre as demais janelas.
+- Atalho global ⌃⌥⌘M traz o widget à frente para operá-lo; segundo aperto devolve ao
+  nível de mesa. Sem permissão de Acessibilidade (Carbon `RegisterEventHotKey`).
+- Versão do app visível no topo dos menus e no rodapé das Preferências.
+
 ## [1.11.0] — 2026-08-10 · #01 — Robustez de produto, inglês e auditoria de segurança
 
 - **Saúde do adapter.** O widget deixa de congelar quando o canal de leitura cai:

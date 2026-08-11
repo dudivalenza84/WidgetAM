@@ -47,6 +47,12 @@ final class AppSettings: ObservableObject {
         didSet { defaults.set(autoLaunchOnPlay, forKey: Keys.autoLaunchOnPlay) }
     }
 
+    /// Mantém o widget sobre as janelas comuns (nível flutuante) em vez do nível de
+    /// mesa dos widgets nativos.
+    @Published var keepAbove: Bool {
+        didSet { defaults.set(keepAbove, forKey: Keys.keepAbove) }
+    }
+
     /// Player que o widget abre no play quando não há nada tocando — e, no modo
     /// fixo, o único que ele controla.
     @Published var preferredPlayerBundleId: String {
@@ -63,6 +69,7 @@ final class AppSettings: ObservableObject {
     private enum Keys {
         static let tintOpacity = "settings.tintOpacity"
         static let autoLaunchOnPlay = "settings.autoLaunchOnPlay"
+        static let keepAbove = "settings.keepAbove"
         static let snapToGrid = "settings.snapToGrid"
         static let preferredPlayerBundleId = "settings.preferredPlayerBundleId"
         static let controlMode = "settings.controlMode"
@@ -71,6 +78,7 @@ final class AppSettings: ObservableObject {
     private enum Defaults {
         static let tintOpacity: Double = 0.45
         static let autoLaunchOnPlay = true
+        static let keepAbove = false
         static let snapToGrid = true
         static let preferredPlayerBundleId = AmazonMusicPlayer.bundleID
         static let controlMode = ControlMode.automatic
@@ -81,12 +89,14 @@ final class AppSettings: ObservableObject {
         defaults.register(defaults: [
             Keys.tintOpacity: Defaults.tintOpacity,
             Keys.autoLaunchOnPlay: Defaults.autoLaunchOnPlay,
+            Keys.keepAbove: Defaults.keepAbove,
             Keys.snapToGrid: Defaults.snapToGrid,
             Keys.preferredPlayerBundleId: Defaults.preferredPlayerBundleId,
             Keys.controlMode: Defaults.controlMode.rawValue,
         ])
         tintOpacity = defaults.double(forKey: Keys.tintOpacity)
         autoLaunchOnPlay = defaults.bool(forKey: Keys.autoLaunchOnPlay)
+        keepAbove = defaults.bool(forKey: Keys.keepAbove)
         snapToGrid = defaults.bool(forKey: Keys.snapToGrid)
         preferredPlayerBundleId = defaults.string(forKey: Keys.preferredPlayerBundleId)
             ?? Defaults.preferredPlayerBundleId

@@ -3,6 +3,34 @@
 Decisões com efeito além da sessão em que foram tomadas (ADR-lite). Entradas novas
 vão no topo. O que está aqui não se rediscute sem motivo novo.
 
+## 2026-08-11 · #01 — "Trocar app" troca o player preferido E abre o app
+
+**Contexto:** o submenu "Trocar app" (menu da bandeja e do clique direito) define o
+player preferido. No modo automático, com outro app tocando, só trocar a preferência
+não teria efeito visível nenhum — a ação pareceria quebrada.
+
+**Escolha (do dono do produto):** além de definir o preferido, escolher no submenu
+abre/traz à frente o app escolhido na hora.
+
+**Alternativa descartada:** só trocar a preferência (comportamento idêntico ao seletor
+das Preferências). Descartada pelo motivo acima.
+
+## 2026-08-11 · #01 — Atalho global fixo ⌃⌥⌘M via Carbon; elevação temporária separada da preferência
+
+**Contexto:** trazer o widget (janela em nível de mesa) à frente exige um atalho que
+funcione com o app em background. `NSEvent.addGlobalMonitor` exige permissão de
+Acessibilidade; bibliotecas de atalho seriam dependência nova embrulhando a mesma API.
+
+**Escolha:** Carbon `RegisterEventHotKey` (`GlobalHotKey.swift`), combinação fixa
+⌃⌥⌘M — três modificadores para não colidir com atalhos de outros apps. O aperto eleva
+para `.floating` como estado **temporário** (`isTemporarilyRaised`), desfeito no
+segundo aperto ou ao perder key; a preferência persistida `keepAbove` é outra coisa e
+não é tocada pelo atalho.
+
+**Alternativas descartadas:** atalho configurável com gravador de tecla (escopo sem
+demanda; a combinação é exibida nas Preferências), monitor global de eventos (permissão
+de Acessibilidade sem necessidade).
+
 ## 2026-08-10 · #01 — Testes rodam dentro do binário, porque as CLT não têm framework de teste
 
 **Contexto.** A Fase 2 do ROADMAP pede cobertura do que é testável sem UI. O caminho

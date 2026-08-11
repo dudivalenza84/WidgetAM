@@ -50,6 +50,7 @@ enum L10n {
     static func openPlayer(_ name: String) -> String {
         String(localized: "Open \(name)")
     }
+    static var switchApp: String { String(localized: "Switch app") }
     static var preferences: String { String(localized: "Preferences…") }
     static var openAtLogin: String { String(localized: "Open at login") }
     static var quit: String { String(localized: "Quit") }
@@ -73,6 +74,7 @@ enum L10n {
     }
 
     static var sectionPlacement: String { String(localized: "Placement") }
+    static var keepAbove: String { String(localized: "Keep the widget above other windows") }
     static var snapToGrid: String { String(localized: "Align to the macOS widget grid") }
     static var snapToGridHelp: String {
         String(localized: "The grid is the same one used by the desktop's native widgets: with a native widget visible, alignment is measured from it; with none, the system's default geometry is used.")
@@ -86,6 +88,14 @@ enum L10n {
         String(localized: "Open \(name) on play (if it is closed)")
     }
     static var fallbackPlayerName: String { String(localized: "preferred player") }
+    static var bringToFrontShortcut: String { String(localized: "Bring widget to front") }
+    static var bringToFrontShortcutHelp: String {
+        String(localized: "Press the shortcut again to send the widget back to the desktop level.")
+    }
+
+    // MARK: - Sobre
+
+    static var version: String { String(localized: "Version") }
 
     // MARK: - App não instalado
 

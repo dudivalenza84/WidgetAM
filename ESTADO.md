@@ -1,48 +1,39 @@
 # Estado — MacMediaWidget
 
-Última sessão: 2026-08-10 · #01 — Pendências independentes, Fase 1 (multi-player) e Fase 2 (robustez) — concluída
+Última sessão: 2026-08-11 · #01 — Interações do widget: duplo clique, menu de contexto, trocar app, sempre no topo, atalho global — concluída
 
 ## Próximo passo
 
-Nenhum trabalho de código está bloqueado esperando outro trabalho de código: as Fases 1
-e 2 do `ROADMAP.md` estão feitas e os itens da Fase 4 que não dependem de compra também.
-O que resta trava em três decisões do dono do produto (ver pendências). Se ele já tiver
-resolvido alguma ao retomar, o caminho é direto:
+Nenhum trabalho de código bloqueado por outro código. As interações novas (1.12.0)
+estão instaladas e validadas pelo dono. O que resta trava nas mesmas três decisões de
+produto:
 
-- **Developer Program assinado** → exercitar o pipeline com
-  `MMW_SIGN_IDENTITY` / `MMW_NOTARY_PROFILE` em `scripts/build-app.sh`, depois Sparkle.
+- **Developer Program assinado** → exercitar `MMW_SIGN_IDENTITY` / `MMW_NOTARY_PROFILE`
+  em `scripts/build-app.sh`, depois Sparkle.
 - **Spotify instalado** → `scripts/testar-player.sh com.spotify.client Spotify` e criar
-  `SpotifyPlayer` espelhando `AppleMusicPlayer`, declarando capacidades **só depois** do
-  teste.
+  `SpotifyPlayer` espelhando `AppleMusicPlayer`, capacidades **só depois** do teste.
 - **Nome decidido** → Fase 3 (validação de marca, ícone, materiais).
 
 ## Pendências abertas (prioridade)
 
 - [ ] Assinar o Apple Developer Program (US$ 99/ano) — gargalo do resto da Fase 4
 - [ ] Instalar o Spotify — fecha o critério de saída da Fase 1
-- [ ] Testes manuais: tradução pt-BR na tela, arraste da barra no Apple Music, multi-monitor real, automação negada
-- [ ] Conferir se "Abrir no login" sobreviveu à troca do bundle
-- [ ] Avaliar se `--run-tests` e `verificar-traducoes.sh` entram no `fechar-sessao.sh`
+- [ ] Conferir se "Abrir no login" sobreviveu às trocas do bundle (2026-08-10 e 08-11)
+- [ ] Testar retorno automático do nível elevado por ⌃⌥⌘M ao clicar em outro app
+- [ ] Testes manuais pendentes: tradução pt-BR na tela, arraste da barra no Apple
+  Music, multi-monitor real, automação negada
 
 ## Decisões vigentes que restringem o trabalho
 
-- **O comando do MediaRemote não tem destinatário** — atua na sessão de Now Playing, sem
-  bundle id. Só AppleScript endereça um app. É o fato que sustenta a arquitetura inteira.
-- Nada entra na matriz de compatibilidade sem evidência observada: comando aceito sem
-  erro ≠ comando funcionando (lição do seek do Amazon Music).
-- Idioma-base do código é **inglês** (chave = texto em inglês); pt-BR é tradução.
-  Explicação, commit, doc e comentário seguem em pt-BR.
-- Testes rodam com `swift run MacMediaWidget --run-tests` — as CLT não têm XCTest nem
-  swift-testing, e instalar o Xcode é decisão do dono.
-- Em release, o adapter só é aceito do bundle: caminho do brew é gravável sem
-  privilégio e viraria execução de código no processo do app.
-- Toda área interativa nova da UI precisa de `.nonDraggableWindowArea()`, senão arrasta
-  a janela.
+- **O comando do MediaRemote não tem destinatário** — só AppleScript endereça um app.
+- Nada entra na matriz de compatibilidade sem evidência observada.
+- Idioma-base do código é **inglês**; pt-BR é tradução (42 chaves, verificadas por script).
+- "Trocar app" no menu troca o preferido **e abre o app**; atalho global é fixo (⌃⌥⌘M,
+  Carbon) e a elevação que ele causa é temporária, separada da preferência `keepAbove`.
+- Toda área interativa nova da UI precisa de `.nonDraggableWindowArea()`.
 - Amazon Music: sem seek, sem posição, sem AppleScript, sem volume por-app.
 
 ## Alertas
 
-- Nenhum. Remote em dia (7 commits empurrados no encerramento, sem o 403 do keychain
-  desta vez).
-- `swift build` OK · 53 verificações OK · traduções 37/37 OK.
-- O `.app` instalado em `/Applications` está na 1.11.0, igual ao código.
+- Nenhum. `swift build` OK · 53 verificações OK · traduções 42/42 OK.
+- O `.app` de `/Applications` está na 1.12.0, igual ao código, rodando.

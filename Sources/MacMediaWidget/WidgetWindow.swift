@@ -15,6 +15,15 @@ final class WidgetWindow: NSPanel, NSWindowDelegate {
     private var snapTimer: Timer?
     private var cancellables = Set<AnyCancellable>()
 
+    /// Fábrica do menu de contexto (clique direito). Injetada pelo AppDelegate para a
+    /// janela não conhecer o `AppMenuController`.
+    var contextMenuProvider: (() -> NSMenu)?
+
+    /// Elevado temporariamente pelo atalho global: fica sobre as janelas comuns até o
+    /// próximo aperto do atalho (ou até perder o estado de key), sem mexer na
+    /// preferência persistida `keepAbove`.
+    private var isTemporarilyRaised = false
+
     init(nowPlaying: NowPlayingController) {
         self.nowPlaying = nowPlaying
         super.init(
@@ -25,9 +34,6 @@ final class WidgetWindow: NSPanel, NSWindowDelegate {
         )
 
         isFloatingPanel = true
-        // Mesmo nível de janela dos widgets nativos da mesa (medido via
-        // CGWindowList): acima dos ícones do desktop, atrás das janelas comuns.
-        level = NSWindow.Level(rawValue: NativeWidgetGrid.nativeLevel)
         isOpaque = false
         backgroundColor = .clear
         // A sombra fica a cargo do SwiftUI (acompanha o card arredondado). A
@@ -42,10 +48,21 @@ final class WidgetWindow: NSPanel, NSWindowDelegate {
         // não-key/não-ativante.
         acceptsMouseMovedEvents = true
         delegate = self
+        applyLevel()
 
         let host = NSHostingView(rootView: ContentView(nowPlaying: nowPlaying))
         host.autoresizingMask = [.width, .height]
         contentView = host
+
+        // Aplica ao vivo a troca de "manter sobre as demais janelas" nas preferências.
+        // O Task adia para depois do didSet: @Published emite no willSet, quando
+        // `settings.keepAbove` ainda tem o valor antigo.
+        settings.$keepAbove
+            .dropFirst()
+            .sink { [weak self] _ in
+                Task { @MainActor in self?.applyLevel() }
+            }
+            .store(in: &cancellables)
 
         // Realinha ao vivo quando o snap é ligado nas preferências (ignora a
         // emissão do valor inicial com dropFirst).
@@ -83,6 +100,70 @@ final class WidgetWindow: NSPanel, NSWindowDelegate {
 
     override var canBecomeKey: Bool { true }
     override var canBecomeMain: Bool { false }
+
+    // MARK: - Nível de janela
+
+    /// Nível conforme o estado: em nível de mesa (como os widgets nativos) por padrão;
+    /// flutuando sobre as janelas comuns com a preferência `keepAbove` ligada ou
+    /// enquanto elevado pelo atalho global.
+    private func applyLevel() {
+        if settings.keepAbove || isTemporarilyRaised {
+            level = .floating
+        } else {
+            // Mesmo nível dos widgets nativos da mesa (medido via CGWindowList):
+            // acima dos ícones do desktop, atrás das janelas comuns.
+            level = NSWindow.Level(rawValue: NativeWidgetGrid.nativeLevel)
+        }
+    }
+
+    /// Ação do atalho global: mostra o widget se escondido e o eleva sobre as janelas
+    /// comuns para ser operado. Um segundo aperto (ou perder o estado de key) devolve
+    /// ao nível de mesa — a menos que a preferência `keepAbove` já o mantenha em cima.
+    func bringToFront() {
+        if !isVisible {
+            showWidget()
+        } else if isTemporarilyRaised {
+            isTemporarilyRaised = false
+            applyLevel()
+            return
+        }
+        isTemporarilyRaised = true
+        applyLevel()
+        orderFrontRegardless()
+    }
+
+    /// Interagir com o widget elevado pode torná-lo key; clicar em outro app depois
+    /// desfaz a elevação temporária — o atalho serve para uma operação pontual, não
+    /// para deixar o widget preso na frente sem o usuário pedir.
+    func windowDidResignKey(_ notification: Notification) {
+        guard isTemporarilyRaised else { return }
+        isTemporarilyRaised = false
+        applyLevel()
+    }
+
+    // MARK: - Mouse
+
+    /// Duplo clique em área "morta" do card (fundo, capa, textos) abre o player que o
+    /// widget está exibindo. Cliques sobre controles não chegam aqui: botões, slider e
+    /// barra de seek consomem o evento antes de ele subir à janela.
+    override func mouseUp(with event: NSEvent) {
+        if event.clickCount == 2 {
+            nowPlaying.openSourcePlayer()
+            return
+        }
+        super.mouseUp(with: event)
+    }
+
+    /// Clique direito em qualquer ponto do card abre o mesmo menu da bandeja. O evento
+    /// chega aqui pela responder chain: o NSHostingView não tem menu de contexto
+    /// próprio e repassa.
+    override func rightMouseDown(with event: NSEvent) {
+        guard let menu = contextMenuProvider?(), let contentView else {
+            super.rightMouseDown(with: event)
+            return
+        }
+        NSMenu.popUpContextMenu(menu, with: event, for: contentView)
+    }
 
     func showWidget() {
         if let saved = savedOrigin(), Self.isOnSomeScreen(origin: saved, size: frame.size) {

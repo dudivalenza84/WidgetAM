@@ -24,8 +24,12 @@ Migração para `PENDENCIAS_CONCLUIDAS.md` só por pedido explícito.
   `docs/compatibilidade-players.md`. Sem regressão no Amazon Music (verificado) —
   `2026-08-09 · #01`
 - [ ] Verificar no menu da bandeja se "Abrir no login" continua ligado — o bundle de
-  `/Applications` foi substituído inteiro em `2026-08-10 · #01` e o registro do
-  `SMAppService` pode não ter sobrevivido à troca — `2026-08-10 · #01`
+  `/Applications` foi substituído inteiro em `2026-08-10 · #01` **e de novo em
+  `2026-08-11 · #01`** e o registro do `SMAppService` pode não ter sobrevivido à
+  troca — `2026-08-10 · #01`
+- [ ] Testar o retorno automático do nível do widget elevado por ⌃⌥⌘M ao clicar em
+  outro app (caminho `windowDidResignKey`): depende de o painel ter virado key na
+  interação, o que não foi exercitado à mão — `2026-08-11 · #01`
 
 - [x] Remontar o `.app` (v1.9.0) via `scripts/build-app.sh` e substituir o de
   `/Applications` — feito em `2026-08-10 · #01`. O `Resources/Info.plist` estava

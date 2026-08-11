@@ -3,6 +3,10 @@
 Uma linha por sessão. Apenas índice — nunca acumula conteúdo de sessão.
 Formato: `YYYY-MM-DD · #NN — <objetivo> — <status>` → [arquivo](docs/sessions/YYYY-MM-DD-NN.md)
 
+## 2026-08-11
+
+- 2026-08-11 · #01 — Interações do widget: duplo clique, menu de contexto, trocar app, sempre no topo, atalho global — concluída → [arquivo](docs/sessions/2026-08-11-01.md)
+
 ## 2026-08-10
 
 - 2026-08-10 · #01 — Pendências independentes, Fase 1 (multi-player) e Fase 2 (robustez) — concluída → [arquivo](docs/sessions/2026-08-10-01.md)

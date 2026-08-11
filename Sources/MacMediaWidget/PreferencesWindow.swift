@@ -63,6 +63,7 @@ struct PreferencesView: View {
             }
 
             Section(L10n.sectionPlacement) {
+                Toggle(L10n.keepAbove, isOn: $settings.keepAbove)
                 Toggle(L10n.snapToGrid, isOn: $settings.snapToGrid)
                 Text(L10n.snapToGridHelp)
                     .font(.callout)
@@ -90,6 +91,19 @@ struct PreferencesView: View {
                     get: { LoginItem.isEnabled },
                     set: { _ in LoginItem.toggle() }
                 ))
+                LabeledContent(L10n.bringToFrontShortcut) {
+                    Text("⌃⌥⌘M").monospaced()
+                }
+                Text(L10n.bringToFrontShortcutHelp)
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+            }
+
+            Section {
+                LabeledContent(L10n.version) {
+                    Text(AppVersion.current)
+                        .foregroundStyle(.secondary)
+                }
             }
         }
         .formStyle(.grouped)

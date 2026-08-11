@@ -145,6 +145,13 @@ final class NowPlayingController: ObservableObject {
         return L10n.playerNotPlaying(name)
     }
 
+    /// Abre (ou traz à frente) o player que o card está exibindo — o da sessão ativa
+    /// no modo automático, o escolhido no modo fixo; sem sessão, o preferido. É a ação
+    /// do duplo clique no widget, e `controlledPlayer` já resolve exatamente isso.
+    func openSourcePlayer() {
+        controlledPlayer.launch()
+    }
+
     // MARK: - Stream
 
     func start() {
