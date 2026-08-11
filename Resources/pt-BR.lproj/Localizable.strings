@@ -46,6 +46,10 @@
 "The grid is the same one used by the desktop's native widgets: with a native widget visible, alignment is measured from it; with none, the system's default geometry is used." = "A grade é a mesma dos widgets nativos da mesa: com algum widget nativo visível, o alinhamento é medido por ele; sem nenhum, usa a geometria padrão do sistema.";
 
 "Appearance" = "Aparência";
+"Widget size" = "Tamanho do widget";
+"Compact (1×1)" = "Compacto (1×1)";
+"Wide (2×1)" = "Largo (2×1)";
+"Same footprints as the desktop's native widgets: one grid cell (like the clock) or two cells wide (like the weather widget)." = "Os mesmos formatos dos widgets nativos da mesa: uma célula da grade (como o relógio) ou duas células de largura (como a previsão do tempo).";
 "Tint opacity" = "Opacidade do tint";
 
 "Behavior" = "Comportamento";

@@ -3,6 +3,24 @@
 Decisões com efeito além da sessão em que foram tomadas (ADR-lite). Entradas novas
 vão no topo. O que está aqui não se rediscute sem motivo novo.
 
+## 2026-08-11 · #03 — Tamanhos do widget são os footprints da grade nativa (1×1 e 2×1)
+
+**Contexto:** o usuário quer escolher entre widget largo (como o de previsão do tempo)
+e compacto quadrado (como relógio/calendário nativos).
+
+**Escolha:** a preferência `widgetSize` oferece exatamente os formatos da grade já
+medida em `NativeWidgetGrid` — 1 célula (170×170 de card) ou 2 células de largura
+(350×170) — e as dimensões são **derivadas** de `pitch`/`cardInset`, não constantes
+soltas. No compacto, a sidebar vertical de volume vira slider horizontal no rodapé
+(não cabe nos ~142 pt úteis) e a capa vira miniatura ao lado dos textos; os botões de
+transporte mantêm os mesmos alvos de 28 pt. A troca aplica ao vivo preservando o canto
+superior esquerdo (âncora do snap) e realinhando à grade. O snap deixou de ler
+`WidgetMetrics.height` fixo e deriva a altura do card da própria janela.
+
+**Alternativa descartada:** tamanho livre (largura/altura arbitrárias em slider).
+Quebraria o alinhamento célula-a-célula com os widgets nativos, que é o diferencial
+visual do produto — o card deixaria de "pertencer" à mesa.
+
 ## 2026-08-11 · #01 — "Trocar app" troca o player preferido E abre o app
 
 **Contexto:** o submenu "Trocar app" (menu da bandeja e do clique direito) define o

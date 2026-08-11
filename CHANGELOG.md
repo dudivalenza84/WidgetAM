@@ -3,6 +3,15 @@
 Formato semver: MINOR por release cronológica, PATCH para hotfix.
 Entradas novas vão no topo.
 
+## [1.13.0] — 2026-08-11 · #03 — Tamanho do widget configurável (1×1 e 2×1)
+
+- Preferência nova em Aparência: tamanho do widget — Compacto (1×1, uma célula da
+  grade nativa, como o relógio) ou Largo (2×1, o formato original). Aplica ao vivo,
+  redimensionando a janela sem sair do lugar e realinhando à grade.
+- Layout compacto próprio para o quadrado de 170 pt: capa em miniatura ao lado do
+  título/artista, barra de progresso e transporte com os mesmos alvos de clique, e
+  volume em slider horizontal no rodapé (a sidebar vertical não cabe).
+
 ## [1.12.0] — 2026-08-11 · #01 — Interações do widget e atalho global
 
 - Duplo clique no card abre o player que o widget está exibindo.

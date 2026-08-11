@@ -71,6 +71,15 @@ struct PreferencesView: View {
             }
 
             Section(L10n.sectionAppearance) {
+                Picker(L10n.widgetSize, selection: $settings.widgetSize) {
+                    ForEach(WidgetSize.allCases) { size in
+                        Text(size.label).tag(size)
+                    }
+                }
+                Text(L10n.widgetSizeHelp)
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+
                 LabeledContent(L10n.tintOpacity) {
                     HStack {
                         Slider(value: $settings.tintOpacity, in: 0...1)

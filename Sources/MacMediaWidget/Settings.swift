@@ -23,6 +23,25 @@ enum ControlMode: String, CaseIterable, Identifiable {
     }
 }
 
+/// Tamanho do card, nos formatos da grade de widgets nativos da mesa: 1 célula
+/// (quadrado, como relógio/calendário) ou 2 células de largura (como o widget de
+/// previsão do tempo *medium*). O layout da UI muda junto — ver `ContentView`.
+enum WidgetSize: String, CaseIterable, Identifiable {
+    /// 1×1 — uma célula da grade (footprint 180×180).
+    case small
+    /// 2×1 — duas células de largura (footprint 360×180). Formato original do widget.
+    case medium
+
+    var id: String { rawValue }
+
+    var label: String {
+        switch self {
+        case .small: return L10n.widgetSizeSmall
+        case .medium: return L10n.widgetSizeMedium
+        }
+    }
+}
+
 /// Preferências do widget, respaldadas por `UserDefaults`. Singleton observável:
 /// a UI (card e tela de configurações) e a janela reagem às mudanças ao vivo via
 /// Combine, sem recompilar nem reiniciar.
@@ -64,6 +83,11 @@ final class AppSettings: ObservableObject {
         didSet { defaults.set(controlMode.rawValue, forKey: Keys.controlMode) }
     }
 
+    /// Formato do card na grade de widgets nativos: 1×1 (compacto) ou 2×1 (largo).
+    @Published var widgetSize: WidgetSize {
+        didSet { defaults.set(widgetSize.rawValue, forKey: Keys.widgetSize) }
+    }
+
     private let defaults: UserDefaults
 
     private enum Keys {
@@ -73,6 +97,7 @@ final class AppSettings: ObservableObject {
         static let snapToGrid = "settings.snapToGrid"
         static let preferredPlayerBundleId = "settings.preferredPlayerBundleId"
         static let controlMode = "settings.controlMode"
+        static let widgetSize = "settings.widgetSize"
     }
 
     private enum Defaults {
@@ -82,6 +107,7 @@ final class AppSettings: ObservableObject {
         static let snapToGrid = true
         static let preferredPlayerBundleId = AmazonMusicPlayer.bundleID
         static let controlMode = ControlMode.automatic
+        static let widgetSize = WidgetSize.medium
     }
 
     private init(defaults: UserDefaults = .standard) {
@@ -93,6 +119,7 @@ final class AppSettings: ObservableObject {
             Keys.snapToGrid: Defaults.snapToGrid,
             Keys.preferredPlayerBundleId: Defaults.preferredPlayerBundleId,
             Keys.controlMode: Defaults.controlMode.rawValue,
+            Keys.widgetSize: Defaults.widgetSize.rawValue,
         ])
         tintOpacity = defaults.double(forKey: Keys.tintOpacity)
         autoLaunchOnPlay = defaults.bool(forKey: Keys.autoLaunchOnPlay)
@@ -102,5 +129,7 @@ final class AppSettings: ObservableObject {
             ?? Defaults.preferredPlayerBundleId
         controlMode = defaults.string(forKey: Keys.controlMode)
             .flatMap(ControlMode.init(rawValue:)) ?? Defaults.controlMode
+        widgetSize = defaults.string(forKey: Keys.widgetSize)
+            .flatMap(WidgetSize.init(rawValue:)) ?? Defaults.widgetSize
     }
 }

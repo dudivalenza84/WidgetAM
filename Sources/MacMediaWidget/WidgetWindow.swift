@@ -26,8 +26,9 @@ final class WidgetWindow: NSPanel, NSWindowDelegate {
 
     init(nowPlaying: NowPlayingController) {
         self.nowPlaying = nowPlaying
+        let windowSize = WidgetMetrics.windowSize(for: AppSettings.shared.widgetSize)
         super.init(
-            contentRect: NSRect(x: 0, y: 0, width: WidgetMetrics.windowWidth, height: WidgetMetrics.windowHeight),
+            contentRect: NSRect(x: 0, y: 0, width: windowSize.width, height: windowSize.height),
             styleMask: [.borderless, .nonactivatingPanel],
             backing: .buffered,
             defer: false
@@ -64,6 +65,16 @@ final class WidgetWindow: NSPanel, NSWindowDelegate {
             }
             .store(in: &cancellables)
 
+        // Troca de formato nas preferências redimensiona a janela ao vivo, mantendo o
+        // canto superior esquerdo (a âncora do snap) no lugar.
+        settings.$widgetSize
+            .dropFirst()
+            .removeDuplicates()
+            .sink { [weak self] size in
+                Task { @MainActor in self?.applySize(size) }
+            }
+            .store(in: &cancellables)
+
         // Realinha ao vivo quando o snap é ligado nas preferências (ignora a
         // emissão do valor inicial com dropFirst).
         settings.$snapToGrid
@@ -84,6 +95,19 @@ final class WidgetWindow: NSPanel, NSWindowDelegate {
                 Task { @MainActor in self?.recoverIfOffscreen() }
             }
             .store(in: &cancellables)
+    }
+
+    /// Redimensiona para o formato escolhido preservando o canto superior esquerdo —
+    /// é por ele que o snap alinha o footprint à grade, então o card não "pula" ao
+    /// trocar de tamanho; só encolhe ou cresce para a direita/baixo.
+    private func applySize(_ size: WidgetSize) {
+        let newSize = WidgetMetrics.windowSize(for: size)
+        setFrame(
+            NSRect(x: frame.minX, y: frame.maxY - newSize.height,
+                   width: newSize.width, height: newSize.height),
+            display: true
+        )
+        snapToGrid()
     }
 
     /// Traz o widget de volta se a configuração de telas mudou e ele ficou fora.
@@ -226,9 +250,12 @@ final class WidgetWindow: NSPanel, NSWindowDelegate {
         let snappedLeft = NativeWidgetGrid.snap(footprintLeft, to: anchor.x)
         let snappedTop = NativeWidgetGrid.snap(footprintTop, to: anchor.topY)
 
+        // Altura do card visível derivada da própria janela (card + 2 margens):
+        // vale para qualquer formato, sem consultar a preferência.
+        let cardHeight = frame.height - margin * 2
         let snapped = NSPoint(
             x: snappedLeft + inset - margin,
-            y: snappedTop - inset - WidgetMetrics.height - margin
+            y: snappedTop - inset - cardHeight - margin
         )
         if snapped != frame.origin {
             setFrameOrigin(snapped)

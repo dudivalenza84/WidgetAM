@@ -5,6 +5,7 @@ Formato: `YYYY-MM-DD · #NN — <objetivo> — <status>` → [arquivo](docs/sess
 
 ## 2026-08-11
 
+- 2026-08-11 · #03 — Tamanho do widget configurável (1×1/2×1) + baixas de pendências e Fase 2 — concluída → [arquivo](docs/sessions/2026-08-11-03.md)
 - 2026-08-11 · #02 — Verificar toggle do atalho global ⌃⌥⌘M (já implementado; validado ao vivo) — concluída → [arquivo](docs/sessions/2026-08-11-02.md)
 - 2026-08-11 · #01 — Interações do widget: duplo clique, menu de contexto, trocar app, sempre no topo, atalho global — concluída → [arquivo](docs/sessions/2026-08-11-01.md)
 

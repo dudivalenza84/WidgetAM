@@ -81,6 +81,12 @@ enum L10n {
     }
 
     static var sectionAppearance: String { String(localized: "Appearance") }
+    static var widgetSize: String { String(localized: "Widget size") }
+    static var widgetSizeSmall: String { String(localized: "Compact (1×1)") }
+    static var widgetSizeMedium: String { String(localized: "Wide (2×1)") }
+    static var widgetSizeHelp: String {
+        String(localized: "Same footprints as the desktop's native widgets: one grid cell (like the clock) or two cells wide (like the weather widget).")
+    }
     static var tintOpacity: String { String(localized: "Tint opacity") }
 
     static var sectionBehavior: String { String(localized: "Behavior") }

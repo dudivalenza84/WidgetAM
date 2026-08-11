@@ -1,18 +1,26 @@
 import AppKit
 import SwiftUI
 
-/// Dimensões do card: as do widget *medium* nativo, medidas na grade real da
-/// mesa (célula de 180 pt, footprint de 360×180, inset interno de 5 pt —
-/// ver NativeWidgetGrid).
+/// Dimensões do card por formato, medidas na grade real da mesa (célula de
+/// 180 pt, inset interno de 5 pt — ver NativeWidgetGrid): o card visível é o
+/// footprint em células menos o inset de cada lado, como nos widgets nativos.
 enum WidgetMetrics {
-    static let width: CGFloat = 350
-    static let height: CGFloat = 170
     static let cornerRadius: CGFloat = 24
     /// Margem transparente ao redor do card, onde a sombra do SwiftUI é desenhada.
     static let shadowMargin: CGFloat = 18
 
-    static var windowWidth: CGFloat { width + shadowMargin * 2 }
-    static var windowHeight: CGFloat { height + shadowMargin * 2 }
+    static func cardSize(for size: WidgetSize) -> CGSize {
+        let cell = NativeWidgetGrid.pitch - NativeWidgetGrid.cardInset * 2
+        switch size {
+        case .small: return CGSize(width: cell, height: cell)
+        case .medium: return CGSize(width: cell + NativeWidgetGrid.pitch, height: cell)
+        }
+    }
+
+    static func windowSize(for size: WidgetSize) -> CGSize {
+        let card = cardSize(for: size)
+        return CGSize(width: card.width + shadowMargin * 2, height: card.height + shadowMargin * 2)
+    }
 }
 
 /// UI do widget no padrão dos widgets nativos do macOS: card de cantos bem
@@ -31,28 +39,27 @@ struct ContentView: View {
     /// outro app está tocando (ver `NowPlayingController.displayedTrack`).
     private var track: TrackInfo { nowPlaying.displayedTrack }
 
+    private var isCompact: Bool { settings.widgetSize == .small }
+
     var body: some View {
-        HStack(spacing: 12) {
-            artwork
-            VStack(alignment: .leading, spacing: 6) {
-                titleRow
-                Text(track.artist ?? subtitlePlaceholder)
-                    .font(.system(size: 13))
-                    .foregroundStyle(.secondary)
-                    .lineLimit(1)
-                Spacer(minLength: 2)
-                progressBar
-                controls
-                    .frame(maxWidth: .infinity, alignment: .center)
+        let card = WidgetMetrics.cardSize(for: settings.widgetSize)
+
+        return Group {
+            if isCompact {
+                compactLayout
+            } else {
+                mediumLayout
             }
-            volumeSidebar
         }
-        .padding(16)
-        .frame(width: WidgetMetrics.width, height: WidgetMetrics.height)
+        .padding(isCompact ? 14 : 16)
+        .frame(width: card.width, height: card.height)
         .modifier(CardSurface(tint: tint, tintOpacity: settings.tintOpacity))
         .shadow(color: .black.opacity(0.25), radius: 12, x: 0, y: 6)
         .padding(WidgetMetrics.shadowMargin)
-        .frame(width: WidgetMetrics.windowWidth, height: WidgetMetrics.windowHeight)
+        .frame(
+            width: card.width + WidgetMetrics.shadowMargin * 2,
+            height: card.height + WidgetMetrics.shadowMargin * 2
+        )
         .task(id: track.artwork) {
             if let color = track.artwork?.averageColor() {
                 tint = Color(nsColor: color)
@@ -67,13 +74,59 @@ struct ContentView: View {
         }
     }
 
+    // MARK: - Layouts
+
+    /// Formato 2×1: capa grande à esquerda, textos/controles no centro, sidebar
+    /// vertical de volume à direita. É o layout original do widget.
+    private var mediumLayout: some View {
+        HStack(spacing: 12) {
+            artwork(side: 108, cornerRadius: 14)
+            VStack(alignment: .leading, spacing: 6) {
+                titleRow
+                Text(track.artist ?? subtitlePlaceholder)
+                    .font(.system(size: 13))
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+                Spacer(minLength: 2)
+                progressBar
+                controls
+                    .frame(maxWidth: .infinity, alignment: .center)
+            }
+            volumeSidebar
+        }
+    }
+
+    /// Formato 1×1: nos ~142 pt úteis do quadrado não cabe a sidebar vertical nem a
+    /// capa grande — a capa encolhe para miniatura ao lado dos textos e o volume vira
+    /// uma linha horizontal no rodapé. Os botões de transporte mantêm o mesmo alvo de
+    /// clique do formato largo.
+    private var compactLayout: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 8) {
+                artwork(side: 52, cornerRadius: 10)
+                VStack(alignment: .leading, spacing: 2) {
+                    titleRow
+                    Text(track.artist ?? subtitlePlaceholder)
+                        .font(.system(size: 11))
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
+                }
+            }
+            Spacer(minLength: 2)
+            progressBar
+            controls
+                .frame(maxWidth: .infinity, alignment: .center)
+            volumeFooter
+        }
+    }
+
     /// Título da faixa com o ícone da fonte ativa à direita — é como o widget diz de
     /// qual app ele está falando, agora que pode ser qualquer um.
     private var titleRow: some View {
         HStack(spacing: 6) {
             Text(track.title ?? L10n.nothingPlaying)
-                .font(.system(size: 16, weight: .bold))
-                .lineLimit(1)
+                .font(.system(size: isCompact ? 12 : 16, weight: .bold))
+                .lineLimit(isCompact ? 2 : 1)
             Spacer(minLength: 4)
             // O aviso de canal degradado toma o lugar do ícone da fonte: nesse estado
             // não há fonte confiável para identificar, e o alerta é o que importa.
@@ -117,8 +170,7 @@ struct ContentView: View {
 
     // MARK: - Componentes
 
-    @ViewBuilder
-    private var artwork: some View {
+    private func artwork(side: CGFloat, cornerRadius: CGFloat) -> some View {
         Group {
             if let image = track.artwork {
                 Image(nsImage: image)
@@ -126,14 +178,14 @@ struct ContentView: View {
                     .aspectRatio(contentMode: .fill)
             } else {
                 Image(systemName: "music.note")
-                    .font(.system(size: 30))
+                    .font(.system(size: side * 0.28))
                     .foregroundStyle(.secondary)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background(.quaternary)
             }
         }
-        .frame(width: 108, height: 108)
-        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+        .frame(width: side, height: side)
+        .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
         .shadow(color: .black.opacity(0.3), radius: 5, x: 0, y: 3)
     }
 
@@ -225,21 +277,39 @@ struct ContentView: View {
     /// por que às vezes o volume do Mac inteiro se mexe e às vezes não.
     private var volumeSidebar: some View {
         VStack(spacing: 8) {
-            VerticalVolumeSlider(value: volume.volume) { volume.setVolume($0) }
+            VolumeSlider(value: volume.volume, vertical: true) { volume.setVolume($0) }
                 .frame(width: 20, height: 104)
 
-            Button { volume.toggleMute() } label: {
-                Image(systemName: speakerSymbol)
-                    .font(.system(size: 12, weight: .medium))
-                    .frame(width: 24, height: 20)
-                    .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
+            muteButton
         }
         .foregroundStyle(.secondary)
         .frame(width: 24)
         .help(volume.target.label)
         .nonDraggableWindowArea()
+    }
+
+    /// Versão horizontal do controle de volume, para o formato 1×1: botão de mute à
+    /// esquerda e slider ocupando o resto da linha. Mesmo alvo e mesmo tooltip da
+    /// sidebar — só muda a orientação.
+    private var volumeFooter: some View {
+        HStack(spacing: 6) {
+            muteButton
+            VolumeSlider(value: volume.volume, vertical: false) { volume.setVolume($0) }
+                .frame(height: 16)
+        }
+        .foregroundStyle(.secondary)
+        .help(volume.target.label)
+        .nonDraggableWindowArea()
+    }
+
+    private var muteButton: some View {
+        Button { volume.toggleMute() } label: {
+            Image(systemName: speakerSymbol)
+                .font(.system(size: 12, weight: .medium))
+                .frame(width: 24, height: 20)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
     }
 
     private var speakerSymbol: String {
@@ -300,12 +370,13 @@ private struct CardSurface: ViewModifier {
     }
 }
 
-/// `NSSlider` vertical nativo. Usado em vez de um `Slider` SwiftUI rotacionado:
-/// a rotação desloca a área de hit-test, fazendo o clique cair no "fundo" da
-/// janela (que é movível) em vez de no controle. O `NSSlider` mantém o
+/// `NSSlider` nativo, vertical ou horizontal. Usado em vez de um `Slider` SwiftUI
+/// rotacionado: a rotação desloca a área de hit-test, fazendo o clique cair no
+/// "fundo" da janela (que é movível) em vez de no controle. O `NSSlider` mantém o
 /// hit-testing correto e marca sua área como não-movível.
-struct VerticalVolumeSlider: NSViewRepresentable {
+struct VolumeSlider: NSViewRepresentable {
     var value: Double
+    var vertical: Bool
     var onChange: (Double) -> Void
 
     func makeNSView(context: Context) -> NSSlider {
@@ -314,7 +385,7 @@ struct VerticalVolumeSlider: NSViewRepresentable {
             target: context.coordinator,
             action: #selector(Coordinator.changed(_:))
         )
-        slider.isVertical = true
+        slider.isVertical = vertical
         slider.controlSize = .mini
         return slider
     }
