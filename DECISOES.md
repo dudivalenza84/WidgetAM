@@ -3,6 +3,36 @@
 Decisões com efeito além da sessão em que foram tomadas (ADR-lite). Entradas novas
 vão no topo. O que está aqui não se rediscute sem motivo novo.
 
+## 2026-08-12 · #01 — Identidade visual: conceito "Órbita", assets gerados de SVG por pipeline nativo
+
+**Contexto:** o app não tinha ícone, favicon nem marca; a bandeja usava o SF Symbol
+genérico `music.note.list`.
+
+**Escolha:** conceito **Órbita** — play dentro de anel de progresso interrompido,
+gradiente ciano (#22D3EE) → violeta (#8B5CF6) sobre grafite — escolhido pelo usuário
+numa prancheta de 4 conceitos (artifact). A fonte da verdade são os SVGs de
+`Resources/icon/` (`icon-master`, `icon-small` para 16/32 px, `menubar-template`);
+**todo asset derivado sai de `scripts/gerar-icones.sh`** (icns, favicon, bandeja),
+que renderiza via `scripts/render-svg.swift` usando o suporte nativo do AppKit a SVG
+(CoreSVG, macOS 11+) — sem dependência de brew/rsvg. Na UI, a marca é o `BrandMark`
+(vetor SwiftUI com a mesma geometria), nunca um PNG.
+
+**Descartado:** conceitos A (tile), B (equalizador) e C (nota); renderização por
+rsvg-convert/ImageMagick (dependência nova para tarefa que o AppKit já faz).
+
+## 2026-08-12 · #01 — Transporte no menu é view custom lado a lado, e clicar não fecha o menu
+
+**Contexto:** botões ⏮ ⏯ ⏭ no menu de contexto/bandeja podiam ser 3 itens comuns ou
+uma linha custom.
+
+**Escolha:** linha única com os três botões em `NSHostingView` dentro de `NSMenuItem`
+(estilo Controle Central). View custom não dispara a seleção do menu, então ele fica
+aberto — dá para pausar e pular várias faixas em sequência. Escolha do usuário entre
+as duas opções.
+
+**Descartado:** 3 `NSMenuItem` comuns — o menu fecharia a cada clique, exigindo
+reabrir para cada comando.
+
 ## 2026-08-11 · #03 — Tamanhos do widget são os footprints da grade nativa (1×1 e 2×1)
 
 **Contexto:** o usuário quer escolher entre widget largo (como o de previsão do tempo)

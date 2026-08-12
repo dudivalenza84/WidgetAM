@@ -50,6 +50,15 @@ enum L10n {
     static func openPlayer(_ name: String) -> String {
         String(localized: "Open \(name)")
     }
+    static func playingTrack(_ title: String) -> String {
+        String(localized: "Playing — \(title)")
+    }
+    static func pausedTrack(_ title: String) -> String {
+        String(localized: "Paused — \(title)")
+    }
+    static var previousTrack: String { String(localized: "Previous track") }
+    static var playPause: String { String(localized: "Play/Pause") }
+    static var nextTrack: String { String(localized: "Next track") }
     static var switchApp: String { String(localized: "Switch app") }
     static var preferences: String { String(localized: "Preferences…") }
     static var openAtLogin: String { String(localized: "Open at login") }

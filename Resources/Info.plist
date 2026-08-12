@@ -22,9 +22,11 @@
         <string>pt-BR</string>
     </array>
     <key>CFBundleShortVersionString</key>
-    <string>1.13.0</string>
+    <string>1.14.0</string>
     <key>CFBundleVersion</key>
-    <string>13</string>
+    <string>14</string>
+    <key>CFBundleIconFile</key>
+    <string>AppIcon</string>
     <!-- Obrigatório para enviar Apple Events: é o texto que o macOS mostra no prompt
          de permissão de Automação, na primeira vez que o widget fala com um player.
          Sem esta chave o pedido é negado. -->

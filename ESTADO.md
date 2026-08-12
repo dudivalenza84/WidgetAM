@@ -1,34 +1,34 @@
 # Estado — MacMediaWidget
 
-Última sessão: 2026-08-11 · #03 — Tamanho do widget configurável (1×1/2×1) + baixas de pendências — concluída
+Última sessão: 2026-08-12 · #01 — Transporte e status no menu + identidade visual (Órbita) — concluída
 
 ## Próximo passo
 
-Usuário testar manualmente o formato compacto (1×1) novo, v1.13.0 já instalada e
-rodando em `/Applications`: troca ao vivo nas preferências (Aparência → Tamanho do
-widget), snap à grade nos dois formatos, seek/volume/transporte no layout compacto,
-duplo clique e arraste. Problema no layout 1×1 se resolve em
-`ContentView.compactLayout`; no redimensionamento, em `WidgetWindow.applySize`.
+Testar manualmente a 1.14.0, já instalada e rodando em `/Applications`: menu
+(contexto e bandeja) com linha de status e botões ⏮ ⏯ ⏭ que não fecham ao clicar,
+ícone novo no Finder, glifo da bandeja, cabeçalho das Preferências e marca-d'água no
+canto do widget (opacidade em `ContentView`, overlay `BrandMark`, se precisar ajuste).
+Também segue pendente o teste manual do formato 1×1 (1.13.0).
 
 ## Pendências abertas (prioridade)
 
+- [ ] Testar manualmente a 1.14.0 (menu, ícone, bandeja, preferências, marca-d'água)
 - [ ] Testar manualmente o formato compacto 1×1 (v1.13.0)
 - [ ] Instalar o Spotify — fecha o critério de saída da Fase 1
-- [ ] Fase 2 restante: tradução pt-BR **na tela** (texto em arquivo já revisado, sem
-  erro) e multi-monitor real
+- [ ] Fase 2 restante: tradução pt-BR **na tela** e multi-monitor real
 - [ ] Assinar o Apple Developer Program (US$ 99/ano) — gargalo do resto da Fase 4
 
 ## Decisões vigentes que restringem o trabalho
 
-- Tamanhos do widget são os footprints da grade nativa (1×1/2×1), derivados de
-  `NativeWidgetGrid` — sem tamanho livre.
 - **O comando do MediaRemote não tem destinatário** — só AppleScript endereça um app.
-- Nada entra na matriz de compatibilidade sem evidência observada.
-- Idioma-base do código é **inglês**; pt-BR é tradução (46 chaves, verificadas por script).
-- Toda área interativa nova da UI precisa de `.nonDraggableWindowArea()`.
 - Amazon Music: sem seek, sem posição, sem AppleScript, sem volume por-app.
+- Nada entra na matriz de compatibilidade sem evidência observada.
+- Idioma-base inglês; string nova de UI precisa de chave no `pt-BR.lproj` (+ script);
+  área interativa nova precisa de `.nonDraggableWindowArea()`.
+- Identidade visual é o conceito **Órbita**: mudou SVG em `Resources/icon/` → rodar
+  `scripts/gerar-icones.sh`; na UI usar `BrandMark`, nunca PNG.
 
 ## Alertas
 
 - Nenhum. `swift build` OK, 53 asserções OK, traduções OK. `.app` de `/Applications`
-  na 1.13.0, igual ao código, rodando.
+  na 1.14.0, igual ao código, rodando.

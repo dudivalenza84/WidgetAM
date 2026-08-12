@@ -36,6 +36,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         // Um só construtor de menu para a bandeja e para o clique direito no widget.
         menuController = AppMenuController(
+            nowPlaying: nowPlaying,
             onToggleWidget: { [weak self] in self?.widgetWindow.toggleVisibility() },
             onOpenPreferredPlayer: { [weak self] in self?.nowPlaying.preferredPlayer.launch() },
             onOpenPreferences: { [weak self] in self?.preferences.show() },

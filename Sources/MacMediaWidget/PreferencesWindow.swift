@@ -43,6 +43,35 @@ struct PreferencesView: View {
     private let players = PlayerRegistry.shared.installedKnownPlayers()
 
     var body: some View {
+        VStack(spacing: 0) {
+            brandHeader
+            form
+        }
+        .frame(width: 460)
+        .fixedSize(horizontal: false, vertical: true)
+    }
+
+    /// Cabeçalho de marca: o ícone real do bundle (icns; genérico no binário solto de
+    /// desenvolvimento), nome e versão — que por isso saiu do rodapé do formulário.
+    private var brandHeader: some View {
+        HStack(spacing: 14) {
+            Image(nsImage: NSApp.applicationIconImage)
+                .resizable()
+                .frame(width: 56, height: 56)
+            VStack(alignment: .leading, spacing: 2) {
+                Text("MacMediaWidget")
+                    .font(.title3.weight(.semibold))
+                Text("\(L10n.version) \(AppVersion.current)")
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+            }
+            Spacer()
+        }
+        .padding(.horizontal, 24)
+        .padding(.top, 18)
+    }
+
+    private var form: some View {
         Form {
             Section(L10n.sectionPlayer) {
                 Picker(L10n.preferredPlayer, selection: $settings.preferredPlayerBundleId) {
@@ -107,17 +136,8 @@ struct PreferencesView: View {
                     .font(.callout)
                     .foregroundStyle(.secondary)
             }
-
-            Section {
-                LabeledContent(L10n.version) {
-                    Text(AppVersion.current)
-                        .foregroundStyle(.secondary)
-                }
-            }
         }
         .formStyle(.grouped)
-        .frame(width: 460)
-        .fixedSize(horizontal: false, vertical: true)
     }
 
     private var preferredPlayer: Player? {

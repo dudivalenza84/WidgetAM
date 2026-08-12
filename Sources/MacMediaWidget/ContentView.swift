@@ -54,6 +54,15 @@ struct ContentView: View {
         .padding(isCompact ? 14 : 16)
         .frame(width: card.width, height: card.height)
         .modifier(CardSurface(tint: tint, tintOpacity: settings.tintOpacity))
+        // Marca-d'água discreta no canto: vive na calha do padding do card, então não
+        // disputa espaço com nenhum layout. Sem hit test — o arraste passa através.
+        .overlay(alignment: .bottomTrailing) {
+            BrandMark()
+                .frame(width: 11, height: 11)
+                .opacity(0.16)
+                .padding(5)
+                .allowsHitTesting(false)
+        }
         .shadow(color: .black.opacity(0.25), radius: 12, x: 0, y: 6)
         .padding(WidgetMetrics.shadowMargin)
         .frame(

@@ -22,6 +22,11 @@
 "Show/hide widget" = "Mostrar/ocultar widget";
 "Open player" = "Abrir player";
 "Open %@" = "Abrir %@";
+"Playing — %@" = "Tocando — %@";
+"Paused — %@" = "Pausado — %@";
+"Previous track" = "Faixa anterior";
+"Play/Pause" = "Reproduzir/Pausar";
+"Next track" = "Próxima faixa";
 "Switch app" = "Trocar app";
 "Preferences…" = "Preferências…";
 "Open at login" = "Abrir no login";

@@ -1,4 +1,5 @@
 import AppKit
+import SwiftUI
 
 /// Constrói o menu do app — o mesmo conteúdo para a bandeja e para o clique direito no
 /// widget, montado num lugar só para os dois nunca divergirem.
@@ -8,17 +9,20 @@ import AppKit
 /// `menuWillOpen`, e o menu de contexto por já nascer populado a cada clique.
 @MainActor
 final class AppMenuController: NSObject, NSMenuDelegate {
+    private let nowPlaying: NowPlayingController
     private let onToggleWidget: () -> Void
     private let onOpenPreferredPlayer: () -> Void
     private let onOpenPreferences: () -> Void
     private let onQuit: () -> Void
 
     init(
+        nowPlaying: NowPlayingController,
         onToggleWidget: @escaping () -> Void,
         onOpenPreferredPlayer: @escaping () -> Void,
         onOpenPreferences: @escaping () -> Void,
         onQuit: @escaping () -> Void
     ) {
+        self.nowPlaying = nowPlaying
         self.onToggleWidget = onToggleWidget
         self.onOpenPreferredPlayer = onOpenPreferredPlayer
         self.onOpenPreferences = onOpenPreferences
@@ -57,6 +61,8 @@ final class AppMenuController: NSObject, NSMenuDelegate {
             action: nil,
             keyEquivalent: ""
         ))
+        menu.addItem(playbackStatusItem())
+        menu.addItem(transportItem())
         menu.addItem(.separator())
 
         menu.addItem(item(L10n.showHideWidget, #selector(toggleWidget)))
@@ -73,6 +79,38 @@ final class AppMenuController: NSObject, NSMenuDelegate {
         menu.addItem(.separator())
 
         menu.addItem(item(L10n.quit, #selector(quit)))
+    }
+
+    /// Linha informativa com o estado do player e a faixa atual. Sem action, o
+    /// autoenable desabilita sozinho — é leitura, não comando. O estado é o do momento
+    /// da abertura: o menu da bandeja repopula via `menuWillOpen` e o de contexto nasce
+    /// novo a cada clique, então nunca abre defasado.
+    private func playbackStatusItem() -> NSMenuItem {
+        let track = nowPlaying.track
+        let title: String
+        if let name = track.title, track.hasContent {
+            title = track.isPlaying ? L10n.playingTrack(name) : L10n.pausedTrack(name)
+        } else {
+            title = L10n.nothingPlaying
+        }
+        let item = NSMenuItem(title: title, action: nil, keyEquivalent: "")
+        let symbol = track.isPlaying ? "play.fill" : "pause.fill"
+        item.image = NSImage(
+            systemSymbolName: symbol,
+            accessibilityDescription: nil
+        )
+        return item
+    }
+
+    /// Linha com os três botões de transporte lado a lado. View custom não fecha o
+    /// menu ao clicar — dá para pausar e pular faixas em sequência.
+    private func transportItem() -> NSMenuItem {
+        let item = NSMenuItem()
+        let hosting = NSHostingView(rootView: MenuTransportView(nowPlaying: nowPlaying))
+        hosting.frame = NSRect(x: 0, y: 0, width: 220, height: 32)
+        hosting.autoresizingMask = [.width]
+        item.view = hosting
+        return item
     }
 
     /// Submenu "Trocar app": um item por player conhecido instalado, com checkmark no

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <!-- Variante para 16/32 px: anel mais grosso, cor chapada (gradiente vira ruído
+       nesses tamanhos) e play maior — senão o glifo desaparece na miniaturização. -->
+  <rect x="100" y="100" width="824" height="824" rx="185" fill="#181B22"/>
+  <circle cx="512" cy="512" r="220" fill="none" stroke="#5FB8E8" stroke-width="96"
+          stroke-linecap="round" stroke-dasharray="1065 317" transform="rotate(-90 512 512)"/>
+  <polygon points="443,402 443,624 642,512" fill="#FFFFFF"/>
+</svg>

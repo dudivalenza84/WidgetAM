@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <!-- Ícone "Órbita" (conceito D, sessão 2026-08-12 · #01): play dentro de anel de
+       progresso ciano→violeta sobre grafite. Corpo de 824 px centrado no canvas de
+       1024 (margens de 100 px), raio de canto 22,5% — a grade de ícones do macOS. -->
+  <defs>
+    <radialGradient id="bg" cx="0.5" cy="0.35" r="0.9">
+      <stop offset="0" stop-color="#242833"/>
+      <stop offset="1" stop-color="#14161C"/>
+    </radialGradient>
+    <linearGradient id="ring" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#22D3EE"/>
+      <stop offset="1" stop-color="#8B5CF6"/>
+    </linearGradient>
+  </defs>
+  <rect x="100" y="100" width="824" height="824" rx="185" fill="url(#bg)"/>
+  <circle cx="512" cy="512" r="233" fill="none" stroke="url(#ring)" stroke-width="55"
+          stroke-linecap="round" stroke-dasharray="1131 336" transform="rotate(-90 512 512)"/>
+  <polygon points="457,416 457,608 622,512" fill="#FFFFFF"/>
+</svg>

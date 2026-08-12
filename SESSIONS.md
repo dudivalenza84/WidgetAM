@@ -3,6 +3,10 @@
 Uma linha por sessão. Apenas índice — nunca acumula conteúdo de sessão.
 Formato: `YYYY-MM-DD · #NN — <objetivo> — <status>` → [arquivo](docs/sessions/YYYY-MM-DD-NN.md)
 
+## 2026-08-12
+
+- 2026-08-12 · #01 — Transporte e status no menu + identidade visual (Órbita) — concluída → [arquivo](docs/sessions/2026-08-12-01.md)
+
 ## 2026-08-11
 
 - 2026-08-11 · #03 — Tamanho do widget configurável (1×1/2×1) + baixas de pendências e Fase 2 — concluída → [arquivo](docs/sessions/2026-08-11-03.md)

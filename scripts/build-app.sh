@@ -45,6 +45,11 @@ cp -R "$ADAPTER_FRAMEWORK" "$CONTENTS/Resources/mediaremote-adapter/"
 # só no repositório.
 cp "$ROOT/Resources/THIRD-PARTY-LICENSES.md" "$CONTENTS/Resources/"
 
+# Identidade visual: ícone do app (icns) e glifo template da bandeja. São gerados por
+# scripts/gerar-icones.sh a partir dos SVGs de Resources/icon/ e ficam versionados.
+cp "$ROOT/Resources/icon/AppIcon.icns" "$CONTENTS/Resources/"
+cp "$ROOT/Resources/icon/MenuBarIcon.png" "$CONTENTS/Resources/"
+
 # Traduções. O idioma-base do código é inglês (a chave é o próprio texto), então só os
 # .lproj de tradução precisam existir — sem eles o app fica em inglês, que é o fallback
 # correto. Ver Sources/MacMediaWidget/L10n.swift.

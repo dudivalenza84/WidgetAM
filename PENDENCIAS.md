@@ -21,6 +21,11 @@ Migração para `PENDENCIAS_CONCLUIDAS.md` só por pedido explícito.
   preferências, snap à grade nos dois formatos, seek/volume/transporte no layout
   compacto, duplo clique e arraste — `2026-08-11 · #03`
 
+- [ ] Testar manualmente a 1.14.0: linha de status e botões de transporte no menu
+  (não deve fechar ao clicar), ícone novo no Finder, glifo da bandeja, cabeçalho das
+  Preferências e marca-d'água do widget (ajustar opacidade se necessário) —
+  `2026-08-12 · #01`
+
 - [ ] **Fase 4 — assinar o Apple Developer Program (US$ 99/ano)**. É o único bloqueio
   real do resto da fase: o pipeline de assinatura, hardened runtime, notarização e
   staple já está pronto em `scripts/build-app.sh` (`MMW_SIGN_IDENTITY` e

@@ -3,6 +3,17 @@
 Formato semver: MINOR por release cronológica, PATCH para hotfix.
 Entradas novas vão no topo.
 
+## [1.14.0] — 2026-08-12 · #01 — Transporte no menu e identidade visual
+
+- Menu (contexto do widget e bandeja): linha de status com estado e faixa atual
+  ("Tocando/Pausado — música") e botões ⏮ ⏯ ⏭ lado a lado que não fecham o menu ao
+  clicar — dá para pausar e pular faixas em sequência.
+- Identidade visual "Órbita": ícone do app (.icns em todas as resoluções), glifo
+  template na bandeja (substitui o SF Symbol genérico), favicon (PNG + ICO) e
+  SVGs-fonte versionados, com pipeline reproduzível (`scripts/gerar-icones.sh`).
+- Marca aplicada: cabeçalho com ícone/nome/versão nas Preferências e marca-d'água
+  discreta no canto do widget.
+
 ## [1.13.0] — 2026-08-11 · #03 — Tamanho do widget configurável (1×1 e 2×1)
 
 - Preferência nova em Aparência: tamanho do widget — Compacto (1×1, uma célula da
