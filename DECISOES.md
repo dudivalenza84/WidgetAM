@@ -3,6 +3,27 @@
 Decisões com efeito além da sessão em que foram tomadas (ADR-lite). Entradas novas
 vão no topo. O que está aqui não se rediscute sem motivo novo.
 
+## 2026-08-13 · #01 — View custom em `NSMenuItem` precisa de largura explícita na `View`, não só no `NSHostingView.frame`
+
+**Contexto:** a linha de status do menu (nome da faixa) ganhou largura fixa e
+letreiro para nome longo. Com a largura só no `NSHostingView.frame`, o letreiro
+nunca detectava overflow e ficava parado — sintoma que só apareceu com instalação
+real (`.app`) e virou vídeo de bug report, não em teste automatizado.
+
+**Causa raiz:** dentro de `NSMenu`, o `NSHostingView` faz o layout do conteúdo pelo
+seu tamanho ideal (`.frame(maxWidth: .infinity)` vira propostas flexíveis, não
+limitadas pela largura do item) — o `frame` do `NSHostingView` em si é ignorado
+para efeito de proposta de layout ao SwiftUI.
+
+**Escolha:** a largura vai explícita como parâmetro da `View` (ex.:
+`.frame(width:)` aplicado na `rootView`, ou um parâmetro de largura que a view usa
+internamente para o cálculo de overflow) — nunca só no `hosting.frame`. Vale para
+qualquer view custom futura num item de menu onde a largura afeta o comportamento
+(não só a aparência).
+
+**Descartado:** nada — bug de primeira implementação, não uma escolha entre
+alternativas.
+
 ## 2026-08-12 · #01 — Identidade visual: conceito "Órbita", assets gerados de SVG por pipeline nativo
 
 **Contexto:** o app não tinha ícone, favicon nem marca; a bandeja usava o SF Symbol

@@ -3,6 +3,15 @@
 Formato semver: MINOR por release cronológica, PATCH para hotfix.
 Entradas novas vão no topo.
 
+## [1.15.0] — 2026-08-13 · #01 — Menu com largura fixa e auto-fechamento
+
+- Menu (bandeja e contexto do widget): largura padronizada em 220 pt, independente
+  do tamanho do nome da música — antes o texto da faixa esticava o menu.
+- Nome de música que não cabe rola em letreiro contínuo, com fade nas bordas e
+  pausa a cada volta.
+- Menu da bandeja se fecha sozinho após 2 s sem interação, desde que o mouse não
+  esteja sobre ele (menu de contexto do widget mantém o comportamento padrão).
+
 ## [1.14.0] — 2026-08-12 · #01 — Transporte no menu e identidade visual
 
 - Menu (contexto do widget e bandeja): linha de status com estado e faixa atual
