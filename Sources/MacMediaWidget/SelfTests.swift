@@ -48,6 +48,8 @@ enum SelfTests {
         playerRegistryMantémInstância()
         catálogoTemAsEntradasConhecidas()
         catálogoSeparaAppDeAtalho()
+        visibilidadeProtegeOPreferido()
+        visibilidadePadrãoÉTudoVisível()
 
         appleScriptDecimalComVírgula()
         appleScriptEntradaInválida()
@@ -320,6 +322,26 @@ enum SelfTests {
                 expect(false, "atalho \(entrada.id) não pode estar em appEntries")
             }
         }
+    }
+
+    // MARK: - Visibilidade por app
+
+    /// O preferido nunca pode ser ocultado — senão o modo fixo apontaria para um app
+    /// que o widget ignora, que é estado sem saída.
+    private static func visibilidadeProtegeOPreferido() {
+        let settings = AppSettings.shared
+        let preferido = settings.preferredPlayerBundleId
+        expect(!settings.canHide(preferido), "não se pode ocultar o player preferido")
+        settings.setHidden(true, for: preferido)
+        expect(!settings.isHidden(preferido), "ocultar o preferido não pode ter efeito")
+    }
+
+    /// Blocklist: o padrão é tudo visível, e app nunca visto não é filtrado.
+    private static func visibilidadePadrãoÉTudoVisível() {
+        expect(
+            !AppSettings.shared.isHidden("com.exemplo.player.novo"),
+            "app desconhecido nasce visível"
+        )
     }
 
     // MARK: - AppleScript

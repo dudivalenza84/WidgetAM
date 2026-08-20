@@ -352,6 +352,9 @@ final class NowPlayingController: ObservableObject {
             }
 
             track = t
+            // Fonte fora do catálogo vira item escolhível nas Preferências — é o
+            // único jeito de o usuário poder ocultar um player que ninguém previu.
+            if let id = t.bundleIdentifier { AppSettings.shared.registerDiscovered(id) }
             refreshDisplayedElapsed()
         }
     }

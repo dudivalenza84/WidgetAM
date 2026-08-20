@@ -769,7 +769,7 @@ git commit -m "fix: ancora a posição no elapsedTime publicado pela fonte"
 - Produz: `AppSettings.hiddenPlayerIDs`, `.discoveredPlayerIDs`, `.isHidden(_:)`,
   `.canHide(_:)`, `.setHidden(_:for:)`, `.registerDiscovered(_:)`, `.forgetDiscovered()`.
 
-- [ ] **Passo 1: Escrever o teste que falha**
+- [x] **Passo 1: Escrever o teste que falha**
 
 ```swift
     /// O preferido nunca pode ser ocultado — senão o modo fixo apontaria para um app
@@ -793,7 +793,7 @@ git commit -m "fix: ancora a posição no elapsedTime publicado pela fonte"
 
 Registrar em `run()`.
 
-- [ ] **Passo 2: Rodar e ver falhar**
+- [x] **Passo 2: Rodar e ver falhar**
 
 ```bash
 swift build 2>&1 | tail -20
@@ -801,7 +801,7 @@ swift build 2>&1 | tail -20
 
 Esperado: `value of type 'AppSettings' has no member 'canHide'`.
 
-- [ ] **Passo 3: Implementar**
+- [x] **Passo 3: Implementar**
 
 Em `Settings.swift`, as chaves:
 
@@ -872,7 +872,7 @@ E as regras de coerência:
 > dentro do `init`, é sinal de que a chamada foi parar no lugar errado: as regras são
 > métodos, nunca rodam na inicialização.
 
-- [ ] **Passo 4: Registrar descobertos no controller**
+- [x] **Passo 4: Registrar descobertos no controller**
 
 Em `NowPlayingController.handleLine`, dentro do `case .update`, depois de `track = t`:
 
@@ -880,13 +880,13 @@ Em `NowPlayingController.handleLine`, dentro do `case .update`, depois de `track
             if let id = t.bundleIdentifier { AppSettings.shared.registerDiscovered(id) }
 ```
 
-- [ ] **Passo 5: Verificar**
+- [x] **Passo 5: Verificar**
 
 ```bash
 swift build 2>&1 | tail -20 && swift run MacMediaWidget --run-tests
 ```
 
-- [ ] **Passo 6: Commit**
+- [x] **Passo 6: Commit**
 
 ```bash
 git add Sources/MacMediaWidget/Settings.swift Sources/MacMediaWidget/NowPlayingController.swift \

@@ -88,6 +88,18 @@ final class AppSettings: ObservableObject {
         didSet { defaults.set(widgetSize.rawValue, forKey: Keys.widgetSize) }
     }
 
+    /// Apps que o usuário desmarcou. **Guarda os ocultos, não os escolhidos**: o
+    /// catálogo não é fechado, e com allowlist todo player novo nasceria filtrado —
+    /// o widget ficaria mudo diante de uma fonte que hoje ele controla sem saber o que é.
+    @Published var hiddenPlayerIDs: Set<String> {
+        didSet { defaults.set(Array(hiddenPlayerIDs), forKey: Keys.hiddenPlayerIDs) }
+    }
+
+    /// Fontes que já apareceram no Now Playing e não estão no catálogo.
+    @Published var discoveredPlayerIDs: [String] {
+        didSet { defaults.set(discoveredPlayerIDs, forKey: Keys.discoveredPlayerIDs) }
+    }
+
     private let defaults: UserDefaults
 
     private enum Keys {
@@ -98,6 +110,8 @@ final class AppSettings: ObservableObject {
         static let preferredPlayerBundleId = "settings.preferredPlayerBundleId"
         static let controlMode = "settings.controlMode"
         static let widgetSize = "settings.widgetSize"
+        static let hiddenPlayerIDs = "settings.hiddenPlayerIDs"
+        static let discoveredPlayerIDs = "settings.discoveredPlayerIDs"
     }
 
     private enum Defaults {
@@ -131,5 +145,41 @@ final class AppSettings: ObservableObject {
             .flatMap(ControlMode.init(rawValue:)) ?? Defaults.controlMode
         widgetSize = defaults.string(forKey: Keys.widgetSize)
             .flatMap(WidgetSize.init(rawValue:)) ?? Defaults.widgetSize
+        // Sem `register(defaults:)`: o padrão dos dois é a coleção vazia, que é
+        // exatamente o que a ausência da chave já devolve.
+        hiddenPlayerIDs = Set(defaults.stringArray(forKey: Keys.hiddenPlayerIDs) ?? [])
+        discoveredPlayerIDs = defaults.stringArray(forKey: Keys.discoveredPlayerIDs) ?? []
+    }
+
+    // MARK: - Visibilidade por app
+
+    func isHidden(_ id: String) -> Bool { hiddenPlayerIDs.contains(id) }
+
+    /// O preferido é intocável, e o último visível também: sem isso, o usuário poderia
+    /// esvaziar o menu inteiro e ficar sem caminho de volta pela própria UI.
+    func canHide(_ id: String) -> Bool {
+        guard id != preferredPlayerBundleId else { return false }
+        let visíveis = PlayerCatalog.entries.map(\.id).filter { !isHidden($0) }
+        return visíveis.count > 1
+    }
+
+    func setHidden(_ hidden: Bool, for id: String) {
+        if hidden {
+            guard canHide(id) else { return }
+            hiddenPlayerIDs.insert(id)
+        } else {
+            hiddenPlayerIDs.remove(id)
+        }
+    }
+
+    /// Registra uma fonte vista no stream que não está no catálogo.
+    func registerDiscovered(_ id: String) {
+        guard PlayerCatalog.entry(for: id) == nil, !discoveredPlayerIDs.contains(id) else { return }
+        discoveredPlayerIDs.append(id)
+    }
+
+    func forgetDiscovered() {
+        hiddenPlayerIDs.subtract(discoveredPlayerIDs)
+        discoveredPlayerIDs = []
     }
 }
