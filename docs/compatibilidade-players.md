@@ -1,7 +1,7 @@
 # Matriz de compatibilidade por player
 
 Levantada com `scripts/testar-player.sh` em **2026-08-10 · #01**, em macOS 26.5.2 com
-`media-control` 0.7.6. Ampliada em **2026-08-20 · #02** (TIDAL) e nas colunas novas.
+`media-control` 0.7.6. Ampliada em **2026-08-20 · #02** (TIDAL e Spotify) e nas colunas novas.
 
 Regra desta tabela: **só entra o que foi observado**. Não há célula preenchida por
 dedução, por documentação do fabricante ou por "o comando não deu erro". O motivo está em
@@ -15,24 +15,34 @@ Legenda: **sim** = observado funcionando · **não** = observado não funcionand
 
 | Capacidade | Amazon Music | Apple Music | Spotify | TIDAL | Deezer | Navegador |
 |---|---|---|---|---|---|---|
-| Aparece como sessão de Now Playing | sim | sim | ? | sim | ? | sim |
-| Metadados (título, artista, capa) | sim | sim | ? | sim | ? | ? |
-| `elapsedTime` no stream | **não** | sim | ? | sim¹ | ? | ? |
-| play/pause (MediaRemote) | sim | sim | ? | sim | ? | ? |
-| next/previous (MediaRemote) | sim | sim | ? | sim | ? | ? |
-| seek (MediaRemote) | **não** | sim | ? | **sim** | ? | ? |
-| AppleScript | **ausente** | sim | ? | **ausente** | ? | **ausente** |
-| posição real (AppleScript) | ausente | sim | ? | ausente | ? | ausente |
-| seek (AppleScript) | ausente | sim | ? | ausente | ? | ausente |
-| volume por-app | ausente | sim | ? | ausente | ? | ausente |
-| shuffle / repeat (AppleScript) | ausente | sim | ? | ausente | ? | ausente |
-| comando endereçado (sem ser a sessão) | **não** | sim | ? | **não** | ? | não |
+| Aparece como sessão de Now Playing | sim | sim | sim | sim | ? | sim |
+| Metadados (título, artista, capa) | sim | sim | sim | sim | ? | ? |
+| `elapsedTime` no stream | **não** | sim | sim¹ | sim¹ | ? | ? |
+| play/pause (MediaRemote) | sim | sim | sim | sim | ? | ? |
+| next/previous (MediaRemote) | sim | sim | sim | sim | ? | ? |
+| seek (MediaRemote) | **não** | sim | **sim** | **sim** | ? | ? |
+| AppleScript | **ausente** | sim | **sim** | **ausente** | ? | **ausente** |
+| posição real (AppleScript) | ausente | sim | sim | ausente | ? | ausente |
+| seek (AppleScript) | ausente | sim | sim | ausente | ? | ausente |
+| volume por-app | ausente | sim | sim² | ausente | ? | ausente |
+| shuffle / repeat (AppleScript) | ausente | sim | sim³ | ausente | ? | ausente |
+| comando endereçado (sem ser a sessão) | **não** | sim | **sim** | **não** | ? | não |
 
 ## Evidência
 
-¹ O `elapsedTime` do TIDAL **não é um relógio**: é uma âncora reemitida em eventos
+¹ O `elapsedTime` do TIDAL e do Spotify **não é um relógio**: é uma âncora reemitida em eventos
 (início de faixa e depois de um seek). Entre eventos o valor fica parado, e o consumidor
 precisa estimar por tempo de parede a partir do `timestamp` que veio junto.
+
+² O `sound volume` do Spotify **funciona, com quantização**: `0→0` e `100→100`, mas todo
+valor intermediário volta `n-1` (pedido 42 lê 41; 63 lê 62; 77 lê 76). Consequência para
+o código: quem gravar e reler para confirmar vai concluir que falhou, e um slider que
+exiba o valor lido recua 1 ponto a cada ajuste. Tratar como sucesso qualquer leitura
+dentro de ±1 do pedido.
+
+³ São `shuffling` e `repeating`, **não** `shuffle enabled` / `song repeat` do Apple Music.
+O `scripts/testar-player.sh` usa o vocabulário do Apple Music e por isso reportou *não
+existe* com `syntax error (-2740)` — falso negativo do roteiro, não ausência no app.
 
 ### Amazon Music (`com.amazon.music`)
 
@@ -67,6 +77,39 @@ repeat (AS)            | verificado   | off -> all
 
 É o player mais capaz da lista: tudo o que o widget sabe fazer, ele aceita — e por dois
 caminhos independentes no caso do seek.
+
+### Spotify (`com.spotify.client`)
+
+Levantado em **2026-08-20 · #02**, com conta logada e faixas completas (178–196 s).
+
+```
+sessão MediaRemote     | verificado   | bundleIdentifier=com.spotify.client
+posição (MediaRemote)  | verificado   | elapsedTime=0.006
+next (MediaRemote)     | verificado   | 'Coração Partido - Ao Vivo' -> 'Mais do Mesmo - Ao Vivo'
+previous (MediaRemote) | verificado   | 'Mais do Mesmo - Ao Vivo' -> 'Coração Partido - Ao Vivo'
+play/pause (MR)        | verificado   | playing True -> False
+posição real (AS)      | verificado   | player position=6.050000190735
+seek (AS)              | verificado   | set 30 -> leu 31.061000823975
+seek (MediaRemote)     | verificado   | teste observável, abaixo
+volume por-app (AS)    | verificado   | escala mapeada, abaixo
+shuffling (AS)         | verificado   | false -> set true -> leu true
+repeating (AS)         | verificado   | false -> set true -> leu true
+comando endereçado     | verificado   | teste com outra sessão, abaixo
+```
+
+**Seek do MediaRemote, teste observável:** numa faixa de 178,5 s, pedido para 172,52 s —
+o `elapsedTime` foi a 172.52 e a faixa **trocou 5 segundos depois**. Real, não ignorado.
+
+**Volume:** `set sound volume` conferido em 8 pontos — `0→0`, `10→9`, `25→24`, `42→41`,
+`50→49`, `63→62`, `77→76`, `100→100`. Monotônico e efetivo; ver nota ².
+
+**Comando endereçado:** com o **Apple Music** tocando e dono da sessão
+(`bundleIdentifier=com.apple.Music`), `tell application "Spotify" to play` fez o Spotify
+voltar a tocar, e o Apple Music **continuou tocando**. Os dois simultâneos é a prova de
+que o comando teve destinatário — é o que habilita o modo fixo com o Spotify escolhido.
+
+O Spotify é, junto com o Apple Music, o mais capaz da lista: aceita tudo o que o widget
+sabe fazer, e o seek por dois caminhos independentes.
 
 ### TIDAL (`com.tidal.desktop`)
 
