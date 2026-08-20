@@ -34,7 +34,7 @@ class AppleScriptPlayer: MediaRemotePlayer {
     /// piso quando a automação é negada, e por isso não pode ficar em
     /// `scriptedCapabilities`: o `elapsedTime` que a fonte publica no stream não
     /// depende de permissão nenhuma.
-    var unscriptedCapabilities: PlayerCapabilities { .fullTransport }
+    var unscriptedCapabilities: PlayerCapabilities { [.fullTransport, .reliablePlaybackState] }
 
     override var capabilities: PlayerCapabilities {
         isAuthorizationDenied

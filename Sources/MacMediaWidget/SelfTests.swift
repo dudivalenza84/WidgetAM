@@ -310,7 +310,10 @@ enum SelfTests {
 
     private static func playerAmazonMusicÉLimitado() {
         let player = AmazonMusicPlayer()
-        expect(player.capabilities == .fullTransport, "Amazon Music só tem transporte")
+        expect(
+            player.capabilities == [.fullTransport, .reliablePlaybackState],
+            "Amazon Music só tem transporte"
+        )
         expect(!player.capabilities.contains(.seek), "Amazon Music não tem seek")
         expect(!player.capabilities.contains(.appVolume), "Amazon Music não tem volume por-app")
         expect(!player.capabilities.contains(.directedControl), "Amazon Music não é endereçável")
@@ -396,7 +399,7 @@ enum SelfTests {
     private static func playersSemAppleScriptTêmSóOMedido() {
         let tidal = TidalPlayer()
         expect(
-            tidal.capabilities == [.fullTransport, .seek, .streamPosition],
+            tidal.capabilities == [.fullTransport, .seek, .streamPosition, .reliablePlaybackState],
             "TIDAL: transporte inteiro, seek e posição do stream"
         )
         expect(!tidal.capabilities.contains(.directedControl), "TIDAL não é endereçável")
@@ -413,6 +416,10 @@ enum SelfTests {
         expect(
             !navegador.capabilities.contains(.streamPosition),
             "o elapsedTime do navegador mente: fica em zero com o vídeo correndo"
+        )
+        expect(
+            !navegador.capabilities.contains(.reliablePlaybackState),
+            "o playing do navegador mente: houve playing=True com o vídeo pausado"
         )
         expect(tidal.capabilities.contains(.streamPosition), "TIDAL publica posição confiável")
         expect(deezer.capabilities.contains(.streamPosition), "Deezer publica posição contínua")
@@ -450,7 +457,10 @@ enum SelfTests {
     private static func playerFonteDesconhecidaÉGenérica() {
         let player = PlayerRegistry.shared.player(for: "com.exemplo.player.inexistente")
         expect(player != nil, "fonte desconhecida deveria ter player genérico")
-        expect(player?.capabilities == .fullTransport, "player genérico só faz transporte")
+        expect(
+            player?.capabilities == [.fullTransport, .reliablePlaybackState],
+            "player genérico só faz transporte"
+        )
     }
 
     private static func playerSemSessãoNãoHáPlayer() {

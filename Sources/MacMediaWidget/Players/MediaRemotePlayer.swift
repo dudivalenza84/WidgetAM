@@ -22,7 +22,7 @@ class MediaRemotePlayer: Player {
             ?? bundleIdentifier
     }
 
-    var capabilities: PlayerCapabilities { .fullTransport }
+    var capabilities: PlayerCapabilities { [.fullTransport, .reliablePlaybackState] }
 
     /// Declaradas aqui, e não só como default do protocolo, para que subclasses possam
     /// sobrescrevê-las: implementação em extension de protocolo é despachada

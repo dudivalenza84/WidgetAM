@@ -144,6 +144,29 @@ final class NowPlayingController: ObservableObject {
         return PlayerRegistry.shared.player(for: id)?.displayName
     }
 
+    /// A fonte que está tocando diz a verdade sobre estar tocando?
+    ///
+    /// Sem sessão a resposta é `true` por vacuidade: não há estado para mentir, e o
+    /// botão é o play que abre o player. Ver `PlayerCapabilities.reliablePlaybackState`.
+    var isPlaybackStateReliable: Bool {
+        guard let player = activePlayer else { return true }
+        return player.capabilities.contains(.reliablePlaybackState)
+    }
+
+    /// Símbolo do botão central. Onde o estado é desconhecido não se escolhe entre play
+    /// e pause: o símbolo é o da alternância, que descreve exatamente o que o botão faz.
+    var playPauseSymbol: String {
+        guard isPlaybackStateReliable else { return "playpause.fill" }
+        return displayedTrack.isPlaying ? "pause.fill" : "play.fill"
+    }
+
+    /// Símbolo do indicador de estado do menu — indicador, não botão, por isso o
+    /// desenho é o inverso do de cima.
+    var playbackStateSymbol: String {
+        guard isPlaybackStateReliable else { return "playpause.fill" }
+        return track.isPlaying ? "play.fill" : "pause.fill"
+    }
+
     /// Se next/previous/seek têm onde atuar.
     ///
     /// Sem a sessão ativa, só um player com `.directedControl` (isto é, com AppleScript)
@@ -279,8 +302,14 @@ final class NowPlayingController: ObservableObject {
         progressTimer = timer
     }
 
+    /// Barra parada é melhor que barra correndo à toa: sem estado de reprodução
+    /// confiável, somar tempo de parede seria inventar movimento com a mídia pausada.
+    private var isEffectivelyPlaying: Bool {
+        track.isPlaying && isPlaybackStateReliable
+    }
+
     private func refreshDisplayedElapsed() {
-        displayedElapsed = estimatedElapsed(at: Date(), playing: track.isPlaying)
+        displayedElapsed = estimatedElapsed(at: Date(), playing: isEffectivelyPlaying)
         pollRealPositionIfNeeded()
     }
 
@@ -304,7 +333,7 @@ final class NowPlayingController: ObservableObject {
             guard let self else { return }
             self.anchorElapsed = value
             self.anchorWall = Date()
-            self.displayedElapsed = self.estimatedElapsed(at: Date(), playing: self.track.isPlaying)
+            self.displayedElapsed = self.estimatedElapsed(at: Date(), playing: self.isEffectivelyPlaying)
         }
     }
 
@@ -396,10 +425,13 @@ final class NowPlayingController: ObservableObject {
                     anchorElapsed = sinceStart
                 }
                 anchorWall = now
-            } else if t.isPlaying != track.isPlaying {
+            } else if t.isPlaying != track.isPlaying, isPlaybackStateReliable {
                 // Transição play/pause sem novo timestamp: consolida o acumulado com o
                 // estado ANTIGO para congelar (ou retomar) na posição correta. Sem
                 // clamp, para não fixar a âncora no fim da faixa.
+                //
+                // Só onde `playing` é confiável: no navegador o campo oscila sozinho, e
+                // reancorar a cada oscilação faria a barra pular sem nada ter mudado.
                 anchorElapsed = estimatedElapsed(at: now, playing: track.isPlaying, clamped: false)
                 anchorWall = now
             }

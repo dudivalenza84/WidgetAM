@@ -13,7 +13,9 @@ import AppKit
 ///   de trocar. Nenhuma das duas é declarada: o botão obedeceria a uma promessa que o
 ///   navegador não cumpre;
 /// - o payload **mente** em `playing` e em `elapsedTime`, então nada aqui declara
-///   `.streamPosition`.
+///   `.streamPosition` nem `.reliablePlaybackState`. Sem a segunda, o widget para de
+///   afirmar se a mídia está tocando: o botão vira o símbolo neutro de alternância —
+///   que é o que ele de fato faz — e a barra deixa de correr por conta própria.
 ///
 /// Esta classe também é o alvo dos atalhos de serviços web: quem toca é o navegador,
 /// então é ele quem aparece como fonte — o widget não tem como saber qual aba está

@@ -24,6 +24,16 @@ onde ela contradisse o plano, mandou a matriz.
   vídeo correndo.
 - Safari fica fora do catálogo até ser medido — continua controlável como fonte genérica.
 
+Dois bugs corrigidos na mesma sessão, os dois sobre o widget prometer o que não entrega:
+
+- **Com a Automação negada, Apple Music e Spotify ficavam com botões mudos.** As
+  capacidades eram rebaixadas corretamente, mas os comandos continuavam saindo por
+  AppleScript, que nesse estado não executa nada. Agora transporte e seek caem no
+  MediaRemote — o seek inclusive continua funcionando, porque os dois apps o obedecem.
+- **O card acreditava no `playing` do navegador, que mente.** Onde a fonte não garante o
+  estado, o botão central vira o símbolo de alternância, o status do menu mostra só o nome
+  da faixa e a barra para de correr sozinha.
+
 ## [1.16.0] — 2026-08-19 · #02 — Visibilidade por app e o gate de evidência dos players
 
 **Novo: você escolhe quais apps o widget controla.** Nas Preferências, a seção

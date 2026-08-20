@@ -19,7 +19,7 @@ final class TidalPlayer: MediaRemotePlayer {
         super.init(bundleIdentifier: Self.bundleID, displayName: "TIDAL")
     }
 
-    override var capabilities: PlayerCapabilities { [.fullTransport, .seek, .streamPosition] }
+    override var capabilities: PlayerCapabilities { [.fullTransport, .seek, .streamPosition, .reliablePlaybackState] }
 
     override var installURL: URL? { Self.installURL }
 }

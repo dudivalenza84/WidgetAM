@@ -16,7 +16,7 @@ struct MenuTransportView: View {
                 .disabled(!nowPlaying.canSkipPrevious)
 
             TransportButton(
-                symbol: nowPlaying.track.isPlaying ? "pause.fill" : "play.fill",
+                symbol: nowPlaying.playPauseSymbol,
                 label: L10n.playPause
             ) { nowPlaying.playPause() }
 

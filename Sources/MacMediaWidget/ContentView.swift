@@ -291,7 +291,7 @@ struct ContentView: View {
             button("backward.fill", size: 15) { nowPlaying.previous() }
                 .disabled(previousReason != nil)
                 .help(previousReason ?? "")
-            button(track.isPlaying ? "pause.fill" : "play.fill", size: 18) {
+            button(nowPlaying.playPauseSymbol, size: 18) {
                 nowPlaying.playPause()
             }
             button("forward.fill", size: 15) { nowPlaying.next() }

@@ -37,6 +37,14 @@ struct PlayerCapabilities: OptionSet, Sendable {
     /// valor em zero com o `timestamp` congelado enquanto o vídeo corre. Ancorar ali
     /// mostraria a barra parada no início para sempre.
     static let streamPosition = PlayerCapabilities(rawValue: 1 << 8)
+    /// O campo `playing` do stream diz a verdade sobre esta fonte.
+    ///
+    /// Vale para todo app nativo medido. Não vale para o navegador: houve leitura de
+    /// `playing=True` com o vídeo comprovadamente pausado na página
+    /// (`docs/compatibilidade-players.md`, nota ⁶). Sem esta capacidade o widget para de
+    /// afirmar o estado — o botão vira o símbolo neutro de alternância e a barra não
+    /// corre sozinha — em vez de mostrar com convicção o oposto do que está acontecendo.
+    static let reliablePlaybackState = PlayerCapabilities(rawValue: 1 << 9)
     /// Aceita mover a posição da faixa.
     static let seek = PlayerCapabilities(rawValue: 1 << 2)
     /// Tem volume próprio, independente do volume de saída do sistema.

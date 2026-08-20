@@ -20,7 +20,7 @@ struct MenuStatusView: View {
 
     var body: some View {
         HStack(spacing: 6) {
-            Image(systemName: nowPlaying.track.isPlaying ? "play.fill" : "pause.fill")
+            Image(systemName: nowPlaying.playbackStateSymbol)
                 .font(.system(size: 11, weight: .semibold))
                 .frame(width: 14)
             MarqueeText(text: statusText, availableWidth: marqueeWidth)
@@ -39,6 +39,9 @@ struct MenuStatusView: View {
         if let oculto = nowPlaying.hiddenSourceName { return L10n.sourceHidden(oculto) }
         let track = nowPlaying.track
         if let name = track.title, track.hasContent {
+            // Sem estado confiável, o nome da faixa sozinho: afirmar "tocando" ou
+            // "pausado" seria acertar por sorte (`docs/compatibilidade-players.md`).
+            guard nowPlaying.isPlaybackStateReliable else { return name }
             return track.isPlaying ? L10n.playingTrack(name) : L10n.pausedTrack(name)
         }
         return L10n.nothingPlaying

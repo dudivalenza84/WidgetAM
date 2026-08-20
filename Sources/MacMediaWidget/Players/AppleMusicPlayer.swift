@@ -27,6 +27,6 @@ final class AppleMusicPlayer: AppleScriptPlayer {
     /// seek do MediaRemote (pedido 209,1 s → `elapsedTime=209.062`), então barra correta
     /// e barra arrastável continuam de pé mesmo sem permissão nenhuma.
     override var unscriptedCapabilities: PlayerCapabilities {
-        [.fullTransport, .streamPosition, .seek]
+        [.fullTransport, .streamPosition, .seek, .reliablePlaybackState]
     }
 }

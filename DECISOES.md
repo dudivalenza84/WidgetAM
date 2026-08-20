@@ -3,6 +3,29 @@
 Decisões com efeito além da sessão em que foram tomadas (ADR-lite). Entradas novas
 vão no topo. O que está aqui não se rediscute sem motivo novo.
 
+## 2026-08-20 · #01 — O widget não afirma estado que a fonte não garante
+
+**Contexto.** O card diz "tocando" ou "pausado" a partir do campo `playing` do stream, e
+faz a barra correr com base nele. No navegador esse campo erra: houve leitura de
+`playing=True` com o vídeo comprovadamente pausado, lido em `document.querySelector(
+'video').paused`. O widget então mostrava o ícone de pausa, o texto "está tocando" e uma
+barra avançando — três afirmações erradas com a mesma origem.
+
+**Decisão.** Capacidade `.reliablePlaybackState`, declarada por todo app nativo medido e
+ausente no `BrowserPlayer`. Sem ela o widget **para de afirmar**: o botão central vira
+`playpause.fill` (que é literalmente o que ele faz — alternar), o status do menu mostra só
+o nome da faixa, e a estimativa de posição não soma tempo de parede. É o mesmo princípio
+de `.streamPosition`, aplicado ao outro campo que o navegador falsifica.
+
+**Alternativa descartada.** Inferir o estado real observando a página por
+`execute javascript`. Funciona como instrumento de medição e não serve como produto:
+depende de "Permitir JavaScript de Apple Events", que o usuário liga à mão no menu
+Desenvolvedor (`docs/fase1-multiplayer.md` §2).
+
+**Alternativa descartada.** Manter o ícone chutando. Um botão que mostra "pausar" com a
+mídia pausada não é um detalhe cosmético: é o widget afirmando o oposto do que o usuário
+está vendo na tela ao lado.
+
 ## 2026-08-20 · #01 — Transporte deixa de ser um bloco só: `next` e `previous` viram capacidades separadas
 
 **Contexto.** `PlayerCapabilities.transport` significava "play, pause, próxima, anterior"

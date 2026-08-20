@@ -36,12 +36,15 @@ Migração para `PENDENCIAS_CONCLUIDAS.md` só por pedido explícito.
   vocabulário da iTunes suite subiu para `AppleScriptPlayer`, com fallback para o
   MediaRemote em transporte e seek, coberto por teste (`MediaRemoteAdapter.commandSink`)
 
-- [ ] **O navegador mente em `playing` e o card acredita.** Houve leitura de
+- [x] **O navegador mente em `playing` e o card acredita.** Houve leitura de
   `playing=True` com o vídeo comprovadamente pausado
   (`docs/compatibilidade-players.md`, nota ⁶). A posição já está protegida — o
   `BrowserPlayer` não declara `.streamPosition` —, mas o ícone play/pause e a estimativa
   da barra ainda seguem o campo. Precisa de um caminho equivalente ao da posição: não
-  confiar em `playing` para fonte de navegador — `2026-08-20 · #01`
+  confiar em `playing` para fonte de navegador — `2026-08-20 · #01` · **corrigido em
+  `2026-08-20 · #01`**: capacidade `.reliablePlaybackState`; sem ela o botão vira
+  `playpause.fill`, o status do menu mostra só o nome da faixa e a barra não corre
+  sozinha
 
 - [ ] **Medir o Safari** e decidir se ele entra no catálogo. Hoje fica de fora de
   propósito (`DECISOES.md · 2026-08-20 · #01`) e cai no `MediaRemotePlayer` genérico.

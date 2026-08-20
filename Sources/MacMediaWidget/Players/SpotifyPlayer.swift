@@ -35,7 +35,7 @@ final class SpotifyPlayer: AppleScriptPlayer {
     /// que o controller faz com ela. E o seek continua indo pelo MediaRemote, que o app
     /// obedece (faixa de 178,5 s posicionada em 172,52 s trocou 5 s depois).
     override var unscriptedCapabilities: PlayerCapabilities {
-        [.fullTransport, .streamPosition, .seek]
+        [.fullTransport, .streamPosition, .seek, .reliablePlaybackState]
     }
 
     override var installURL: URL? { Self.installURL }

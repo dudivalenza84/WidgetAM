@@ -240,7 +240,10 @@ célula, em `2026-08-20 · #01`. Onde a matriz contradisse `docs/plano-players-a
 | Spotify | idem Apple Music |
 | TIDAL | `fullTransport`, `seek`, `streamPosition` |
 | Deezer | `transport`, `nextTrack`, `streamPosition` — sem `previousTrack`, sem `seek` |
-| Google Chrome | `transport`, `seek` — sem `nextTrack`, sem `previousTrack`, sem `streamPosition` |
+| Google Chrome | `transport`, `seek` — sem `nextTrack`, sem `previousTrack`, sem `streamPosition`, sem `reliablePlaybackState` |
+
+Todos os outros declaram `reliablePlaybackState`: o navegador é o único cujo campo
+`playing` foi observado mentindo.
 
 `fullTransport` é o pacote play/pause + próxima + anterior. Ele deixou de ser indivisível
 justamente por causa das duas últimas linhas (`DECISOES.md · 2026-08-20 · #01`).
