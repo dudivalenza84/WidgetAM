@@ -188,7 +188,7 @@ final class AppMenuController: NSObject, NSMenuDelegate {
     private func switchAppItem() -> NSMenuItem {
         let submenu = NSMenu()
         let preferredId = AppSettings.shared.preferredPlayerBundleId
-        for player in PlayerRegistry.shared.installedCatalogPlayers() {
+        for player in PlayerRegistry.shared.selectablePlayers() {
             let entry = NSMenuItem(
                 title: player.displayName,
                 action: #selector(selectPlayer(_:)),

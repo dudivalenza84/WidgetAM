@@ -50,6 +50,7 @@ enum SelfTests {
         catálogoSeparaAppDeAtalho()
         visibilidadeProtegeOPreferido()
         visibilidadePadrãoÉTudoVisível()
+        listaDeEscolhaOmiteOcultos()
 
         appleScriptDecimalComVírgula()
         appleScriptEntradaInválida()
@@ -342,6 +343,18 @@ enum SelfTests {
             !AppSettings.shared.isHidden("com.exemplo.player.novo"),
             "app desconhecido nasce visível"
         )
+    }
+
+    /// O plano previa este teste com o TIDAL; até a Tarefa 3 existir, o Apple Music faz
+    /// o papel — não é o preferido, então é ocultável.
+    private static func listaDeEscolhaOmiteOcultos() {
+        let settings = AppSettings.shared
+        let alvo = AppleMusicPlayer.bundleID
+        let antes = settings.isHidden(alvo)
+        settings.setHidden(true, for: alvo)
+        let ids = PlayerRegistry.shared.selectablePlayers().map(\.bundleIdentifier)
+        expect(!ids.contains(alvo), "app oculto não aparece na lista de escolha")
+        settings.setHidden(antes, for: alvo)
     }
 
     // MARK: - AppleScript

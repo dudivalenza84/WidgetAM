@@ -34,4 +34,21 @@ final class PlayerRegistry {
             .filter(\.isInstalled)
             .sorted { $0.displayName.localizedCaseInsensitiveCompare($1.displayName) == .orderedAscending }
     }
+
+    /// Entradas do catálogo que o usuário pode escolher agora: visíveis, instaladas,
+    /// incluindo os atalhos (que não identificam sessão mas são lançáveis).
+    ///
+    /// O filtro de instalação vale só para `kind == .app`. Um atalho tem a URL como
+    /// destino garantido — o PWA do YouTube Music pode não estar instalado e ainda
+    /// assim ser escolhível, e derrubá-lo por `isInstalled` o tiraria da lista sem motivo.
+    func selectablePlayers() -> [Player] {
+        PlayerCatalog.entries
+            .filter { !AppSettings.shared.isHidden($0.id) }
+            .compactMap { entrada -> Player? in
+                guard let player = player(for: entrada.id) else { return nil }
+                if case .app = entrada.kind, !player.isInstalled { return nil }
+                return player
+            }
+            .sorted { $0.displayName.localizedCaseInsensitiveCompare($1.displayName) == .orderedAscending }
+    }
 }

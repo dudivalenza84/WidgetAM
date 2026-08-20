@@ -908,7 +908,7 @@ git commit -m "feat: preferência de visibilidade por app, como lista de ocultos
 - Produz: `PlayerRegistry.selectablePlayers()` — entradas visíveis, apps e atalhos,
   ordenadas por nome.
 
-- [ ] **Passo 1: Escrever o teste que falha**
+- [x] **Passo 1: Escrever o teste que falha**
 
 ```swift
     private static func listaDeEscolhaOmiteOcultos() {
@@ -922,11 +922,11 @@ git commit -m "feat: preferência de visibilidade por app, como lista de ocultos
     }
 ```
 
-- [ ] **Passo 2: Rodar e ver falhar**
+- [x] **Passo 2: Rodar e ver falhar**
 
 Esperado: `has no member 'selectablePlayers'`.
 
-- [ ] **Passo 3: Implementar no registry**
+- [x] **Passo 3: Implementar no registry**
 
 ```swift
     /// Entradas do catálogo que o usuário pode escolher agora: visíveis, instaladas,
@@ -944,12 +944,12 @@ Esperado: `has no member 'selectablePlayers'`.
 > instalado — e aí `isInstalled` o derrubaria. Tratar: o filtro de instalação vale só
 > para `kind == .app`; atalho sempre passa, porque tem a URL como destino garantido.
 
-- [ ] **Passo 4: Usar no menu**
+- [x] **Passo 4: Usar no menu**
 
 Em `AppMenuController.switchAppItem()`, trocar `installedKnownPlayers()` por
 `selectablePlayers()`. O resto do método fica igual.
 
-- [ ] **Passo 5: Verificar e commitar**
+- [x] **Passo 5: Verificar e commitar**
 
 ```bash
 swift build 2>&1 | tail -20 && swift run MacMediaWidget --run-tests
