@@ -1,7 +1,7 @@
 # Matriz de compatibilidade por player
 
 Levantada com `scripts/testar-player.sh` em **2026-08-10 · #01**, em macOS 26.5.2 com
-`media-control` 0.7.6. Ampliada em **2026-08-20 · #02** (TIDAL e Spotify) e nas colunas novas.
+`media-control` 0.7.6. Ampliada em **2026-08-20 · #02** (Spotify, TIDAL e Deezer) e nas colunas novas.
 
 Regra desta tabela: **só entra o que foi observado**. Não há célula preenchida por
 dedução, por documentação do fabricante ou por "o comando não deu erro". O motivo está em
@@ -15,18 +15,18 @@ Legenda: **sim** = observado funcionando · **não** = observado não funcionand
 
 | Capacidade | Amazon Music | Apple Music | Spotify | TIDAL | Deezer | Navegador |
 |---|---|---|---|---|---|---|
-| Aparece como sessão de Now Playing | sim | sim | sim | sim | ? | sim |
-| Metadados (título, artista, capa) | sim | sim | sim | sim | ? | ? |
-| `elapsedTime` no stream | **não** | sim | sim¹ | sim¹ | ? | ? |
-| play/pause (MediaRemote) | sim | sim | sim | sim | ? | ? |
-| next/previous (MediaRemote) | sim | sim | sim | sim | ? | ? |
-| seek (MediaRemote) | **não** | sim | **sim** | **sim** | ? | ? |
-| AppleScript | **ausente** | sim | **sim** | **ausente** | ? | **ausente** |
-| posição real (AppleScript) | ausente | sim | sim | ausente | ? | ausente |
-| seek (AppleScript) | ausente | sim | sim | ausente | ? | ausente |
-| volume por-app | ausente | sim | sim² | ausente | ? | ausente |
-| shuffle / repeat (AppleScript) | ausente | sim | sim³ | ausente | ? | ausente |
-| comando endereçado (sem ser a sessão) | **não** | sim | **sim** | **não** | ? | não |
+| Aparece como sessão de Now Playing | sim | sim | sim | sim | sim | sim |
+| Metadados (título, artista, capa) | sim | sim | sim | sim | sim | ? |
+| `elapsedTime` no stream | **não** | sim | sim¹ | sim¹ | **sim⁴** | ? |
+| play/pause (MediaRemote) | sim | sim | sim | sim | sim | ? |
+| next/previous (MediaRemote) | sim | sim | sim | sim | next sim / **prev não** | ? |
+| seek (MediaRemote) | **não** | sim | **sim** | **sim** | **não** | ? |
+| AppleScript | **ausente** | sim | **sim** | **ausente** | **ausente** | **ausente** |
+| posição real (AppleScript) | ausente | sim | sim | ausente | ausente | ausente |
+| seek (AppleScript) | ausente | sim | sim | ausente | ausente | ausente |
+| volume por-app | ausente | sim | sim² | ausente | ausente | ausente |
+| shuffle / repeat (AppleScript) | ausente | sim | sim³ | ausente | ausente | ausente |
+| comando endereçado (sem ser a sessão) | **não** | sim | **sim** | **não** | **não** | não |
 
 ## Evidência
 
@@ -43,6 +43,11 @@ dentro de ±1 do pedido.
 ³ São `shuffling` e `repeating`, **não** `shuffle enabled` / `song repeat` do Apple Music.
 O `scripts/testar-player.sh` usa o vocabulário do Apple Music e por isso reportou *não
 existe* com `syntax error (-2740)` — falso negativo do roteiro, não ausência no app.
+
+⁴ O Deezer é o **único do lote cujo `elapsedTime` é um relógio de verdade**: avança
+sozinho, com o `timestamp` acompanhando. Cinco leituras em 12 s sem tocar em nada:
+96,2 → 99,4 → 102,6 → 104,7 → 107,9, deltas batendo com o tempo real. Para ele, ancorar
+a posição no campo do stream dispensa qualquer estimativa.
 
 ### Amazon Music (`com.amazon.music`)
 
@@ -142,6 +147,36 @@ em vez de assumir zero.
 > do conteúdo, mas as células desta coluna não foram reconferidas com faixas completas.
 > `volume por-app` e `shuffle/repeat` estão como *ausente* por não haver AppleScript —
 > essa é uma ausência de mecanismo, independente de login.
+
+### Deezer (`com.deezer.deezer-desktop`)
+
+Levantado em **2026-08-20 · #02**, com faixas completas (177–187 s).
+
+```
+sessão MediaRemote     | verificado   | bundleIdentifier=com.deezer.deezer-desktop
+posição (MediaRemote)  | verificado   | elapsedTime contínuo — ver nota ⁴
+next (MediaRemote)     | verificado   | 'Só Eu Senti (Ao Vivo)' -> 'Termina Comigo Antes Ao Vivo'
+previous (MediaRemote) | NÃO FUNCIONA | teste dedicado, abaixo
+play/pause (MR)        | verificado   | playing True -> False
+AppleScript            | não existe   | app sem dicionário (NSAppleScriptEnabled ausente)
+seek (MediaRemote)     | NÃO FUNCIONA | teste observável, abaixo
+```
+
+**`previous` não funciona, e não é o caso de "reinicia a faixa atual".** Com a faixa em
+42,8 s — bem fora da janela em que um player costuma reiniciar em vez de voltar —, o
+comando não trocou de faixa nem zerou a posição: o tempo apenas seguiu correndo para
+46,0 s. Sem efeito nenhum.
+
+**Seek ignorado, sem ambiguidade.** Numa faixa de 187,4 s tocando em 61,4 s, pedido para
+179,38 s (8 s antes do fim): a posição continuou subindo 1 s por segundo por 13 segundos
+(62,4 → 74,9) e a faixa não trocou. Como aqui o `elapsedTime` é um relógio real, nem o
+valor publicado se mexeu — é o mesmo desfecho do Amazon Music, por evidência mais direta.
+
+**Armadilha de medição, registrada porque custou uma bateria inteira:** a primeira rodada
+saiu inválida porque o Spotify ficou tocando em paralelo e **tomou a sessão no meio do
+teste**. Os comandos do MediaRemote foram para ele, e o `next` do "Deezer" apareceu
+levando a uma faixa que era do Spotify. Antes de medir um player, os outros precisam
+estar **pausados** — não basta estarem em segundo plano.
 
 ## Comportamento do sistema (não é de nenhum player específico)
 
