@@ -127,8 +127,13 @@ final class NowPlayingController: ObservableObject {
     }
 
     /// A sessão atual é de um app que o usuário mandou ocultar?
+    ///
+    /// No modo fixo com **outro** player escolhido a resposta é `false` de propósito: ali
+    /// o widget já ignora a sessão alheia por desenho, e tratá-la como "oculta" faria o
+    /// card avisar sobre um app que ele nem estava exibindo.
     var isActiveSourceHidden: Bool {
         guard let id = track.bundleIdentifier else { return false }
+        if AppSettings.shared.controlMode == .fixed, !isControlledPlayerActive { return false }
         return AppSettings.shared.isHidden(id)
     }
 
@@ -145,8 +150,10 @@ final class NowPlayingController: ObservableObject {
     /// consegue receber o comando. Para os outros, mandar assim seria mandar para quem
     /// estiver tocando — o vazamento de comando global de `DECISOES.md · 2026-08-05 · #01`.
     var canControlTransport: Bool {
-        if isActiveSourceHidden { return false }
-        if isControlledPlayerActive { return true }
+        // Ocultar só derruba o transporte quando a permissão viria da própria sessão
+        // ativa. Um player endereçável no modo fixo continua controlável com um app
+        // oculto tocando — o oculto não é o alvo do comando.
+        if isControlledPlayerActive { return !isActiveSourceHidden }
         return controlledPlayer.capabilities.contains(.directedControl) && controlledPlayer.isRunning
     }
 
