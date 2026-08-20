@@ -34,6 +34,9 @@ struct MenuStatusView: View {
     }
 
     private var statusText: String {
+        // Mesma precedência do card: com a fonte oculta, dizer o nome da faixa
+        // contradiria o widget, que está justamente escondendo esse app.
+        if let oculto = nowPlaying.hiddenSourceName { return L10n.sourceHidden(oculto) }
         let track = nowPlaying.track
         if let name = track.title, track.hasContent {
             return track.isPlaying ? L10n.playingTrack(name) : L10n.pausedTrack(name)

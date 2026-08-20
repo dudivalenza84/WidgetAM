@@ -972,7 +972,7 @@ git commit -m "feat: submenu Trocar app respeita os apps ocultos"
 **Interfaces:**
 - Produz: `NowPlayingController.hiddenSourceName`, `L10n.sourceHidden(_:)`.
 
-- [ ] **Passo 1: Escrever o teste que falha**
+- [x] **Passo 1: Escrever o teste que falha**
 
 ```swift
     /// Card em branco com música tocando é indistinguível de app quebrado — o widget
@@ -985,11 +985,11 @@ git commit -m "feat: submenu Trocar app respeita os apps ocultos"
     }
 ```
 
-- [ ] **Passo 2: Rodar e ver falhar**
+- [x] **Passo 2: Rodar e ver falhar**
 
 Esperado: `type 'L10n' has no member 'sourceHidden'`.
 
-- [ ] **Passo 3: String nova**
+- [x] **Passo 3: String nova**
 
 Em `L10n.swift`, na seção "Transporte indisponível":
 
@@ -1007,7 +1007,7 @@ Em `Resources/pt-BR.lproj/Localizable.strings`:
 "Show this app" = "Mostrar este app";
 ```
 
-- [ ] **Passo 4: Filtrar no controller**
+- [x] **Passo 4: Filtrar no controller**
 
 ```swift
     /// A sessão atual é de um app que o usuário mandou ocultar?
@@ -1036,7 +1036,7 @@ Em `canControlTransport`, na primeira linha:
         if isActiveSourceHidden { return false }
 ```
 
-- [ ] **Passo 5: Mostrar na UI**
+- [x] **Passo 5: Mostrar na UI**
 
 Em `ContentView`, onde hoje se decide entre faixa e `L10n.nothingPlaying`, dar
 precedência ao aviso:
@@ -1055,14 +1055,14 @@ precedência ao aviso:
 
 Mesmo tratamento em `MenuStatusView` (lá sem botão — o menu já leva às Preferências).
 
-- [ ] **Passo 6: Verificar**
+- [x] **Passo 6: Verificar**
 
 ```bash
 swift build 2>&1 | tail -20 && swift run MacMediaWidget --run-tests
 scripts/verificar-traducoes.sh
 ```
 
-- [ ] **Passo 7: Commit**
+- [x] **Passo 7: Commit**
 
 ```bash
 git add Sources/MacMediaWidget/ Resources/pt-BR.lproj/Localizable.strings

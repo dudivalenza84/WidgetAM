@@ -92,10 +92,7 @@ struct ContentView: View {
             artwork(side: 108, cornerRadius: 14)
             VStack(alignment: .leading, spacing: 6) {
                 titleRow
-                Text(track.artist ?? subtitlePlaceholder)
-                    .font(.system(size: 13))
-                    .foregroundStyle(.secondary)
-                    .lineLimit(1)
+                subtitleRow(size: 13)
                 Spacer(minLength: 2)
                 progressBar
                 controls
@@ -115,10 +112,7 @@ struct ContentView: View {
                 artwork(side: 52, cornerRadius: 10)
                 VStack(alignment: .leading, spacing: 2) {
                     titleRow
-                    Text(track.artist ?? subtitlePlaceholder)
-                        .font(.system(size: 11))
-                        .foregroundStyle(.secondary)
-                        .lineLimit(1)
+                    subtitleRow(size: 11)
                 }
             }
             Spacer(minLength: 2)
@@ -133,7 +127,7 @@ struct ContentView: View {
     /// qual app ele está falando, agora que pode ser qualquer um.
     private var titleRow: some View {
         HStack(spacing: 6) {
-            Text(track.title ?? L10n.nothingPlaying)
+            Text(hiddenSourceTitle ?? track.title ?? L10n.nothingPlaying)
                 .font(.system(size: isCompact ? 12 : 16, weight: .bold))
                 .lineLimit(isCompact ? 2 : 1)
             Spacer(minLength: 4)
@@ -157,6 +151,36 @@ struct ContentView: View {
     /// Player cuja identidade o card está exibindo.
     private var sourcePlayer: Player? {
         settings.controlMode == .fixed ? nowPlaying.controlledPlayer : nowPlaying.activePlayer
+    }
+
+    /// Aviso de que a sessão que toca é de um app que o usuário mandou ocultar.
+    /// Precede o título da faixa porque, nesse estado, `displayedTrack` está vazio de
+    /// propósito — sem o aviso o card diria "nada tocando" com música no ar.
+    private var hiddenSourceTitle: String? {
+        nowPlaying.hiddenSourceName.map(L10n.sourceHidden)
+    }
+
+    /// Segunda linha do card: o artista — ou, com a fonte oculta, a saída de volta.
+    /// Card em branco com música tocando é indistinguível de app quebrado.
+    @ViewBuilder
+    private func subtitleRow(size: CGFloat) -> some View {
+        if nowPlaying.hiddenSourceName != nil {
+            Button(L10n.showThisApp) {
+                if let id = nowPlaying.track.bundleIdentifier {
+                    AppSettings.shared.setHidden(false, for: id)
+                }
+            }
+            .buttonStyle(.plain)
+            .font(.system(size: size, weight: .semibold))
+            .foregroundStyle(.secondary)
+            .lineLimit(1)
+            .nonDraggableWindowArea()
+        } else {
+            Text(track.artist ?? subtitlePlaceholder)
+                .font(.system(size: size))
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
+        }
     }
 
     /// Sem faixa, a segunda linha explica o porquê em vez de mostrar um travessão mudo.

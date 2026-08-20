@@ -36,6 +36,13 @@ enum L10n {
         String(localized: "\(name) is not playing")
     }
 
+    // MARK: - Fonte oculta
+
+    static func sourceHidden(_ name: String) -> String {
+        String(localized: "\(name) is playing · hidden")
+    }
+    static var showThisApp: String { String(localized: "Show this app") }
+
     // MARK: - Volume
 
     static var systemVolume: String { String(localized: "System volume") }

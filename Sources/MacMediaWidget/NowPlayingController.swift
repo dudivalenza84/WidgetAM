@@ -122,7 +122,21 @@ final class NowPlayingController: ObservableObject {
         if AppSettings.shared.controlMode == .fixed, !isControlledPlayerActive {
             return TrackInfo()
         }
+        if isActiveSourceHidden { return TrackInfo() }
         return track
+    }
+
+    /// A sessão atual é de um app que o usuário mandou ocultar?
+    var isActiveSourceHidden: Bool {
+        guard let id = track.bundleIdentifier else { return false }
+        return AppSettings.shared.isHidden(id)
+    }
+
+    /// Nome do app oculto que está tocando, para a UI explicar o silêncio em vez de
+    /// parecer quebrada.
+    var hiddenSourceName: String? {
+        guard isActiveSourceHidden, let id = track.bundleIdentifier else { return nil }
+        return PlayerRegistry.shared.player(for: id)?.displayName
     }
 
     /// Se next/previous/seek têm onde atuar.
@@ -131,6 +145,7 @@ final class NowPlayingController: ObservableObject {
     /// consegue receber o comando. Para os outros, mandar assim seria mandar para quem
     /// estiver tocando — o vazamento de comando global de `DECISOES.md · 2026-08-05 · #01`.
     var canControlTransport: Bool {
+        if isActiveSourceHidden { return false }
         if isControlledPlayerActive { return true }
         return controlledPlayer.capabilities.contains(.directedControl) && controlledPlayer.isRunning
     }

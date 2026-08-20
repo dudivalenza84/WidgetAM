@@ -72,3 +72,7 @@
 "Open installation page" = "Abrir instalação";
 "Cancel" = "Cancelar";
 "OK" = "OK";
+
+/* Fonte oculta */
+"%@ is playing · hidden" = "O %@ está tocando · oculto";
+"Show this app" = "Mostrar este app";

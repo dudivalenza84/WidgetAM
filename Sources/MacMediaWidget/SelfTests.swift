@@ -51,6 +51,7 @@ enum SelfTests {
         visibilidadeProtegeOPreferido()
         visibilidadePadrãoÉTudoVisível()
         listaDeEscolhaOmiteOcultos()
+        fonteOcultaTemNomeParaExibir()
 
         appleScriptDecimalComVírgula()
         appleScriptEntradaInválida()
@@ -355,6 +356,15 @@ enum SelfTests {
         let ids = PlayerRegistry.shared.selectablePlayers().map(\.bundleIdentifier)
         expect(!ids.contains(alvo), "app oculto não aparece na lista de escolha")
         settings.setHidden(antes, for: alvo)
+    }
+
+    /// Card em branco com música tocando é indistinguível de app quebrado — o widget
+    /// tem que dizer que está ocultando de propósito.
+    private static func fonteOcultaTemNomeParaExibir() {
+        expect(
+            L10n.sourceHidden("Spotify").contains("Spotify"),
+            "o aviso de fonte oculta precisa nomear o app"
+        )
     }
 
     // MARK: - AppleScript
