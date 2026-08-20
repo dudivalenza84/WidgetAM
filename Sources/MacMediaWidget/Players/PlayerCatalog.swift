@@ -58,6 +58,13 @@ enum PlayerCatalog {
                 installURL: nil,
                 make: { AppleMusicPlayer() }
             ),
+            PlayerCatalogEntry(
+                id: SpotifyPlayer.bundleID,
+                displayName: "Spotify",
+                kind: .app,
+                installURL: SpotifyPlayer.installURL,
+                make: { SpotifyPlayer() }
+            ),
         ]
     }
 

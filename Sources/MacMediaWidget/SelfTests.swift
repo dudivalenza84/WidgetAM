@@ -43,6 +43,7 @@ enum SelfTests {
 
         playerAmazonMusicÉLimitado()
         playerAppleMusicÉCompleto()
+        playerSpotifyTemCamadaAppleScript()
         playerFonteDesconhecidaÉGenérica()
         playerSemSessãoNãoHáPlayer()
         playerRegistryMantémInstância()
@@ -290,6 +291,21 @@ enum SelfTests {
         }
     }
 
+    /// O Spotify é o segundo app da lista com dicionário AppleScript — e por isso o
+    /// segundo endereçável. Tudo aqui foi medido contra o app real em
+    /// `docs/compatibilidade-players.md`, inclusive o seek pelos dois caminhos.
+    private static func playerSpotifyTemCamadaAppleScript() {
+        let player = SpotifyPlayer()
+        expect(player.bundleIdentifier == "com.spotify.client", "bundle id do Spotify")
+        expect(player.capabilities.contains(.directedControl), "Spotify é endereçável por AppleScript")
+        expect(player.capabilities.contains(.transport), "Spotify tem transporte")
+        for capacidade in [
+            PlayerCapabilities.seek, .realPosition, .appVolume, .shuffleRepeat,
+        ] {
+            expect(player.capabilities.contains(capacidade), "Spotify deveria ter \(capacidade)")
+        }
+    }
+
     private static func playerFonteDesconhecidaÉGenérica() {
         let player = PlayerRegistry.shared.player(for: "com.exemplo.player.inexistente")
         expect(player != nil, "fonte desconhecida deveria ter player genérico")
@@ -313,6 +329,7 @@ enum SelfTests {
         let ids = PlayerCatalog.entries.map(\.id)
         expect(ids.contains(AmazonMusicPlayer.bundleID), "catálogo deveria ter Amazon Music")
         expect(ids.contains(AppleMusicPlayer.bundleID), "catálogo deveria ter Apple Music")
+        expect(ids.contains(SpotifyPlayer.bundleID), "catálogo deveria ter Spotify")
         expect(Set(ids).count == ids.count, "catálogo não pode ter id repetido")
     }
 
