@@ -76,3 +76,11 @@
 /* Fonte oculta */
 "%@ is playing · hidden" = "O %@ está tocando · oculto";
 "Show this app" = "Mostrar este app";
+
+/* Apps controlados */
+"Controlled apps" = "Apps controlados";
+"Unchecked apps disappear from the “Switch app” menu, and the widget ignores what they play." = "Apps desmarcados somem do menu “Trocar app”, e o widget ignora o que eles tocam.";
+"The preferred player is always shown" = "o player preferido é sempre exibido";
+"not installed" = "não instalado";
+"opens in the browser" = "abre no navegador";
+"Forget discovered apps" = "Esquecer apps descobertos";

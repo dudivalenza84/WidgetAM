@@ -37,10 +37,18 @@ final class PreferencesController: NSObject, NSWindowDelegate {
 struct PreferencesView: View {
     @ObservedObject private var settings = AppSettings.shared
 
-    /// Players com implementação própria instalados nesta máquina. Fixado uma vez por
-    /// abertura da janela: instalar um player com as preferências abertas é raro o
-    /// bastante para não valer um observador do LaunchServices.
-    private let players = PlayerRegistry.shared.installedCatalogPlayers()
+    /// Players que o usuário pode eleger como preferido: visíveis e instalados.
+    /// Calculada, e não mais fixada na abertura da janela: os checkboxes da seção
+    /// "Apps controlados" alteram esta lista na mesma tela, ao vivo.
+    private var players: [Player] { PlayerRegistry.shared.selectablePlayers() }
+
+    /// Catálogo inteiro, inclusive o que não está instalado — a lista é também a
+    /// vitrine do que o widget suporta.
+    private var catalogEntries: [PlayerCatalogEntry] {
+        PlayerCatalog.entries.sorted {
+            $0.displayName.localizedCaseInsensitiveCompare($1.displayName) == .orderedAscending
+        }
+    }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -87,6 +95,30 @@ struct PreferencesView: View {
                 }
 
                 Text(controlModeExplanation)
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+            }
+
+            Section(L10n.sectionControlledApps) {
+                ForEach(catalogEntries, id: \.id) { entry in
+                    appToggle(id: entry.id, name: entry.displayName, note: note(for: entry))
+                }
+
+                // Fontes que apareceram no Now Playing e não estão no catálogo: é o
+                // único caminho para o usuário ocultar um player que ninguém previu.
+                ForEach(settings.discoveredPlayerIDs, id: \.self) { id in
+                    appToggle(
+                        id: id,
+                        name: MediaRemotePlayer.localizedName(forBundleIdentifier: id) ?? id,
+                        note: nil
+                    )
+                }
+
+                if !settings.discoveredPlayerIDs.isEmpty {
+                    Button(L10n.forgetDiscovered) { settings.forgetDiscovered() }
+                }
+
+                Text(L10n.controlledAppsHelp)
                     .font(.callout)
                     .foregroundStyle(.secondary)
             }
@@ -138,6 +170,34 @@ struct PreferencesView: View {
             }
         }
         .formStyle(.grouped)
+    }
+
+    /// Checkbox de um app controlado. Marcado = visível; a chave é a lista de ocultos.
+    private func appToggle(id: String, name: String, note: String?) -> some View {
+        Toggle(isOn: Binding(
+            get: { !settings.isHidden(id) },
+            set: { settings.setHidden(!$0, for: id) }
+        )) {
+            HStack(spacing: 8) {
+                if let icon = PlayerRegistry.shared.player(for: id)?.icon {
+                    Image(nsImage: icon).resizable().frame(width: 16, height: 16)
+                }
+                Text(name)
+                if let note {
+                    Text("· \(note)").foregroundStyle(.secondary)
+                }
+            }
+        }
+        // Desabilita só o que não dá para desmarcar; um app já oculto sempre pode voltar.
+        .disabled(!settings.canHide(id) && !settings.isHidden(id))
+    }
+
+    /// Nota curta ao lado do nome: por que o app está esmaecido, ou o que ele é.
+    private func note(for entry: PlayerCatalogEntry) -> String? {
+        if entry.id == settings.preferredPlayerBundleId { return L10n.preferredCannotBeHidden }
+        if case .shortcut = entry.kind { return L10n.opensInBrowser }
+        if PlayerRegistry.shared.player(for: entry.id)?.isInstalled == false { return L10n.notInstalled }
+        return nil
     }
 
     private var preferredPlayer: Player? {

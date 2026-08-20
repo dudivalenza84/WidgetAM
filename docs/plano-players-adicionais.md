@@ -1078,7 +1078,7 @@ git commit -m "feat: widget avisa quando a fonte que toca está oculta"
 - Modificar: `Sources/MacMediaWidget/L10n.swift`
 - Modificar: `Resources/pt-BR.lproj/Localizable.strings`
 
-- [ ] **Passo 1: Strings novas**
+- [x] **Passo 1: Strings novas**
 
 ```swift
     static var sectionControlledApps: String { String(localized: "Controlled apps") }
@@ -1095,7 +1095,7 @@ git commit -m "feat: widget avisa quando a fonte que toca está oculta"
 
 Traduções correspondentes no `.strings`.
 
-- [ ] **Passo 2: Lista deixa de ser fixa**
+- [x] **Passo 2: Lista deixa de ser fixa**
 
 Hoje `PreferencesWindow.swift:43` guarda `let players = ...`, com o comentário de que
 instalar app com a janela aberta é raro demais para valer um observador. Isso deixa de
@@ -1114,7 +1114,7 @@ valer: os checkboxes mudam a lista ao vivo. Trocar por propriedade calculada:
 
 O `Picker` de player preferido passa a usar `PlayerRegistry.shared.selectablePlayers()`.
 
-- [ ] **Passo 3: A seção**
+- [x] **Passo 3: A seção**
 
 ```swift
             Section(L10n.sectionControlledApps) {
@@ -1158,20 +1158,20 @@ Com o rótulo auxiliar:
     }
 ```
 
-- [ ] **Passo 4: Descobertos na lista**
+- [x] **Passo 4: Descobertos na lista**
 
 Abaixo do `ForEach` do catálogo, um segundo `ForEach` sobre
 `settings.discoveredPlayerIDs`, com o mesmo `Toggle` e o nome vindo de
 `Player.localizedName(forBundleIdentifier:) ?? id`.
 
-- [ ] **Passo 5: Verificar**
+- [x] **Passo 5: Verificar**
 
 ```bash
 swift build 2>&1 | tail -20 && swift run MacMediaWidget --run-tests
 scripts/verificar-traducoes.sh
 ```
 
-- [ ] **Passo 6: Commit**
+- [x] **Passo 6: Commit**
 
 ```bash
 git add Sources/MacMediaWidget/PreferencesWindow.swift Sources/MacMediaWidget/L10n.swift \

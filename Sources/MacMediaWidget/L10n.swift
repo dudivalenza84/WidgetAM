@@ -43,6 +43,19 @@ enum L10n {
     }
     static var showThisApp: String { String(localized: "Show this app") }
 
+    // MARK: - Apps controlados
+
+    static var sectionControlledApps: String { String(localized: "Controlled apps") }
+    static var controlledAppsHelp: String {
+        String(localized: "Unchecked apps disappear from the “Switch app” menu, and the widget ignores what they play.")
+    }
+    static var preferredCannotBeHidden: String {
+        String(localized: "The preferred player is always shown")
+    }
+    static var notInstalled: String { String(localized: "not installed") }
+    static var opensInBrowser: String { String(localized: "opens in the browser") }
+    static var forgetDiscovered: String { String(localized: "Forget discovered apps") }
+
     // MARK: - Volume
 
     static var systemVolume: String { String(localized: "System volume") }
