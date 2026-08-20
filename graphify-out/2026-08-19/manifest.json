@@ -1,7 +1,7 @@
 {
   ".claude/settings.local.json": {
-    "mtime": 1786666829.2473576,
-    "ast_hash": "8402e1fd4314293e96304bb1e7a7d854",
+    "mtime": 1786271288.2485487,
+    "ast_hash": "5c5f4d916fdda4b43ea87c5e3a85ef52",
     "semantic_hash": ""
   },
   "Package.swift": {
@@ -10,13 +10,13 @@
     "semantic_hash": "949f0c0ec4c77ef6e99da3a287d83cf2"
   },
   "Sources/MacMediaWidget/App.swift": {
-    "mtime": 1786532117.7348208,
-    "ast_hash": "f79b80f3df8e8eab8f865963e3398360",
+    "mtime": 1786446935.4825165,
+    "ast_hash": "74b60041a8f14ea6abfac013a0dbf8c8",
     "semantic_hash": ""
   },
   "Sources/MacMediaWidget/ContentView.swift": {
-    "mtime": 1786533297.93703,
-    "ast_hash": "39d7dcf1f82c8814a82199a1f269f64d",
+    "mtime": 1786402350.0118818,
+    "ast_hash": "db802d9ba5d789910122a41c884a5dc8",
     "semantic_hash": ""
   },
   "Sources/MacMediaWidget/LoginItem.swift": {
@@ -35,23 +35,23 @@
     "semantic_hash": "52e14074e3264691679582ee638e822d"
   },
   "Sources/MacMediaWidget/TrayController.swift": {
-    "mtime": 1786532886.0188975,
-    "ast_hash": "e177dd47d98a8ed03f165c54609d59cb",
+    "mtime": 1786446860.7397466,
+    "ast_hash": "7a3c357d3ce23adb316a6dcf8d482322",
     "semantic_hash": ""
   },
   "Sources/MacMediaWidget/WidgetWindow.swift": {
-    "mtime": 1786476819.9426126,
-    "ast_hash": "62462954f3810e9cc4b71de265db6dee",
+    "mtime": 1786446901.7790709,
+    "ast_hash": "9898fbf9d54ad8ecde8e28610cb9c533",
     "semantic_hash": ""
   },
   "scripts/build-app.sh": {
-    "mtime": 1786532879.4309814,
-    "ast_hash": "25e9fecd022365ed2a7bc613b61d2850",
+    "mtime": 1786402993.5555913,
+    "ast_hash": "a08d5cc847e15ac5c035f036486a6416",
     "semantic_hash": ""
   },
   "CHANGELOG.md": {
-    "mtime": 1787187512.006046,
-    "ast_hash": "5410c46f9ccd8dc81c96edce98b7d2b1",
+    "mtime": 1786447320.8541179,
+    "ast_hash": "4a46d934c31160244a137849a4790e01",
     "semantic_hash": ""
   },
   "CLAUDE.md": {
@@ -60,13 +60,13 @@
     "semantic_hash": ""
   },
   "PENDENCIAS.md": {
-    "mtime": 1787187506.8518965,
-    "ast_hash": "d94435b36c40e5e70fc7e99493691502",
+    "mtime": 1786447306.313728,
+    "ast_hash": "234705d55ec3b1a1fd5c5319add0d944",
     "semantic_hash": ""
   },
   "PENDENCIAS_CONCLUIDAS.md": {
-    "mtime": 1786476992.3554504,
-    "ast_hash": "a9c7f5d9314c1159bb3005b9d2a62d25",
+    "mtime": 1782233219.1794317,
+    "ast_hash": "e153f73c3ecfb1d62db10c55fd05691d",
     "semantic_hash": ""
   },
   "README.md": {
@@ -75,8 +75,8 @@
     "semantic_hash": ""
   },
   "SESSIONS.md": {
-    "mtime": 1787187480.4189482,
-    "ast_hash": "d43260a29a6ea6c0049997502fefb3a4",
+    "mtime": 1786447301.4151978,
+    "ast_hash": "f30e533164d65097059ea0a2e3dd4acd",
     "semantic_hash": ""
   },
   "docs/sessions/2026-06-22-01.md": {
@@ -110,13 +110,13 @@
     "semantic_hash": "0699a54955485d7e6db75aaaa38fe662"
   },
   "Sources/MacMediaWidget/PreferencesWindow.swift": {
-    "mtime": 1786533293.8455093,
-    "ast_hash": "54b2b356a5b6307c5afcbf871651504d",
+    "mtime": 1786446955.591167,
+    "ast_hash": "814659cf1f6c1ebacccaaedc9dd19280",
     "semantic_hash": ""
   },
   "Sources/MacMediaWidget/Settings.swift": {
-    "mtime": 1786476714.4706094,
-    "ast_hash": "a3051cdb11e0b3a7c3c6397879b1e4b3",
+    "mtime": 1786446924.2458634,
+    "ast_hash": "12c55a1319d5e6c11a489bd75aa13c94",
     "semantic_hash": ""
   },
   "scripts/package-dmg.sh": {
@@ -125,8 +125,8 @@
     "semantic_hash": "1c0956385c6e44cde302decb5fe04e6a"
   },
   "Sources/MacMediaWidget/AppMenuController.swift": {
-    "mtime": 1786656818.9719875,
-    "ast_hash": "b472699be2eed749481e019fff3f481e",
+    "mtime": 1786446855.4982429,
+    "ast_hash": "2513d53452a96353d9085840a5f87305",
     "semantic_hash": ""
   },
   "Sources/MacMediaWidget/AppVersion.swift": {
@@ -140,8 +140,8 @@
     "semantic_hash": ""
   },
   "Sources/MacMediaWidget/L10n.swift": {
-    "mtime": 1786532114.9875824,
-    "ast_hash": "87a0cd3002cf6f2b6b39462341a9a80a",
+    "mtime": 1786446945.8854234,
+    "ast_hash": "5f287d807b2f1edbd42403b95c37533d",
     "semantic_hash": ""
   },
   "Sources/MacMediaWidget/NativeWidgetGrid.swift": {
@@ -220,13 +220,13 @@
     "semantic_hash": ""
   },
   "DECISOES.md": {
-    "mtime": 1787187000.49799,
-    "ast_hash": "af85dc42d5c535daf2f0cae47611ccc9",
+    "mtime": 1786447315.5243263,
+    "ast_hash": "e7861e814922fab5b72e39c2f7654b1a",
     "semantic_hash": ""
   },
   "ESTADO.md": {
-    "mtime": 1787187491.3645856,
-    "ast_hash": "8d2c55908de9a1dd494b46965fb55097",
+    "mtime": 1786447330.2439342,
+    "ast_hash": "48cf866e97824f120bc347025c951cc1",
     "semantic_hash": ""
   },
   "ROADMAP.md": {
@@ -292,101 +292,6 @@
   "docs/sessions/2026-08-11-01.md": {
     "mtime": 1786447299.5776985,
     "ast_hash": "b4233799bdcf8272154ff498722de99d",
-    "semantic_hash": ""
-  },
-  "Sources/MacMediaWidget/BrandMark.swift": {
-    "mtime": 1786533279.4579835,
-    "ast_hash": "8a5e4c99e9fc2fe1b5ddcd7dd11e7c1f",
-    "semantic_hash": ""
-  },
-  "Sources/MacMediaWidget/MenuStatusView.swift": {
-    "mtime": 1786656936.4713476,
-    "ast_hash": "9b9f628d261086a2279a3c362abb3dae",
-    "semantic_hash": ""
-  },
-  "Sources/MacMediaWidget/MenuTransportView.swift": {
-    "mtime": 1786532087.3205724,
-    "ast_hash": "e018214077a55aea693343514d0736d5",
-    "semantic_hash": ""
-  },
-  "scripts/gerar-icones.sh": {
-    "mtime": 1786532860.7201753,
-    "ast_hash": "530911dc4e230b45d643d28b83144caa",
-    "semantic_hash": ""
-  },
-  "scripts/render-svg.swift": {
-    "mtime": 1786532802.8307624,
-    "ast_hash": "98922d0f1a1dbdaf9b256e808ed7e585",
-    "semantic_hash": ""
-  },
-  "docs/plano-players-adicionais.md": {
-    "mtime": 1787187314.712993,
-    "ast_hash": "5152633eb4816596a45487608b95bfe3",
-    "semantic_hash": ""
-  },
-  "docs/players-adicionais.md": {
-    "mtime": 1787187026.5606222,
-    "ast_hash": "00fae42d6924080e59a8c80399067800",
-    "semantic_hash": ""
-  },
-  "docs/sessions/2026-08-11-02.md": {
-    "mtime": 1786475890.073588,
-    "ast_hash": "049d61b429b8afbbcf2af74e07f2a2a7",
-    "semantic_hash": ""
-  },
-  "docs/sessions/2026-08-11-03.md": {
-    "mtime": 1786477117.8304589,
-    "ast_hash": "17aee810a83bde9a8a402de23851f061",
-    "semantic_hash": ""
-  },
-  "docs/sessions/2026-08-12-01.md": {
-    "mtime": 1786533482.1766992,
-    "ast_hash": "f07b61c48acbe801677a03fe53f6392a",
-    "semantic_hash": ""
-  },
-  "docs/sessions/2026-08-13-01.md": {
-    "mtime": 1786657139.257205,
-    "ast_hash": "6ba804f9114ef132d058124479aca4ae",
-    "semantic_hash": ""
-  },
-  "docs/sessions/2026-08-19-01.md": {
-    "mtime": 1787187478.2392566,
-    "ast_hash": "79befc4d186418fd94fcd3852925cfb3",
-    "semantic_hash": ""
-  },
-  "Resources/icon/MenuBarIcon.png": {
-    "mtime": 1786532862.870985,
-    "ast_hash": "6bd3c67aa25fae67aaf962a33d21b875",
-    "semantic_hash": ""
-  },
-  "Resources/icon/favicon/favicon-16.png": {
-    "mtime": 1786532863.0518174,
-    "ast_hash": "e4b5a722e0b5cdf01be893b18fcc428a",
-    "semantic_hash": ""
-  },
-  "Resources/icon/favicon/favicon-32.png": {
-    "mtime": 1786532863.2329278,
-    "ast_hash": "e791b24870deff18bd8a663ed3ecd29f",
-    "semantic_hash": ""
-  },
-  "Resources/icon/favicon/favicon-48.png": {
-    "mtime": 1786532863.422856,
-    "ast_hash": "759a4894369e8d5418cc9cbaddd464c0",
-    "semantic_hash": ""
-  },
-  "Resources/icon/icon-master.svg": {
-    "mtime": 1786532789.5064855,
-    "ast_hash": "12d001a91643f4bd94e9a49a5989104b",
-    "semantic_hash": ""
-  },
-  "Resources/icon/icon-small.svg": {
-    "mtime": 1786532793.7414887,
-    "ast_hash": "c1c6422266b427eab9e6287271db767d",
-    "semantic_hash": ""
-  },
-  "Resources/icon/menubar-template.svg": {
-    "mtime": 1786532796.5613534,
-    "ast_hash": "a0378c15e84f8d7b7b53d5b0033478d3",
     "semantic_hash": ""
   }
 }
