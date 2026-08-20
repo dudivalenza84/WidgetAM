@@ -365,10 +365,22 @@ final class NowPlayingController: ObservableObject {
             anchorWall = Date()
             refreshDisplayedElapsed()
 
-        case .update(let t, let newTimestamp):
+        case .update(let t, let newTimestamp, let newElapsed):
             // Reancora o cronômetro local antes de adotar o novo estado.
             let now = Date()
-            if let ts = newTimestamp {
+            if let ts = newTimestamp { lastTimestamp = ts }
+
+            // Onde a fonte publica posição confiável, ela ganha do cálculo por
+            // timestamp — e precisa ganhar: depois de um seek, TIDAL e Spotify
+            // reemitem `elapsedTime` **e** timestamp, e derivar a posição do timestamp
+            // devolveria a barra ao início da faixa. É também o que dá barra correta
+            // nos players sem AppleScript, que não têm o poll de `.realPosition`.
+            if let elapsed = newElapsed,
+               PlayerRegistry.shared.player(for: t.bundleIdentifier)?
+                   .capabilities.contains(.streamPosition) == true {
+                anchorElapsed = elapsed
+                anchorWall = now
+            } else if let ts = newTimestamp {
                 // Faixa nova: o timestamp marca o início dela, então a posição atual é
                 // o tempo de parede decorrido desde ele.
                 //
@@ -377,7 +389,6 @@ final class NowPlayingController: ObservableObject {
                 // posição real é desconhecida e mostrar do início é melhor do que
                 // travar a barra cheia — que era o que acontecia, porque a âncora
                 // acabava fixada na duração e não saía mais de lá até trocar de faixa.
-                lastTimestamp = ts
                 let sinceStart = max(0, now.timeIntervalSince(ts))
                 if let dur = t.duration ?? track.duration, sinceStart > dur {
                     anchorElapsed = 0

@@ -26,8 +26,17 @@ struct PlayerCapabilities: OptionSet, Sendable {
     /// troca de faixa nem reinicia a atual) e o navegador **rebobina** a mídia em vez
     /// de trocar — nos dois casos o botão seria decorativo.
     static let previousTrack = PlayerCapabilities(rawValue: 1 << 7)
-    /// Sabe dizer a posição real da faixa, em vez de estimá-la localmente.
+    /// Sabe dizer a posição real da faixa quando perguntado, em vez de estimá-la
+    /// localmente. Custa um subprocesso por leitura: hoje só a camada AppleScript tem.
     static let realPosition = PlayerCapabilities(rawValue: 1 << 1)
+    /// O `elapsedTime` que a fonte publica no stream do MediaRemote é **confiável** e
+    /// serve de âncora para a barra. Chega de graça, sem subprocesso nenhum.
+    ///
+    /// Não é redundante com `.realPosition` nem implicada por ela: o Amazon Music
+    /// simplesmente não publica o campo, e o navegador publica **mentindo** — deixa o
+    /// valor em zero com o `timestamp` congelado enquanto o vídeo corre. Ancorar ali
+    /// mostraria a barra parada no início para sempre.
+    static let streamPosition = PlayerCapabilities(rawValue: 1 << 8)
     /// Aceita mover a posição da faixa.
     static let seek = PlayerCapabilities(rawValue: 1 << 2)
     /// Tem volume próprio, independente do volume de saída do sistema.

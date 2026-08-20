@@ -30,10 +30,16 @@ class AppleScriptPlayer: MediaRemotePlayer {
     /// depois de verificado contra o app real.
     var scriptedCapabilities: PlayerCapabilities { [] }
 
+    /// O que continua valendo **sem** AppleScript — o que vem pelo MediaRemote. É o
+    /// piso quando a automação é negada, e por isso não pode ficar em
+    /// `scriptedCapabilities`: o `elapsedTime` que a fonte publica no stream não
+    /// depende de permissão nenhuma.
+    var unscriptedCapabilities: PlayerCapabilities { .fullTransport }
+
     override var capabilities: PlayerCapabilities {
         isAuthorizationDenied
-            ? PlayerCapabilities.fullTransport
-            : PlayerCapabilities.fullTransport.union(scriptedCapabilities)
+            ? unscriptedCapabilities
+            : unscriptedCapabilities.union(scriptedCapabilities)
     }
 
     // MARK: - Execução

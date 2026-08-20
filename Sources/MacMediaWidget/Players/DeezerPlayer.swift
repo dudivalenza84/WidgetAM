@@ -21,7 +21,7 @@ final class DeezerPlayer: MediaRemotePlayer {
         super.init(bundleIdentifier: Self.bundleID, displayName: "Deezer")
     }
 
-    override var capabilities: PlayerCapabilities { [.transport, .nextTrack] }
+    override var capabilities: PlayerCapabilities { [.transport, .nextTrack, .streamPosition] }
 
     override var installURL: URL? { Self.installURL }
 }

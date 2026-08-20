@@ -25,6 +25,11 @@ final class SpotifyPlayer: AppleScriptPlayer {
         [.realPosition, .seek, .appVolume, .shuffleRepeat, .directedControl]
     }
 
+    /// O `elapsedTime` do Spotify no stream não é um relógio: é uma âncora reemitida a
+    /// cada faixa e a cada seek. Serve exatamente para o que o controller faz com ela —
+    /// fixar o ponto de partida e continuar estimando por tempo de parede.
+    override var unscriptedCapabilities: PlayerCapabilities { [.fullTransport, .streamPosition] }
+
     override var installURL: URL? { Self.installURL }
 
     // MARK: - Transporte (endereçado, funciona fora da sessão ativa)

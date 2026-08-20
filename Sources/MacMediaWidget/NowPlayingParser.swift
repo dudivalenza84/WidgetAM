@@ -20,8 +20,10 @@ enum NowPlayingParser {
         case reset
         /// Estado novo já mesclado sobre o anterior. `newTimestamp` só vem preenchido
         /// quando o payload trouxe um timestamp diferente do último visto — é o sinal
-        /// de faixa nova.
-        case update(TrackInfo, newTimestamp: Date?)
+        /// de faixa nova. `newElapsed` vem preenchido quando **esta linha** trouxe
+        /// `elapsedTime`: é posição publicada pela própria fonte, e onde ela é confiável
+        /// vale mais do que qualquer estimativa local.
+        case update(TrackInfo, newTimestamp: Date?, newElapsed: Double?)
         /// Linha inválida ou irrelevante.
         case ignored
     }
@@ -51,9 +53,11 @@ enum NowPlayingParser {
         if let v = payload["artist"] as? String { t.artist = v }
         if let v = payload["album"] as? String { t.album = v }
         if let v = payload["duration"] as? Double { t.duration = v }
+        var newElapsed: Double?
         if let v = payload["elapsedTime"] as? Double {
             t.elapsedTime = v
             t.timestamp = Date()
+            newElapsed = v
         }
         if let v = payload["playing"] as? Bool { t.isPlaying = v }
 
@@ -70,6 +74,6 @@ enum NowPlayingParser {
             newTimestamp = ts
         }
 
-        return .update(t, newTimestamp: newTimestamp)
+        return .update(t, newTimestamp: newTimestamp, newElapsed: newElapsed)
     }
 }

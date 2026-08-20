@@ -23,6 +23,10 @@ final class AppleMusicPlayer: AppleScriptPlayer {
         [.realPosition, .seek, .appVolume, .shuffleRepeat, .directedControl]
     }
 
+    /// Publica `elapsedTime` no stream, então a barra fica certa mesmo se o usuário
+    /// negar a Automação e todo o resto cair.
+    override var unscriptedCapabilities: PlayerCapabilities { [.fullTransport, .streamPosition] }
+
     // MARK: - Transporte
     //
     // Vai por AppleScript, e não pelo MediaRemote, porque é endereçado: funciona mesmo

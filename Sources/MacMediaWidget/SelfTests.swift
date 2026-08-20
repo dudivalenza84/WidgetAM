@@ -32,6 +32,8 @@ enum SelfTests {
         parserTimestampSóContaQuandoMuda()
         parserLixoÉIgnorado()
         parserSemElapsedTimeNãoInventa()
+        parserSinalizaElapsedTimeNovo()
+        parserSemElapsedTimeNãoSinaliza()
 
         gradeSnapAlinhaNaCélulaMaisPróxima()
         gradeSnapAceitaValoresNegativos()
@@ -44,6 +46,7 @@ enum SelfTests {
         playerAmazonMusicÉLimitado()
         playerAppleMusicÉCompleto()
         playerSpotifyTemCamadaAppleScript()
+        capacidadesNativasSobrevivemAoRebaixamento()
         playersSemAppleScriptTêmSóOMedido()
         atalhoDoYouTubeMusicNãoÉSessão()
         playerFonteDesconhecidaÉGenérica()
@@ -107,7 +110,7 @@ enum SelfTests {
             mergingInto: TrackInfo(),
             lastTimestamp: nil
         )
-        guard case .update(let track, _) = outcome else {
+        guard case .update(let track, _, _) = outcome else {
             expect(false, "esperava update, veio \(outcome)")
             return
         }
@@ -129,7 +132,7 @@ enum SelfTests {
             mergingInto: atual,
             lastTimestamp: nil
         )
-        guard case .update(let track, let ts) = outcome else {
+        guard case .update(let track, let ts, _) = outcome else {
             expect(false, "esperava update, veio \(outcome)")
             return
         }
@@ -149,7 +152,7 @@ enum SelfTests {
             mergingInto: TrackInfo(),
             lastTimestamp: nil
         )
-        if case .update(_, let ts) = novo {
+        if case .update(_, let ts, _) = novo {
             expect(ts == esperado, "timestamp inédito deveria ser sinalizado")
         } else {
             expect(false, "esperava update para timestamp inédito")
@@ -162,7 +165,7 @@ enum SelfTests {
             mergingInto: TrackInfo(),
             lastTimestamp: esperado
         )
-        if case .update(_, let ts) = repetido {
+        if case .update(_, let ts, _) = repetido {
             expect(ts == nil, "timestamp repetido não deveria ser sinalizado")
         } else {
             expect(false, "esperava update para timestamp repetido")
@@ -192,11 +195,40 @@ enum SelfTests {
             mergingInto: TrackInfo(),
             lastTimestamp: nil
         )
-        guard case .update(let track, _) = outcome else {
+        guard case .update(let track, _, _) = outcome else {
             expect(false, "esperava update")
             return
         }
         expect(track.elapsedTime == nil, "elapsedTime ausente não deveria virar zero")
+    }
+
+    /// TIDAL, Deezer e navegador publicam a posição de graça no stream. Ignorá-la e
+    /// estimar por timestamp é errar com o número certo na mão — e nos dois primeiros
+    /// é o que separa a barra correta da barra reiniciando a cada seek.
+    private static func parserSinalizaElapsedTimeNovo() {
+        let outcome = NowPlayingParser.parse(
+            line(#"{"diff":true,"payload":{"elapsedTime":42.5}}"#),
+            mergingInto: TrackInfo(),
+            lastTimestamp: nil
+        )
+        guard case .update(_, _, let novo) = outcome else {
+            expect(false, "linha com elapsedTime deveria virar update")
+            return
+        }
+        expect(novo == 42.5, "elapsedTime da linha deveria ser sinalizado")
+    }
+
+    private static func parserSemElapsedTimeNãoSinaliza() {
+        let outcome = NowPlayingParser.parse(
+            line(#"{"diff":true,"payload":{"title":"Faixa"}}"#),
+            mergingInto: TrackInfo(),
+            lastTimestamp: nil
+        )
+        guard case .update(_, _, let novo) = outcome else {
+            expect(false, "linha sem elapsedTime ainda é update")
+            return
+        }
+        expect(novo == nil, "sem elapsedTime não se inventa posição")
     }
 
     // MARK: - Grade de snap
@@ -283,6 +315,22 @@ enum SelfTests {
         expect(!player.capabilities.contains(.directedControl), "Amazon Music não é endereçável")
     }
 
+    /// O piso de um player com AppleScript não é só transporte: o que vem pelo
+    /// MediaRemote — o `elapsedTime` publicado — continua valendo se o usuário negar a
+    /// Automação e todo o resto cair.
+    private static func capacidadesNativasSobrevivemAoRebaixamento() {
+        for player in [AppleMusicPlayer(), SpotifyPlayer()] as [AppleScriptPlayer] {
+            expect(
+                player.unscriptedCapabilities.contains(.streamPosition),
+                "\(player.displayName): posição do stream não depende de Automação"
+            )
+            expect(
+                !player.unscriptedCapabilities.contains(.directedControl),
+                "\(player.displayName): endereçamento depende de Automação"
+            )
+        }
+    }
+
     private static func playerAppleMusicÉCompleto() {
         let player = AppleMusicPlayer()
         for capacidade in [
@@ -313,7 +361,10 @@ enum SelfTests {
     /// `docs/compatibilidade-players.md`, inclusive as ausências.
     private static func playersSemAppleScriptTêmSóOMedido() {
         let tidal = TidalPlayer()
-        expect(tidal.capabilities == [.fullTransport, .seek], "TIDAL: transporte inteiro e seek")
+        expect(
+            tidal.capabilities == [.fullTransport, .seek, .streamPosition],
+            "TIDAL: transporte inteiro, seek e posição do stream"
+        )
         expect(!tidal.capabilities.contains(.directedControl), "TIDAL não é endereçável")
 
         let deezer = DeezerPlayer()
@@ -325,6 +376,16 @@ enum SelfTests {
             bundleIdentifier: PlayerCatalog.chromeID, displayName: "Google Chrome"
         )
         expect(navegador.capabilities.contains(.seek), "navegador aceita seek")
+        expect(
+            !navegador.capabilities.contains(.streamPosition),
+            "o elapsedTime do navegador mente: fica em zero com o vídeo correndo"
+        )
+        expect(tidal.capabilities.contains(.streamPosition), "TIDAL publica posição confiável")
+        expect(deezer.capabilities.contains(.streamPosition), "Deezer publica posição contínua")
+        expect(
+            !AmazonMusicPlayer().capabilities.contains(.streamPosition),
+            "Amazon Music não publica elapsedTime"
+        )
         expect(!navegador.capabilities.contains(.nextTrack), "nextTrack não faz nada no navegador")
         expect(
             !navegador.capabilities.contains(.previousTrack),
