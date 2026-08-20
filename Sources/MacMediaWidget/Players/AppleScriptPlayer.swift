@@ -32,8 +32,8 @@ class AppleScriptPlayer: MediaRemotePlayer {
 
     override var capabilities: PlayerCapabilities {
         isAuthorizationDenied
-            ? PlayerCapabilities.transport
-            : PlayerCapabilities.transport.union(scriptedCapabilities)
+            ? PlayerCapabilities.fullTransport
+            : PlayerCapabilities.fullTransport.union(scriptedCapabilities)
     }
 
     // MARK: - Execução

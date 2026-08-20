@@ -102,6 +102,17 @@ enum MediaRemoteAdapter {
         run(["send", String(command.rawValue)])
     }
 
+    /// Move a posição da sessão ativa. O adapter espera **microssegundos**.
+    ///
+    /// Como todo comando daqui, vai para quem estiver com a sessão — e como todo
+    /// comando daqui, ser aceito não é ser obedecido: Amazon Music e Deezer engolem
+    /// este pedido sem mover nada (`docs/compatibilidade-players.md`). Por isso quem
+    /// chama precisa ter `.seek` nas capacidades, declarada só com evidência.
+    static func seek(to seconds: Double) {
+        let microseconds = Int64((max(seconds, 0) * 1_000_000).rounded())
+        run(["seek", String(microseconds)])
+    }
+
     /// Pergunta ao adapter se ele ainda consegue falar com o MediaRemote.
     ///
     /// É a checagem que distingue "nenhuma música tocando" de "o mecanismo do app parou

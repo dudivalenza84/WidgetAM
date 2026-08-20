@@ -195,8 +195,8 @@ final class AppMenuController: NSObject, NSMenuDelegate {
                 keyEquivalent: ""
             )
             entry.target = self
-            entry.representedObject = player.bundleIdentifier
-            entry.state = player.bundleIdentifier == preferredId ? .on : .off
+            entry.representedObject = player.catalogID
+            entry.state = player.catalogID == preferredId ? .on : .off
             if let icon = player.icon {
                 let sized = icon.copy() as! NSImage
                 sized.size = NSSize(width: 16, height: 16)

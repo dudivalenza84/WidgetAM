@@ -1,7 +1,7 @@
 # Matriz de compatibilidade por player
 
 Levantada com `scripts/testar-player.sh` em **2026-08-10 · #01**, em macOS 26.5.2 com
-`media-control` 0.7.6. Ampliada em **2026-08-20 · #02** (Spotify, TIDAL, Deezer e navegador).
+`media-control` 0.7.6. Ampliada em **2026-08-19 · #02** (Spotify, TIDAL, Deezer e navegador).
 
 Regra desta tabela: **só entra o que foi observado**. Não há célula preenchida por
 dedução, por documentação do fabricante ou por "o comando não deu erro". O motivo está em
@@ -97,7 +97,7 @@ caminhos independentes no caso do seek.
 
 ### Spotify (`com.spotify.client`)
 
-Levantado em **2026-08-20 · #02**, com conta logada e faixas completas (178–196 s).
+Levantado em **2026-08-19 · #02**, com conta logada e faixas completas (178–196 s).
 
 ```
 sessão MediaRemote     | verificado   | bundleIdentifier=com.spotify.client
@@ -130,7 +130,7 @@ sabe fazer, e o seek por dois caminhos independentes.
 
 ### TIDAL (`com.tidal.desktop`)
 
-Levantado em **2026-08-20 · #02**.
+Levantado em **2026-08-19 · #02**.
 
 ```
 sessão MediaRemote     | verificado   | bundleIdentifier=com.tidal.desktop
@@ -162,7 +162,7 @@ em vez de assumir zero.
 
 ### Deezer (`com.deezer.deezer-desktop`)
 
-Levantado em **2026-08-20 · #02**, com faixas completas (177–187 s).
+Levantado em **2026-08-19 · #02**, com faixas completas (177–187 s).
 
 ```
 sessão MediaRemote     | verificado   | bundleIdentifier=com.deezer.deezer-desktop
@@ -192,7 +192,7 @@ estar **pausados** — não basta estarem em segundo plano.
 
 ### Navegador — Google Chrome (`com.google.Chrome`)
 
-Levantado em **2026-08-20 · #02**, com vídeo do YouTube em playlist.
+Levantado em **2026-08-19 · #02**, com vídeo do YouTube em playlist.
 
 ```
 sessão MediaRemote     | verificado   | bundleIdentifier=com.google.Chrome

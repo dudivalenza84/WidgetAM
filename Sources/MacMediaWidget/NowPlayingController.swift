@@ -157,6 +157,26 @@ final class NowPlayingController: ObservableObject {
         return controlledPlayer.capabilities.contains(.directedControl) && controlledPlayer.isRunning
     }
 
+    /// Pular faixa exige, além de uma sessão onde atuar, que o app **obedeça** ao
+    /// comando. Não é redundância: o Deezer ignora o `previous` e o navegador ignora o
+    /// `next`, os dois sem erro nenhum (`docs/compatibilidade-players.md`). Botão que
+    /// não faz nada é pior que botão desligado — o usuário culpa o widget.
+    var canSkipNext: Bool {
+        canControlTransport && controlledPlayer.capabilities.contains(.nextTrack)
+    }
+
+    var canSkipPrevious: Bool {
+        canControlTransport && controlledPlayer.capabilities.contains(.previousTrack)
+    }
+
+    /// Por que pular está indisponível: pode ser a sessão (não há onde atuar) ou o
+    /// próprio app (não aceita o comando). São causas diferentes e a UI diz qual é.
+    func skipUnavailableReason(next: Bool) -> String? {
+        if next ? canSkipNext : canSkipPrevious { return nil }
+        if let reason = transportUnavailableReason { return reason }
+        return L10n.playerCommandUnsupported(controlledPlayer.displayName)
+    }
+
     /// Por que o transporte está indisponível, para a UI mostrar em vez de só apagar
     /// os botões.
     var transportUnavailableReason: String? {
@@ -384,12 +404,12 @@ final class NowPlayingController: ObservableObject {
     // MARK: - Comandos
 
     func next() {
-        guard canControlTransport else { return }
+        guard canSkipNext else { return }
         controlledPlayer.next()
     }
 
     func previous() {
-        guard canControlTransport else { return }
+        guard canSkipPrevious else { return }
         controlledPlayer.previous()
     }
 

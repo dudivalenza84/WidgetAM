@@ -44,6 +44,8 @@ enum SelfTests {
         playerAmazonMusicÉLimitado()
         playerAppleMusicÉCompleto()
         playerSpotifyTemCamadaAppleScript()
+        playersSemAppleScriptTêmSóOMedido()
+        atalhoDoYouTubeMusicNãoÉSessão()
         playerFonteDesconhecidaÉGenérica()
         playerSemSessãoNãoHáPlayer()
         playerRegistryMantémInstância()
@@ -275,7 +277,7 @@ enum SelfTests {
 
     private static func playerAmazonMusicÉLimitado() {
         let player = AmazonMusicPlayer()
-        expect(player.capabilities == .transport, "Amazon Music só tem transporte")
+        expect(player.capabilities == .fullTransport, "Amazon Music só tem transporte")
         expect(!player.capabilities.contains(.seek), "Amazon Music não tem seek")
         expect(!player.capabilities.contains(.appVolume), "Amazon Music não tem volume por-app")
         expect(!player.capabilities.contains(.directedControl), "Amazon Music não é endereçável")
@@ -306,10 +308,54 @@ enum SelfTests {
         }
     }
 
+    /// Electron e navegador não expõem AppleScript de mídia: sobra o que o MediaRemote
+    /// dá — e nem isso vem inteiro. Cada linha aqui corresponde a uma medição de
+    /// `docs/compatibilidade-players.md`, inclusive as ausências.
+    private static func playersSemAppleScriptTêmSóOMedido() {
+        let tidal = TidalPlayer()
+        expect(tidal.capabilities == [.fullTransport, .seek], "TIDAL: transporte inteiro e seek")
+        expect(!tidal.capabilities.contains(.directedControl), "TIDAL não é endereçável")
+
+        let deezer = DeezerPlayer()
+        expect(deezer.capabilities.contains(.nextTrack), "Deezer pula para a próxima")
+        expect(!deezer.capabilities.contains(.previousTrack), "Deezer ignora o previous")
+        expect(!deezer.capabilities.contains(.seek), "Deezer ignora o seek, como o Amazon Music")
+
+        let navegador = BrowserPlayer(
+            bundleIdentifier: PlayerCatalog.chromeID, displayName: "Google Chrome"
+        )
+        expect(navegador.capabilities.contains(.seek), "navegador aceita seek")
+        expect(!navegador.capabilities.contains(.nextTrack), "nextTrack não faz nada no navegador")
+        expect(
+            !navegador.capabilities.contains(.previousTrack),
+            "previousTrack rebobina em vez de trocar de mídia"
+        )
+    }
+
+    /// O atalho existe no catálogo, é escolhível pelo id sintético e fica fora de
+    /// `appEntries` — ele não é sessão de Now Playing, quem toca é o navegador.
+    private static func atalhoDoYouTubeMusicNãoÉSessão() {
+        let atalho = PlayerCatalog.entry(for: PlayerCatalog.youTubeMusicID)
+        expect(atalho != nil, "YouTube Music deveria estar no catálogo")
+        expect(
+            !PlayerCatalog.appEntries.contains { $0.id == PlayerCatalog.youTubeMusicID },
+            "YouTube Music não pode identificar sessão"
+        )
+        // O `bundleIdentifier` é o do PWA (de onde saem ícone e abertura); a chave de
+        // escolha e de visibilidade é o id do catálogo. Trocar um pelo outro deixa a
+        // preferência apontando para fora do catálogo.
+        let player = PlayerRegistry.shared.player(for: PlayerCatalog.youTubeMusicID)
+        expect(player?.catalogID == PlayerCatalog.youTubeMusicID, "atalho se identifica pelo id do catálogo")
+        expect(
+            player?.bundleIdentifier != PlayerCatalog.youTubeMusicID,
+            "o bundle id do atalho é o do app que abre, não o id sintético"
+        )
+    }
+
     private static func playerFonteDesconhecidaÉGenérica() {
         let player = PlayerRegistry.shared.player(for: "com.exemplo.player.inexistente")
         expect(player != nil, "fonte desconhecida deveria ter player genérico")
-        expect(player?.capabilities == .transport, "player genérico só faz transporte")
+        expect(player?.capabilities == .fullTransport, "player genérico só faz transporte")
     }
 
     private static func playerSemSessãoNãoHáPlayer() {
@@ -330,6 +376,10 @@ enum SelfTests {
         expect(ids.contains(AmazonMusicPlayer.bundleID), "catálogo deveria ter Amazon Music")
         expect(ids.contains(AppleMusicPlayer.bundleID), "catálogo deveria ter Apple Music")
         expect(ids.contains(SpotifyPlayer.bundleID), "catálogo deveria ter Spotify")
+        expect(ids.contains(TidalPlayer.bundleID), "catálogo deveria ter TIDAL")
+        expect(ids.contains(DeezerPlayer.bundleID), "catálogo deveria ter Deezer")
+        expect(ids.contains(PlayerCatalog.chromeID), "catálogo deveria ter o Chrome")
+        expect(ids.contains(PlayerCatalog.youTubeMusicID), "catálogo deveria ter YouTube Music")
         expect(Set(ids).count == ids.count, "catálogo não pode ter id repetido")
     }
 
@@ -370,7 +420,7 @@ enum SelfTests {
         let alvo = AppleMusicPlayer.bundleID
         let antes = settings.isHidden(alvo)
         settings.setHidden(true, for: alvo)
-        let ids = PlayerRegistry.shared.selectablePlayers().map(\.bundleIdentifier)
+        let ids = PlayerRegistry.shared.selectablePlayers().map(\.catalogID)
         expect(!ids.contains(alvo), "app oculto não aparece na lista de escolha")
         settings.setHidden(antes, for: alvo)
     }

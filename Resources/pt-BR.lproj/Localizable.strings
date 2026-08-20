@@ -13,6 +13,7 @@
 "%@ is not installed" = "O %@ não está instalado";
 "%@ is closed" = "O %@ está fechado";
 "%@ is not playing" = "O %@ não está tocando";
+"%@ does not accept this command" = "O %@ não aceita este comando";
 
 /* Volume */
 "System volume" = "Volume do sistema";

@@ -13,6 +13,7 @@ struct MenuTransportView: View {
                 symbol: "backward.fill",
                 label: L10n.previousTrack
             ) { nowPlaying.previous() }
+                .disabled(!nowPlaying.canSkipPrevious)
 
             TransportButton(
                 symbol: nowPlaying.track.isPlaying ? "pause.fill" : "play.fill",
@@ -23,6 +24,7 @@ struct MenuTransportView: View {
                 symbol: "forward.fill",
                 label: L10n.nextTrack
             ) { nowPlaying.next() }
+                .disabled(!nowPlaying.canSkipNext)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 3)

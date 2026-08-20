@@ -40,6 +40,21 @@ struct PlayerCatalogEntry {
 /// sessão.
 @MainActor
 enum PlayerCatalog {
+    /// Id sintético: o YouTube Music não tem bundle id próprio de sessão — quem toca é
+    /// o navegador (`DECISOES.md · 2026-08-19 · #01`).
+    static let youTubeMusicID = "service.youtube.music"
+
+    /// Bundle id do PWA do YouTube Music instalado pelo Chrome. Serve só para abrir —
+    /// a sessão de Now Playing sai como o navegador de qualquer forma.
+    private static let youTubeMusicPWA = "com.google.Chrome.app.cinhimbnkkaeohfgghhklpknlkffjgod"
+
+    private static let youTubeMusicURL = URL(string: "https://music.youtube.com")!
+
+    /// Bundle id do Chrome. É o navegador medido em `docs/compatibilidade-players.md`;
+    /// o Safari fica fora do catálogo até ser medido, e enquanto isso cai no
+    /// `MediaRemotePlayer` genérico, como qualquer fonte que ninguém previu.
+    static let chromeID = "com.google.Chrome"
+
     static var entries: [PlayerCatalogEntry] {
         [
             PlayerCatalogEntry(
@@ -64,6 +79,41 @@ enum PlayerCatalog {
                 kind: .app,
                 installURL: SpotifyPlayer.installURL,
                 make: { SpotifyPlayer() }
+            ),
+            PlayerCatalogEntry(
+                id: TidalPlayer.bundleID,
+                displayName: "TIDAL",
+                kind: .app,
+                installURL: TidalPlayer.installURL,
+                make: { TidalPlayer() }
+            ),
+            PlayerCatalogEntry(
+                id: DeezerPlayer.bundleID,
+                displayName: "Deezer",
+                kind: .app,
+                installURL: DeezerPlayer.installURL,
+                make: { DeezerPlayer() }
+            ),
+            PlayerCatalogEntry(
+                id: chromeID,
+                displayName: "Google Chrome",
+                kind: .app,
+                installURL: URL(string: "https://www.google.com/chrome/"),
+                make: { BrowserPlayer(bundleIdentifier: chromeID, displayName: "Google Chrome") }
+            ),
+            PlayerCatalogEntry(
+                id: youTubeMusicID,
+                displayName: "YouTube Music",
+                kind: .shortcut(.appElseURL(bundleID: youTubeMusicPWA, url: youTubeMusicURL)),
+                installURL: nil,
+                make: {
+                    BrowserPlayer(
+                        bundleIdentifier: youTubeMusicPWA,
+                        displayName: "YouTube Music",
+                        catalogID: youTubeMusicID,
+                        serviceURL: youTubeMusicURL
+                    )
+                }
             ),
         ]
     }

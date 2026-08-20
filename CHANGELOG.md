@@ -3,7 +3,7 @@
 Formato semver: MINOR por release cronológica, PATCH para hotfix.
 Entradas novas vão no topo.
 
-## [1.16.0] — 2026-08-20 · #02 — Visibilidade por app e o gate de evidência dos players
+## [1.16.0] — 2026-08-19 · #02 — Visibilidade por app e o gate de evidência dos players
 
 **Novo: você escolhe quais apps o widget controla.** Nas Preferências, a seção
 **Apps controlados** lista o catálogo e também todo app que já apareceu tocando, cada um

@@ -280,22 +280,23 @@ struct ContentView: View {
     /// centros ficam a ~42pt um do outro, como no espaçamento de 26 sobre os
     /// glifos nus de antes.
     private var controls: some View {
-        // Prev/next só existem sobre uma sessão viva; o play não, porque é ele que
-        // abre o player e cria a sessão. Desabilitar em vez de mandar às cegas evita
-        // que o comando global caia no app errado.
-        let canTransport = nowPlaying.canControlTransport
-        let reason = nowPlaying.transportUnavailableReason ?? ""
+        // Prev/next só existem sobre uma sessão viva **e** num app que obedeça ao
+        // comando; o play não depende de sessão, porque é ele que abre o player e a
+        // cria. Desabilitar em vez de mandar às cegas evita tanto o comando global
+        // caindo no app errado quanto o botão que o app engole em silêncio.
+        let previousReason = nowPlaying.skipUnavailableReason(next: false)
+        let nextReason = nowPlaying.skipUnavailableReason(next: true)
 
         return HStack(spacing: 14) {
             button("backward.fill", size: 15) { nowPlaying.previous() }
-                .disabled(!canTransport)
-                .help(reason)
+                .disabled(previousReason != nil)
+                .help(previousReason ?? "")
             button(track.isPlaying ? "pause.fill" : "play.fill", size: 18) {
                 nowPlaying.playPause()
             }
             button("forward.fill", size: 15) { nowPlaying.next() }
-                .disabled(!canTransport)
-                .help(reason)
+                .disabled(nextReason != nil)
+                .help(nextReason ?? "")
         }
         .foregroundStyle(.primary)
         .nonDraggableWindowArea()

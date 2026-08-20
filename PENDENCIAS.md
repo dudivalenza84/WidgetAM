@@ -12,10 +12,10 @@ Migração para `PENDENCIAS_CONCLUIDAS.md` só por pedido explícito.
   seek do Spotify (posicionar a 5 s do fim) e a leitura do bundle id que a sessão do PWA
   do YouTube Music publica. Nenhuma capacidade entra no código antes disso. Roteiro
   completo em `docs/plano-players-adicionais.md` — `2026-08-19 · #01` · **feito em
-  `2026-08-20 · #02`**: matriz completa em `docs/compatibilidade-players.md`
+  `2026-08-19 · #02`**: matriz completa em `docs/compatibilidade-players.md`
 
 - [ ] **Implantar os players adicionais** seguindo `docs/plano-players-adicionais.md`.
-  **Tarefas 0, 1, 5, 6, 7 e 8 feitas em `2026-08-20 · #02`.** Faltam a **2**
+  **Tarefas 0, 1, 5, 6, 7 e 8 feitas em `2026-08-19 · #02`.** Faltam a **2**
   (`SpotifyPlayer`), a **3** (TIDAL, Deezer, navegador e o atalho do YouTube Music), a
   **4** (âncora por `elapsedTime`) e a **9** (bundle, teste manual e documentação).
   Fecha o critério de saída da Fase 1 do ROADMAP, que exigia o Spotify — `2026-08-19 · #01`
@@ -25,27 +25,27 @@ Migração para `PENDENCIAS_CONCLUIDAS.md` só por pedido explícito.
   antes da evidência existir; `docs/compatibilidade-players.md` agora contradiz o plano em
   pontos concretos — Deezer sem seek e sem `previous`, navegador sem `next` e com
   `previous` que rebobina. Na dúvida entre os dois documentos, **manda a matriz**
-  — `2026-08-20 · #02`
+  — `2026-08-19 · #02`
 
 - [ ] **`scripts/testar-player.sh` produz falso negativo em três situações**, todas
-  encontradas em `2026-08-20 · #02` só porque o resultado foi conferido à mão:
+  encontradas em `2026-08-19 · #02` só porque o resultado foi conferido à mão:
   (a) testa shuffle/repeat com o vocabulário do Apple Music (`shuffle enabled`, `song
   repeat`) e reporta *não existe* com `syntax error (-2740)` no Spotify, que usa
   `shuffling`/`repeating`; (b) compara volume por igualdade exata, e o Spotify quantiza
   em `n-1`; (c) julga o efeito lendo o payload do Now Playing, que **mente no navegador**
   (reportou play/pause quebrado com o vídeo pausado de verdade). Corrigir os três e, para
-  navegador, observar a página via `execute javascript` — `2026-08-20 · #02`
+  navegador, observar a página via `execute javascript` — `2026-08-19 · #02`
 
 - [ ] **A interação de app oculto com o modo fixo não tem teste automatizado.** A
   correção em `95eb583` (oculto não derruba comando endereçado) foi verificada por
   leitura: `NowPlayingController.track` é `private(set)` e vem do stream real, então não
   há como montar "sessão X tocando, oculta, modo fixo" no `SelfTests` sem expor um setter
-  só para teste. Decidir se vale a infraestrutura — `2026-08-20 · #02`
+  só para teste. Decidir se vale a infraestrutura — `2026-08-19 · #02`
 
 - [ ] **Testar ao vivo a visibilidade por app** (1.16.0): desmarcar um app e conferir que
   ele some do submenu "Trocar app"; com ele tocando, ver o card mostrar "X está tocando ·
   oculto" e o botão "Mostrar este app" devolver; conferir que o preferido fica esmaecido e
-  que "Esquecer apps descobertos" limpa a lista — `2026-08-20 · #02`
+  que "Esquecer apps descobertos" limpa a lista — `2026-08-19 · #02`
 
 - [ ] **PWA do YouTube Music não abre:** o `app_mode_loader` executa e sai sem deixar
   processo (provável descasamento do shim com o Chrome 151). Conserto é reinstalar pelo
@@ -88,7 +88,7 @@ Migração para `PENDENCIAS_CONCLUIDAS.md` só por pedido explícito.
   `fechar-sessao.sh` — hoje o encerramento só roda `swift build`, então uma chave de
   tradução quebrada ou uma asserção falhando passariam batido — `2026-08-10 · #01`
 - [ ] Registrar no `README.md`/`ROADMAP` que o widget passou a ter visibilidade por app,
-  quando a Fase 1 fechar (a Tarefa 9 do plano cobre isso) — `2026-08-20 · #02`
+  quando a Fase 1 fechar (a Tarefa 9 do plano cobre isso) — `2026-08-19 · #02`
 
 ## Baixa
 

@@ -35,6 +35,9 @@ enum L10n {
     static func playerNotPlaying(_ name: String) -> String {
         String(localized: "\(name) is not playing")
     }
+    static func playerCommandUnsupported(_ name: String) -> String {
+        String(localized: "\(name) does not accept this command")
+    }
 
     // MARK: - Fonte oculta
 

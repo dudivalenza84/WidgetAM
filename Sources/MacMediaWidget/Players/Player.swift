@@ -16,8 +16,16 @@ struct PlayerCapabilities: OptionSet, Sendable {
     let rawValue: Int
     init(rawValue: Int) { self.rawValue = rawValue }
 
-    /// play, pause, próxima, anterior.
+    /// play e pause.
     static let transport = PlayerCapabilities(rawValue: 1 << 0)
+    /// Pula para a faixa seguinte. Separado de `.transport` porque **não** vem junto:
+    /// no navegador o `nextTrack` do MediaRemote não faz nada, com o vídeo seguindo em
+    /// frente como se nada tivesse sido pedido (`docs/compatibilidade-players.md`).
+    static let nextTrack = PlayerCapabilities(rawValue: 1 << 6)
+    /// Volta para a faixa anterior. Também separado: o Deezer ignora o comando (nem
+    /// troca de faixa nem reinicia a atual) e o navegador **rebobina** a mídia em vez
+    /// de trocar — nos dois casos o botão seria decorativo.
+    static let previousTrack = PlayerCapabilities(rawValue: 1 << 7)
     /// Sabe dizer a posição real da faixa, em vez de estimá-la localmente.
     static let realPosition = PlayerCapabilities(rawValue: 1 << 1)
     /// Aceita mover a posição da faixa.
@@ -32,6 +40,11 @@ struct PlayerCapabilities: OptionSet, Sendable {
     /// destinatário** — atua sobre a sessão ativa, seja ela qual for. Só quem tem
     /// AppleScript pode ser endereçado diretamente.
     static let directedControl = PlayerCapabilities(rawValue: 1 << 5)
+
+    /// Transporte completo: play/pause mais as duas trocas de faixa. É o que se espera
+    /// de um player qualquer, e o que o MediaRemote oferece por padrão — quem foi
+    /// medido faltando alguma peça declara o conjunto na mão, sem este atalho.
+    static let fullTransport: PlayerCapabilities = [.transport, .nextTrack, .previousTrack]
 }
 
 /// Uma fonte de reprodução controlável pelo widget.
@@ -44,6 +57,12 @@ struct PlayerCapabilities: OptionSet, Sendable {
 protocol Player: AnyObject {
     /// Bundle id do app. É a chave que liga o payload do stream a esta implementação.
     var bundleIdentifier: String { get }
+    /// Chave desta fonte no `PlayerCatalog` — e, por tabela, em tudo que o usuário
+    /// escolhe ou oculta (`preferredPlayerBundleId`, lista de ocultos, menu "Trocar
+    /// app"). Igual ao `bundleIdentifier` em todo player que é um app de verdade; só
+    /// difere nos atalhos de serviço web, cujo id de catálogo é sintético porque o
+    /// serviço não tem processo próprio (`PlayerCatalog.youTubeMusicID`).
+    var catalogID: String { get }
     /// Nome para exibir na UI.
     var displayName: String { get }
     var capabilities: PlayerCapabilities { get }
@@ -79,6 +98,9 @@ extension Player {
     func position() async -> Double? { nil }
     func volume() async -> Double? { nil }
     func setVolume(_ value: Double) {}
+
+    /// Um app é sua própria entrada no catálogo; atalho sobrescreve.
+    var catalogID: String { bundleIdentifier }
 
     /// URL do app instalado, se houver.
     var applicationURL: URL? {

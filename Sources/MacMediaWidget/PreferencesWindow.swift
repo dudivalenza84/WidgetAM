@@ -82,9 +82,12 @@ struct PreferencesView: View {
     private var form: some View {
         Form {
             Section(L10n.sectionPlayer) {
+                // A chave é `catalogID`, não `bundleIdentifier`: um atalho de serviço
+                // web é escolhido pelo id do catálogo, e gravar o bundle do PWA aqui
+                // deixaria a preferência apontando para fora do catálogo.
                 Picker(L10n.preferredPlayer, selection: $settings.preferredPlayerBundleId) {
-                    ForEach(players, id: \.bundleIdentifier) { player in
-                        Text(player.displayName).tag(player.bundleIdentifier)
+                    ForEach(players, id: \.catalogID) { player in
+                        Text(player.displayName).tag(player.catalogID)
                     }
                 }
 
@@ -201,7 +204,7 @@ struct PreferencesView: View {
     }
 
     private var preferredPlayer: Player? {
-        players.first { $0.bundleIdentifier == settings.preferredPlayerBundleId }
+        players.first { $0.catalogID == settings.preferredPlayerBundleId }
     }
 
     private var preferredPlayerName: String {

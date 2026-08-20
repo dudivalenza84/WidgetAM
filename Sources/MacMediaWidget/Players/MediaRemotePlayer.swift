@@ -22,24 +22,53 @@ class MediaRemotePlayer: Player {
             ?? bundleIdentifier
     }
 
-    var capabilities: PlayerCapabilities { [.transport] }
+    var capabilities: PlayerCapabilities { .fullTransport }
 
-    /// Declarada aqui, e não só como default do protocolo, para que subclasses possam
-    /// sobrescrevê-la: implementação em extension de protocolo é despachada
+    /// Declaradas aqui, e não só como default do protocolo, para que subclasses possam
+    /// sobrescrevê-las: implementação em extension de protocolo é despachada
     /// estaticamente e `override` não a alcançaria.
     var installURL: URL? { nil }
+    var catalogID: String { bundleIdentifier }
 
     func playPause() { MediaRemoteAdapter.send(.togglePlayPause) }
     func play() { MediaRemoteAdapter.send(.play) }
     func next() { MediaRemoteAdapter.send(.nextTrack) }
     func previous() { MediaRemoteAdapter.send(.previousTrack) }
 
-    // Os quatro abaixo são no-op aqui — o MediaRemote não dá posição nem volume — mas
+    /// O adapter aceita posicionamento, e em alguns apps ele **funciona de verdade**
+    /// (TIDAL e navegador, medidos por observação — não pelo código de retorno, que o
+    /// Amazon Music devolve alegremente sem fazer nada). Quem chama já consultou
+    /// `.seek`, então mandar aqui é seguro: nos apps sem a capacidade este método
+    /// nunca é alcançado.
+    ///
+    /// Vale só quando o player **é** a sessão de Now Playing: o comando do MediaRemote
+    /// não tem destinatário. `NowPlayingController.canControlTransport` garante isso
+    /// antes de chegar aqui.
+    func seek(to seconds: Double) {
+        MediaRemoteAdapter.seek(to: seconds)
+    }
+
+    // Os três abaixo são no-op aqui — o MediaRemote não dá posição nem volume — mas
     // precisam existir na classe, e não apenas como default do protocolo, para que as
     // subclasses com AppleScript consigam sobrescrevê-los. Implementação em extension
     // de protocolo é despachada estaticamente.
-    func seek(to seconds: Double) {}
     func position() async -> Double? { nil }
     func volume() async -> Double? { nil }
     func setVolume(_ value: Double) {}
+
+    /// Declarado aqui pelo mesmo motivo dos anteriores: `launch()` mora numa extension
+    /// de `Player`, despachada estaticamente, e o `BrowserPlayer` precisa sobrescrevê-lo
+    /// para abrir a URL do serviço quando não há app instalado.
+    @discardableResult
+    func launch() -> Bool {
+        guard !DebugFlags.simulatesMissingApp, let url = applicationURL else {
+            NSLog("MacMediaWidget: \(displayName) não encontrado (\(bundleIdentifier))")
+            promptInstall()
+            return false
+        }
+        let config = NSWorkspace.OpenConfiguration()
+        config.activates = true
+        NSWorkspace.shared.openApplication(at: url, configuration: config)
+        return true
+    }
 }

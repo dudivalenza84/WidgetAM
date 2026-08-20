@@ -3,7 +3,76 @@
 Decisões com efeito além da sessão em que foram tomadas (ADR-lite). Entradas novas
 vão no topo. O que está aqui não se rediscute sem motivo novo.
 
-## 2026-08-20 · #02 — O observador de um teste de capacidade tem que ser do domínio do player, não do MediaRemote
+## 2026-08-20 · #01 — Transporte deixa de ser um bloco só: `next` e `previous` viram capacidades separadas
+
+**Contexto.** `PlayerCapabilities.transport` significava "play, pause, próxima, anterior"
+— um pacote indivisível, presumido para qualquer fonte. A bateria de medição de
+`2026-08-19 · #02` derrubou a premissa em dois lugares: o **Deezer ignora `previous`**
+(com a faixa em 42,8 s o comando não trocou de faixa nem reiniciou a atual — passou em
+branco) e o **navegador ignora `next`** (o vídeo seguiu correndo, `t=110` → `t=114`),
+além de `previous` rebobinar a mídia atual em vez de trocar.
+
+**Decisão.** `.transport` passa a significar só **play/pause**, e existem
+`.nextTrack` e `.previousTrack` separadas, mais o atalho `.fullTransport` para quem tem
+as três. Quem foi medido faltando uma peça declara o conjunto na mão. A UI (widget e
+menu) desabilita o botão correspondente e explica por quê — "O Deezer não aceita este
+comando" — em vez de mostrar um botão que o app engole em silêncio.
+
+**Alternativa descartada.** Manter o bloco único e deixar o botão morto. É a mesma
+mentira que a capacidade `.seek` existe para impedir: quando o app ignora o comando, quem
+leva a culpa é o widget, e não há como o usuário descobrir a diferença.
+
+## 2026-08-20 · #01 — O seek do MediaRemote entra como caminho real, com a capacidade decidindo caso a caso
+
+**Contexto.** O widget só sabia fazer seek por AppleScript, então TIDAL e navegador —
+que não têm dicionário — ficariam com a barra travada em leitura. Mas os dois **obedecem**
+ao posicionamento do MediaRemote, provado por observação: no TIDAL a faixa de 30 s
+posicionada em 25,99 s terminou 5 s depois; no navegador o `currentTime` do `<video>` foi
+para 45 s. Amazon Music e Deezer, no mesmo teste, ignoram.
+
+**Decisão.** `MediaRemotePlayer.seek(to:)` passa a mandar `seek <microssegundos>` ao
+adapter, e a capacidade `.seek` continua sendo declarada só por quem foi medido
+obedecendo. O comando não tem destinatário, então vale apenas enquanto o player **for** a
+sessão de Now Playing — `canControlTransport` já garante isso antes da chamada.
+
+**Alternativa descartada.** Deixar o seek exclusivo da camada AppleScript. Custaria a
+barra arrastável em dois dos quatro players novos, sem ganho de segurança: a proteção
+contra o "aceita e ignora" está na capacidade, não no canal.
+
+## 2026-08-20 · #01 — Atalho de serviço web se identifica por `catalogID`, não pelo bundle id
+
+**Contexto.** O YouTube Music entra no catálogo como atalho, com id sintético
+(`service.youtube.music`), mas o `Player` que o representa precisa carregar o bundle id do
+PWA — é dele que saem ícone, caminho de instalação e abertura. Os dois pontos onde o
+usuário escolhe um player (o menu "Trocar app" e o seletor de preferido) gravavam
+`player.bundleIdentifier`, o que salvaria o bundle do PWA como preferido: uma chave que
+não existe no catálogo, e que portanto não casa com nada — nem com a lista de ocultos,
+nem com a nota de "abre no navegador".
+
+**Decisão.** `Player` ganha `catalogID`, igual ao `bundleIdentifier` em todo app de
+verdade e sintético só nos atalhos. Tudo que o usuário escolhe ou oculta passa a usar
+`catalogID`; o `bundleIdentifier` continua sendo o que casa com a sessão do MediaRemote.
+
+**Alternativa descartada.** Dar ao atalho o id sintético como `bundleIdentifier`. Ele
+perderia ícone e caminho de abertura, porque `applicationURL` e `icon` moram numa
+extension de protocolo (despacho estático) e não dá para sobrescrevê-las por baixo do
+existencial `Player`.
+
+## 2026-08-20 · #01 — Safari fica fora do catálogo até ser medido
+
+**Contexto.** A Tarefa 3 do plano previa Chrome e Safari como entradas do catálogo, com o
+mesmo `BrowserPlayer`. Só o Chrome foi medido; o perfil dele (play/pause e seek sim,
+`next`/`previous` não) é comportamento do par navegador+página, não uma constante do
+canal.
+
+**Decisão.** Só o Chrome entra. Sem entrada no catálogo, o Safari continua caindo no
+`MediaRemotePlayer` genérico, exatamente como hoje — nenhuma regressão — e o usuário ainda
+pode ocultá-lo pela lista de fontes descobertas. Medir o Safari está em `PENDENCIAS.md`.
+
+**Alternativa descartada.** Copiar o perfil do Chrome para o Safari. Seria a primeira
+capacidade declarada por dedução no projeto, contra a regra que originou a matriz.
+
+## 2026-08-19 · #02 — O observador de um teste de capacidade tem que ser do domínio do player, não do MediaRemote
 
 **Contexto.** A regra do projeto era "comando aceito sem erro não é comando funcionando",
 nascida do Amazon Music, que aceita o seek e o ignora. O `scripts/testar-player.sh` a
@@ -26,7 +95,7 @@ controle de aba de navegador, que funciona.
 payload de fonte não confiável são igualmente inválidos. Três células desta sessão teriam
 entrado erradas sem isso.
 
-## 2026-08-20 · #02 — Ocultar um app não pode derrubar comando endereçado
+## 2026-08-19 · #02 — Ocultar um app não pode derrubar comando endereçado
 
 **Contexto.** O plano da Tarefa 7 mandava `canControlTransport` retornar `false` sempre
 que a sessão ativa fosse de um app oculto. No modo fixo com um player endereçável
