@@ -23,49 +23,10 @@ final class AppleMusicPlayer: AppleScriptPlayer {
         [.realPosition, .seek, .appVolume, .shuffleRepeat, .directedControl]
     }
 
-    /// Publica `elapsedTime` no stream, então a barra fica certa mesmo se o usuário
-    /// negar a Automação e todo o resto cair.
-    override var unscriptedCapabilities: PlayerCapabilities { [.fullTransport, .streamPosition] }
-
-    // MARK: - Transporte
-    //
-    // Vai por AppleScript, e não pelo MediaRemote, porque é endereçado: funciona mesmo
-    // quando outro app é a sessão de Now Playing. É o que dá sentido ao modo fixo.
-
-    override func playPause() { fireIfRunning("playpause") }
-
-    /// O único comando que pode abrir o app: é o play do widget assumindo o player.
-    override func play() { fire("play") }
-
-    override func next() { fireIfRunning("next track") }
-
-    /// `previous track` vai para a faixa anterior; `back track` voltaria ao início da
-    /// atual. O botão do widget é "anterior", então é `previous track`.
-    override func previous() { fireIfRunning("previous track") }
-
-    // MARK: - Posição
-
-    override func position() async -> Double? {
-        guard isRunning else { return nil }
-        return AppleScriptRunner.number(from: await tell("get player position"))
-    }
-
-    override func seek(to seconds: Double) {
-        fireIfRunning("set player position to \(Int(seconds.rounded()))")
-    }
-
-    // MARK: - Volume por-app
-
-    override func volume() async -> Double? {
-        guard isRunning else { return nil }
-        guard let level = AppleScriptRunner.number(from: await tell("get sound volume")) else {
-            return nil
-        }
-        return level / 100
-    }
-
-    override func setVolume(_ value: Double) {
-        let level = Int((min(max(value, 0), 1) * 100).rounded())
-        fireIfRunning("set sound volume to \(level)")
+    /// O que sobrevive à Automação negada: publica `elapsedTime` no stream e obedece ao
+    /// seek do MediaRemote (pedido 209,1 s → `elapsedTime=209.062`), então barra correta
+    /// e barra arrastável continuam de pé mesmo sem permissão nenhuma.
+    override var unscriptedCapabilities: PlayerCapabilities {
+        [.fullTransport, .streamPosition, .seek]
     }
 }

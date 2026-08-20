@@ -80,4 +80,95 @@ class AppleScriptPlayer: MediaRemotePlayer {
         guard isRunning else { return }
         fire(body)
     }
+
+    #if DEBUG
+    /// Força o estado de Automação negada. Existe porque o caminho real — revogar a
+    /// permissão em Ajustes do Sistema — não é reproduzível num teste, e o rebaixamento
+    /// é justamente onde o transporte já ficou mudo uma vez (`PENDENCIAS.md`,
+    /// `2026-08-20 · #01`).
+    func simulateAuthorizationDenied() { isAuthorizationDenied = true }
+    #endif
+
+    // MARK: - Vocabulário da iTunes suite
+    //
+    // Music.app e Spotify falam o mesmo dicionário nestes verbos — `playpause`, `play`,
+    // `next track`, `previous track`, `player position` e `sound volume`. Por isso a
+    // implementação mora aqui, e a subclasse declara apenas as capacidades que foram
+    // medidas. Um player com vocabulário diferente sobrescreve o que precisar.
+    //
+    // Chamar um destes num player sem a capacidade correspondente é inócuo: quem chama
+    // consultou `capabilities` antes.
+
+    var playPauseCommand: String { "playpause" }
+    var playCommand: String { "play" }
+    var nextCommand: String { "next track" }
+    /// `previous track` vai para a faixa anterior; `back track` voltaria ao início da
+    /// atual. O botão do widget é "anterior", então é `previous track`.
+    var previousCommand: String { "previous track" }
+
+    // MARK: - Transporte
+    //
+    // Vai por AppleScript, e não pelo MediaRemote, porque é **endereçado**: funciona
+    // mesmo quando outro app é a sessão de Now Playing. É o que dá sentido ao modo fixo.
+    //
+    // Com a Automação negada, cai para o MediaRemote — que é o que `capabilities` passa
+    // a prometer nesse estado. Sem este fallback o comando viraria no-op silencioso:
+    // `tell` retorna sem executar nada assim que `isAuthorizationDenied` vira `true`, e
+    // o widget ficaria oferecendo botões de transporte que não fazem coisa alguma.
+
+    override func playPause() {
+        guard !isAuthorizationDenied else { return super.playPause() }
+        fireIfRunning(playPauseCommand)
+    }
+
+    /// O único comando que pode abrir o app: é o play do widget assumindo o player.
+    override func play() {
+        guard !isAuthorizationDenied else { return super.play() }
+        fire(playCommand)
+    }
+
+    override func next() {
+        guard !isAuthorizationDenied else { return super.next() }
+        fireIfRunning(nextCommand)
+    }
+
+    override func previous() {
+        guard !isAuthorizationDenied else { return super.previous() }
+        fireIfRunning(previousCommand)
+    }
+
+    // MARK: - Posição
+
+    override func position() async -> Double? {
+        guard isRunning else { return nil }
+        return AppleScriptRunner.number(from: await tell("get player position"))
+    }
+
+    /// Aqui o fallback vale mais do que no transporte: Apple Music e Spotify **também**
+    /// obedecem ao seek do MediaRemote (medido nos dois), então a barra continua
+    /// arrastável mesmo sem Automação — desde que o player seja a sessão ativa, que é o
+    /// que `NowPlayingController.canControlTransport` garante antes de chamar.
+    override func seek(to seconds: Double) {
+        guard !isAuthorizationDenied else { return super.seek(to: seconds) }
+        fireIfRunning("set player position to \(Int(seconds.rounded()))")
+    }
+
+    // MARK: - Volume por-app (0–100 no dicionário, 0…1 no protocolo)
+    //
+    // Sem fallback: o MediaRemote não tem volume, e `capabilities` já deixa de prometer
+    // `.appVolume` quando a Automação cai — o `VolumeRouter` passa a mexer no volume de
+    // saída do sistema por conta própria.
+
+    override func volume() async -> Double? {
+        guard isRunning else { return nil }
+        guard let level = AppleScriptRunner.number(from: await tell("get sound volume")) else {
+            return nil
+        }
+        return level / 100
+    }
+
+    override func setVolume(_ value: Double) {
+        let level = Int((min(max(value, 0), 1) * 100).rounded())
+        fireIfRunning("set sound volume to \(level)")
+    }
 }

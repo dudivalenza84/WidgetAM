@@ -47,6 +47,7 @@ enum SelfTests {
         playerAppleMusicÉCompleto()
         playerSpotifyTemCamadaAppleScript()
         capacidadesNativasSobrevivemAoRebaixamento()
+        automaçãoNegadaCaiNoMediaRemote()
         playersSemAppleScriptTêmSóOMedido()
         atalhoDoYouTubeMusicNãoÉSessão()
         playerFonteDesconhecidaÉGenérica()
@@ -329,6 +330,39 @@ enum SelfTests {
                 "\(player.displayName): endereçamento depende de Automação"
             )
         }
+    }
+
+    /// O bug de `2026-08-20 · #01`: com a Automação negada, `capabilities` voltava a
+    /// prometer transporte, mas os comandos continuavam saindo por `tell` — que retorna
+    /// sem executar nada nesse estado. O widget oferecia botões mudos.
+    private static func automaçãoNegadaCaiNoMediaRemote() {
+        var recebidos: [MediaCommand] = []
+        MediaRemoteAdapter.commandSink = { recebidos.append($0) }
+        defer { MediaRemoteAdapter.commandSink = nil }
+
+        // Instância nova (não a do registry): o rebaixamento é permanente por instância.
+        let autorizado = SpotifyPlayer()
+        autorizado.playPause()
+        autorizado.next()
+        expect(recebidos.isEmpty, "com Automação, o comando é endereçado por AppleScript")
+
+        let negado = SpotifyPlayer()
+        negado.simulateAuthorizationDenied()
+        negado.playPause()
+        negado.next()
+        negado.previous()
+        expect(
+            recebidos == [.togglePlayPause, .nextTrack, .previousTrack],
+            "sem Automação, o transporte cai no MediaRemote — veio \(recebidos)"
+        )
+        expect(
+            !negado.capabilities.contains(.directedControl),
+            "sem Automação não há como endereçar o app"
+        )
+        expect(
+            negado.capabilities.contains(.streamPosition),
+            "a posição publicada no stream não depende de Automação"
+        )
     }
 
     private static func playerAppleMusicÉCompleto() {

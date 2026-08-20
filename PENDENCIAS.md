@@ -26,13 +26,15 @@ Migração para `PENDENCIAS_CONCLUIDAS.md` só por pedido explícito.
   `previous` que rebobina. Na dúvida entre os dois documentos, **manda a matriz**
   — `2026-08-19 · #02`
 
-- [ ] **Player com AppleScript perde o transporte quando a Automação é negada.**
+- [x] **Player com AppleScript perde o transporte quando a Automação é negada.**
   `AppleScriptPlayer.capabilities` rebaixa para `unscriptedCapabilities` — que inclui
   `fullTransport` —, mas `playPause`/`next`/`previous` do Apple Music e do Spotify
   continuam indo por `tell`, e `tell` retorna cedo assim que `isAuthorizationDenied` vira
   `true`. Resultado: o widget promete transporte e não faz nada. A correção é cair no
   MediaRemote (`super`) nesse estado. Bug **anterior** a esta sessão, encontrado ao mexer
-  no rebaixamento — `2026-08-20 · #01`
+  no rebaixamento — `2026-08-20 · #01` · **corrigido em `2026-08-20 · #01`**: o
+  vocabulário da iTunes suite subiu para `AppleScriptPlayer`, com fallback para o
+  MediaRemote em transporte e seek, coberto por teste (`MediaRemoteAdapter.commandSink`)
 
 - [ ] **O navegador mente em `playing` e o card acredita.** Houve leitura de
   `playing=True` com o vídeo comprovadamente pausado

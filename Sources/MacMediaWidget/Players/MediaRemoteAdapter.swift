@@ -98,7 +98,20 @@ enum MediaRemoteAdapter {
         }
     }
 
+    #if DEBUG
+    /// Desvia os comandos em vez de executá-los, para o `SelfTests` observar **para onde**
+    /// um player roteia sem disparar subprocesso nem mexer na música de quem está
+    /// rodando o teste. `nil` fora do teste, que é o caminho normal.
+    nonisolated(unsafe) static var commandSink: ((MediaCommand) -> Void)?
+    #endif
+
     static func send(_ command: MediaCommand) {
+        #if DEBUG
+        if let commandSink {
+            commandSink(command)
+            return
+        }
+        #endif
         run(["send", String(command.rawValue)])
     }
 
