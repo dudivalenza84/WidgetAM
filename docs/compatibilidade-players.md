@@ -1,7 +1,7 @@
 # Matriz de compatibilidade por player
 
 Levantada com `scripts/testar-player.sh` em **2026-08-10 · #01**, em macOS 26.5.2 com
-`media-control` 0.7.6. Ampliada em **2026-08-20 · #02** (Spotify, TIDAL e Deezer) e nas colunas novas.
+`media-control` 0.7.6. Ampliada em **2026-08-20 · #02** (Spotify, TIDAL, Deezer e navegador).
 
 Regra desta tabela: **só entra o que foi observado**. Não há célula preenchida por
 dedução, por documentação do fabricante ou por "o comando não deu erro". O motivo está em
@@ -16,11 +16,11 @@ Legenda: **sim** = observado funcionando · **não** = observado não funcionand
 | Capacidade | Amazon Music | Apple Music | Spotify | TIDAL | Deezer | Navegador |
 |---|---|---|---|---|---|---|
 | Aparece como sessão de Now Playing | sim | sim | sim | sim | sim | sim |
-| Metadados (título, artista, capa) | sim | sim | sim | sim | sim | ? |
-| `elapsedTime` no stream | **não** | sim | sim¹ | sim¹ | **sim⁴** | ? |
-| play/pause (MediaRemote) | sim | sim | sim | sim | sim | ? |
-| next/previous (MediaRemote) | sim | sim | sim | sim | next sim / **prev não** | ? |
-| seek (MediaRemote) | **não** | sim | **sim** | **sim** | **não** | ? |
+| Metadados (título, artista, capa) | sim | sim | sim | sim | sim | sim⁵ |
+| `elapsedTime` no stream | **não** | sim | sim¹ | sim¹ | **sim⁴** | **não confiável⁶** |
+| play/pause (MediaRemote) | sim | sim | sim | sim | sim | **sim** |
+| next/previous (MediaRemote) | sim | sim | sim | sim | next sim / **prev não** | **next não / prev rebobina⁷** |
+| seek (MediaRemote) | **não** | sim | **sim** | **sim** | **não** | **sim** |
 | AppleScript | **ausente** | sim | **sim** | **ausente** | **ausente** | **ausente** |
 | posição real (AppleScript) | ausente | sim | sim | ausente | ausente | ausente |
 | seek (AppleScript) | ausente | sim | sim | ausente | ausente | ausente |
@@ -43,6 +43,18 @@ dentro de ±1 do pedido.
 ³ São `shuffling` e `repeating`, **não** `shuffle enabled` / `song repeat` do Apple Music.
 O `scripts/testar-player.sh` usa o vocabulário do Apple Music e por isso reportou *não
 existe* com `syntax error (-2740)` — falso negativo do roteiro, não ausência no app.
+
+⁵ Do navegador vêm o título do vídeo e o canal no lugar do artista (`'Sabrina Carpenter
+- Espresso'` / `'SabrinaCarpenterVEVO'`).
+
+⁶ **O payload do navegador mente, e não só na posição.** `elapsedTime` fica em `0` com o
+`timestamp` congelado enquanto o vídeo corre, e só se atualiza depois de um seek. O campo
+`playing` também erra: houve leitura de `playing=True` com o vídeo comprovadamente
+pausado. Consequência direta: para fonte de navegador, o widget não pode confiar em
+`playing` nem em `elapsedTime` — e ancorar a posição no campo mostraria sempre zero.
+
+⁷ `nextTrack` não tem efeito. `previousTrack` **rebobina o vídeo atual** para o início
+(`t=114` → `t=0`) em vez de trocar de mídia.
 
 ⁴ O Deezer é o **único do lote cujo `elapsedTime` é um relógio de verdade**: avança
 sozinho, com o `timestamp` acompanhando. Cinco leituras em 12 s sem tocar em nada:
@@ -177,6 +189,43 @@ saiu inválida porque o Spotify ficou tocando em paralelo e **tomou a sessão no
 teste**. Os comandos do MediaRemote foram para ele, e o `next` do "Deezer" apareceu
 levando a uma faixa que era do Spotify. Antes de medir um player, os outros precisam
 estar **pausados** — não basta estarem em segundo plano.
+
+### Navegador — Google Chrome (`com.google.Chrome`)
+
+Levantado em **2026-08-20 · #02**, com vídeo do YouTube em playlist.
+
+```
+sessão MediaRemote     | verificado   | bundleIdentifier=com.google.Chrome
+metadados              | verificado   | title='Sabrina Carpenter - Espresso', artist='SabrinaCarpenterVEVO'
+togglePlayPause (MR)   | verificado   | tocando -> PAUSADO -> tocando (observado na página)
+pause / play (MR)      | verificado   | PAUSADO / tocando (observado na página)
+seek (MediaRemote)     | verificado   | pedido 45 s -> currentTime do <video> em 45 s
+nextTrack (MR)         | NÃO FUNCIONA | vídeo seguiu correndo, t=110 -> t=114
+previousTrack (MR)     | rebobina     | t=114 -> t=0, mesmo vídeo
+AppleScript (mídia)    | não existe   | sem dicionário de reprodução
+```
+
+**Como esta linha foi medida, e por que o roteiro padrão não serve aqui.** O
+`scripts/testar-player.sh` julga o efeito lendo o payload do Now Playing, e no navegador
+o payload mente (nota ⁶). Rodado assim, ele reportou `play/pause | NÃO FUNCIONA |
+playing continuou True` — quando o vídeo tinha pausado de verdade. A medição válida usou
+a **própria página como observador**, lendo `document.querySelector('video')` por
+AppleScript:
+
+```
+tell application "Google Chrome" to tell tab 1 of window 1 to execute javascript "..."
+```
+
+Duas armadilhas nesse caminho, ambas custaram medição: `active tab of window 1` pode não
+ser a aba que toca — uma aba vizinha com um `<video>` parado devolve `currentTime=0` para
+sempre, e a leitura parece um app quebrado. Varrer as abas e fixar a que tem vídeo
+resolve. E `execute javascript ... in tab t of window w` dá `-1723`; a forma que funciona
+é `tell tab t of window w to execute javascript`.
+
+**Isto também fecha a identidade de sessão de serviço web** (§3 do desenho, e o Passo 5
+da Tarefa 0): o YouTube tocando publica sob `com.google.Chrome`, com o título do vídeo.
+Não há bundle id do serviço nem do PWA — quem reproduz é o processo do navegador. O
+YouTube Music continua modelado como `.shortcut`, não como `.app`.
 
 ## Comportamento do sistema (não é de nenhum player específico)
 

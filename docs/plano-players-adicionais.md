@@ -43,7 +43,7 @@ registrada em `docs/compatibilidade-players.md`).
 **Arquivos:**
 - Modificar: `docs/compatibilidade-players.md` (colunas novas)
 
-- [ ] **Passo 1: Spotify — bateria completa**
+- [x] **Passo 1: Spotify — bateria completa**
 
 ```bash
 scripts/testar-player.sh com.spotify.client Spotify 2>&1 | tee /tmp/teste-spotify.log
@@ -52,13 +52,13 @@ scripts/testar-player.sh com.spotify.client Spotify 2>&1 | tee /tmp/teste-spotif
 Aceitar o prompt de Automação quando o macOS pedir ("MacMediaWidget quer controlar
 Spotify"). É o único do lote que pode ganhar a camada AppleScript.
 
-- [ ] **Passo 2: Spotify — seek pelo teste observável**
+- [x] **Passo 2: Spotify — seek pelo teste observável**
 
 Com o Spotify tocando, posicionar a 5 s do fim da faixa e observar se ela termina e
 avança sozinha. Ler o código de retorno **não** serve — foi assim que o Amazon Music
 passou por funcional.
 
-- [ ] **Passo 3: TIDAL e Deezer**
+- [x] **Passo 3: TIDAL e Deezer**
 
 ```bash
 scripts/testar-player.sh com.tidal.desktop 2>&1 | tee /tmp/teste-tidal.log
@@ -68,7 +68,7 @@ scripts/testar-player.sh com.deezer.deezer-desktop 2>&1 | tee /tmp/teste-deezer.
 Anotar especialmente se `elapsedTime` **avança** com música tocando (no TIDAL o campo
 existe; falta saber se o valor anda). É o que decide a Tarefa 4.
 
-- [ ] **Passo 4: Navegador**
+- [x] **Passo 4: Navegador**
 
 Abrir um vídeo no Chrome, dar play **manualmente** (autoplay com som é bloqueado) e:
 
@@ -76,7 +76,7 @@ Abrir um vídeo no Chrome, dar play **manualmente** (autoplay com som é bloquea
 scripts/testar-player.sh com.google.Chrome 2>&1 | tee /tmp/teste-chrome.log
 ```
 
-- [ ] **Passo 5: Identidade do PWA do YouTube Music**
+- [x] **Passo 5: Identidade do PWA do YouTube Music**
 
 Reinstalar o PWA pelo Chrome (menu → Transmitir, salvar e compartilhar → Instalar página
 como app), abrir, dar play e ler:
@@ -89,7 +89,7 @@ Esperado, pelo mecanismo da §3 do desenho: `com.google.Chrome`. **Se vier o bun
 PWA**, o desenho está errado neste ponto — registrar em `DECISOES.md` e promover o
 YouTube Music a `kind: .app` antes de seguir.
 
-- [ ] **Passo 6: Preencher a matriz e commitar**
+- [x] **Passo 6: Preencher a matriz e commitar**
 
 Cada célula recebe *verificado (com evidência)*, *não funciona (com evidência)* ou
 *não existe*. Colar as linhas de evidência como nas seções já existentes.
