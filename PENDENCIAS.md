@@ -5,11 +5,24 @@ Migração para `PENDENCIAS_CONCLUIDAS.md` só por pedido explícito.
 
 ## Alta
 
-- [ ] **Fase 1 — fechar o critério de saída do ROADMAP:** instalar Spotify (e decidir
-  sobre o Deezer) e rodar `scripts/testar-player.sh com.spotify.client Spotify` para
-  preencher a coluna na matriz. A arquitetura já comporta: basta um `SpotifyPlayer`
-  espelhando o `AppleMusicPlayer`, com capacidades declaradas **só depois** do teste —
-  `2026-08-10 · #01`
+- [ ] **Tarefa 0 do plano — bateria de testes nos players (gate do desenvolvimento):**
+  rodar `scripts/testar-player.sh` em `com.spotify.client Spotify`, `com.tidal.desktop`,
+  `com.deezer.deezer-desktop` e `com.google.Chrome`, cada um com fila de **3+ faixas**
+  tocando (com uma faixa só, `next` dá falso negativo). Inclui o teste observável do
+  seek do Spotify (posicionar a 5 s do fim) e a leitura do bundle id que a sessão do PWA
+  do YouTube Music publica. Nenhuma capacidade entra no código antes disso. Roteiro
+  completo em `docs/plano-players-adicionais.md` — `2026-08-19 · #01`
+
+- [ ] **Implantar os players adicionais** seguindo `docs/plano-players-adicionais.md`
+  (Tarefas 1 a 9): catálogo, `SpotifyPlayer`, TIDAL/Deezer/navegador, âncora por
+  `elapsedTime`, visibilidade por app e a seção "Apps controlados" nas Preferências.
+  Fecha o critério de saída da Fase 1 do ROADMAP, que exigia o Spotify — os quatro apps
+  já estão instalados — `2026-08-19 · #01`
+
+- [ ] **PWA do YouTube Music não abre:** o `app_mode_loader` executa e sai sem deixar
+  processo (provável descasamento do shim com o Chrome 151). Conserto é reinstalar pelo
+  Chrome. **Não bloqueia o plano** — a entrada do catálogo usa `appElseURL` e cai na
+  página quando o PWA falha — `2026-08-19 · #01`
 
 - [ ] **Fase 2 — o que ainda exige olho humano ou hardware:** conferir a tradução
   pt-BR **na tela** (o texto do `pt-BR.lproj` foi revisado em arquivo em

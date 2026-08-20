@@ -3,6 +3,18 @@
 Formato semver: MINOR por release cronológica, PATCH para hotfix.
 Entradas novas vão no topo.
 
+## [Não lançado] — 2026-08-19 · #01 — Planejamento dos players adicionais
+
+Sessão de planejamento: **nenhuma mudança no app** — o binário segue na 1.15.0. A
+versão 1.16.0 fica reservada para a implementação.
+
+- Levantados Spotify, TIDAL, Deezer e YouTube Music por inspeção estática, sem enviar
+  comando a nenhum player. Só o Spotify tem dicionário AppleScript (teto igual ao do
+  Apple Music); TIDAL e Deezer são Electron e ficam no transporte.
+- Apurado que serviço web não pode ter identidade de sessão própria: o PWA do Chrome é
+  só um lançador, e o MediaRemote identifica a sessão pelo processo.
+- Desenho em `docs/players-adicionais.md` e plano em `docs/plano-players-adicionais.md`.
+
 ## [1.15.0] — 2026-08-13 · #01 — Menu com largura fixa e auto-fechamento
 
 - Menu (bandeja e contexto do widget): largura padronizada em 220 pt, independente

@@ -3,6 +3,50 @@
 Decisões com efeito além da sessão em que foram tomadas (ADR-lite). Entradas novas
 vão no topo. O que está aqui não se rediscute sem motivo novo.
 
+## 2026-08-19 · #01 — Serviço que roda dentro do navegador é atalho de lançamento, nunca identidade de sessão
+
+**Contexto:** ao planejar a entrada do YouTube Music, a ideia inicial era tratá-lo como
+app próprio, já que o PWA instalado tem bundle id (`com.google.Chrome.app.cinhim…`).
+Apurado nesta sessão: o `open` do PWA não deixa processo algum, nenhum processo do
+Chrome traz `--app-id`, e o shim `app_mode_loader` é apenas um lançador — quem reproduz
+o áudio é o processo do Chrome. Como o MediaRemote identifica a sessão pelo processo
+(o payload traz `processIdentifier` ao lado de `bundleIdentifier`), a sessão sai como
+`com.google.Chrome` com ou sem PWA funcionando.
+
+**Escolha:** o catálogo de players distingue `kind: .app` (identifica sessão **e** é
+lançável) de `kind: .shortcut` (só lançável). YouTube Music é `.shortcut`, aberto por
+`appElseURL(PWA, music.youtube.com)`, e a fonte continua rotulada como o navegador.
+
+**Alternativa descartada:** rotular a sessão do Chrome como "YouTube Music" quando a
+entrada estivesse ativa. Descartada porque qualquer outra aba com áudio — um vídeo,
+uma videochamada, outro serviço — receberia o mesmo rótulo. O widget mostra o que sabe;
+inventar identidade é a mesma classe de erro do seek do Amazon Music, que "funcionava"
+até alguém olhar o resultado.
+
+**Nota:** o PWA não abrir é defeito do shim (provável descasamento com o Chrome 151) e
+se conserta reinstalando pelo Chrome. Independe do widget, e consertá-lo não mudaria
+esta decisão.
+
+## 2026-08-19 · #01 — Visibilidade de player é lista de ocultos (blocklist), não de escolhidos
+
+**Contexto:** o dono do produto pediu checkboxes em Preferências para escolher quais
+apps o widget controla, e decidiu que a marcação afeta também a exibição — app
+desmarcado tocando é ignorado pelo widget.
+
+**Escolha:** `AppSettings.hiddenPlayerIDs: Set<String>`, com padrão vazio. A UI é a
+lista de checkboxes pedida; o que persiste é o complemento.
+
+**Alternativa descartada:** guardar a lista dos marcados. Descartada porque o catálogo
+não é fechado — o widget controla qualquer fonte que publique Now Playing, inclusive
+apps que o código nunca viu. Com allowlist, todo player novo nasceria desmarcado e,
+por causa do filtro de exibição, o widget ficaria mudo diante dele: regressão direta
+sobre o comportamento atual. Com blocklist, o padrão é tudo visível e o checkbox só
+subtrai.
+
+**Consequência:** o player preferido nunca pode ser ocultado (checkbox travado) e
+ocultar todos é bloqueado — assim o modo fixo apontando para app oculto deixa de ser
+um estado alcançável.
+
 ## 2026-08-13 · #01 — View custom em `NSMenuItem` precisa de largura explícita na `View`, não só no `NSHostingView.frame`
 
 **Contexto:** a linha de status do menu (nome da faixa) ganhou largura fixa e
