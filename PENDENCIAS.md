@@ -14,18 +14,49 @@ Migração para `PENDENCIAS_CONCLUIDAS.md` só por pedido explícito.
   completo em `docs/plano-players-adicionais.md` — `2026-08-19 · #01` · **feito em
   `2026-08-19 · #02`**: matriz completa em `docs/compatibilidade-players.md`
 
-- [ ] **Implantar os players adicionais** seguindo `docs/plano-players-adicionais.md`.
-  **Tarefas 0, 1, 5, 6, 7 e 8 feitas em `2026-08-19 · #02`.** Faltam a **2**
-  (`SpotifyPlayer`), a **3** (TIDAL, Deezer, navegador e o atalho do YouTube Music), a
-  **4** (âncora por `elapsedTime`) e a **9** (bundle, teste manual e documentação).
-  Fecha o critério de saída da Fase 1 do ROADMAP, que exigia o Spotify — `2026-08-19 · #01`
+- [x] **Implantar os players adicionais** seguindo `docs/plano-players-adicionais.md`.
+  Tarefas 0, 1, 5, 6, 7 e 8 em `2026-08-19 · #02`; **2, 3, 4 e 9 em `2026-08-20 · #01`**
+  (1.17.0). Fecha o critério de saída da Fase 1 do ROADMAP, que exigia o Spotify
+  — `2026-08-19 · #01`
 
-- [ ] **As capacidades das Tarefas 2 e 3 vêm da matriz, não do plano.** O
+- [x] **As capacidades das Tarefas 2 e 3 vêm da matriz, não do plano.** O
   `docs/plano-players-adicionais.md` escreveu as `PlayerCapabilities` a partir do `.sdef`,
   antes da evidência existir; `docs/compatibilidade-players.md` agora contradiz o plano em
   pontos concretos — Deezer sem seek e sem `previous`, navegador sem `next` e com
   `previous` que rebobina. Na dúvida entre os dois documentos, **manda a matriz**
   — `2026-08-19 · #02`
+
+- [ ] **Player com AppleScript perde o transporte quando a Automação é negada.**
+  `AppleScriptPlayer.capabilities` rebaixa para `unscriptedCapabilities` — que inclui
+  `fullTransport` —, mas `playPause`/`next`/`previous` do Apple Music e do Spotify
+  continuam indo por `tell`, e `tell` retorna cedo assim que `isAuthorizationDenied` vira
+  `true`. Resultado: o widget promete transporte e não faz nada. A correção é cair no
+  MediaRemote (`super`) nesse estado. Bug **anterior** a esta sessão, encontrado ao mexer
+  no rebaixamento — `2026-08-20 · #01`
+
+- [ ] **O navegador mente em `playing` e o card acredita.** Houve leitura de
+  `playing=True` com o vídeo comprovadamente pausado
+  (`docs/compatibilidade-players.md`, nota ⁶). A posição já está protegida — o
+  `BrowserPlayer` não declara `.streamPosition` —, mas o ícone play/pause e a estimativa
+  da barra ainda seguem o campo. Precisa de um caminho equivalente ao da posição: não
+  confiar em `playing` para fonte de navegador — `2026-08-20 · #01`
+
+- [ ] **Medir o Safari** e decidir se ele entra no catálogo. Hoje fica de fora de
+  propósito (`DECISOES.md · 2026-08-20 · #01`) e cai no `MediaRemotePlayer` genérico.
+  Roteiro na última tabela de `docs/compatibilidade-players.md` — `2026-08-20 · #01`
+
+- [ ] **Testar ao vivo a 1.17.0** (`dist/`, ainda não instalada): trocar de app pelo menu
+  para cada player; barra acompanhando a música no TIDAL e no Deezer; seek arrastando a
+  barra no Spotify e no TIDAL; botão "anterior" desligado no Deezer e "próxima" desligado
+  no Chrome, com o motivo no tooltip; YouTube Music abrindo o PWA ou o site — roteiro
+  completo na Tarefa 9 de `docs/plano-players-adicionais.md` — `2026-08-20 · #01`
+
+- [ ] **Atalho de serviço web escolhido como preferido no modo fixo fica sem sessão.**
+  O YouTube Music é `catalogID` sintético e `bundleIdentifier` do PWA; quem toca é o
+  Chrome, então `isControlledPlayerActive` nunca casa e o card fica vazio com o transporte
+  desligado. É consequência conhecida de o serviço não ter processo próprio
+  (`DECISOES.md · 2026-08-19 · #01`), mas a UI não explica isso ao usuário — decidir entre
+  avisar na tela ou impedir a escolha — `2026-08-20 · #01`
 
 - [ ] **`scripts/testar-player.sh` produz falso negativo em três situações**, todas
   encontradas em `2026-08-19 · #02` só porque o resultado foi conferido à mão:
@@ -87,8 +118,10 @@ Migração para `PENDENCIAS_CONCLUIDAS.md` só por pedido explícito.
 - [ ] Avaliar se `verificar-traducoes.sh` e `--run-tests` devem entrar no
   `fechar-sessao.sh` — hoje o encerramento só roda `swift build`, então uma chave de
   tradução quebrada ou uma asserção falhando passariam batido — `2026-08-10 · #01`
-- [ ] Registrar no `README.md`/`ROADMAP` que o widget passou a ter visibilidade por app,
-  quando a Fase 1 fechar (a Tarefa 9 do plano cobre isso) — `2026-08-19 · #02`
+- [x] Registrar no `README.md`/`ROADMAP` que o widget passou a ter visibilidade por app,
+  quando a Fase 1 fechar (a Tarefa 9 do plano cobre isso) — `2026-08-19 · #02` · feito em
+  `2026-08-20 · #01`: o README ganhou a tabela de apps suportados e a nota de "Apps
+  controlados" (não há `ROADMAP.md` no repositório)
 
 ## Baixa
 

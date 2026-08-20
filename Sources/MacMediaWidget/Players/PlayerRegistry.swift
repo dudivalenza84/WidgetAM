@@ -26,15 +26,6 @@ final class PlayerRegistry {
         return player
     }
 
-    /// Players do catálogo que identificam sessão, instalados nesta máquina.
-    /// Base do seletor de player preferido e da detecção de onboarding.
-    func installedCatalogPlayers() -> [Player] {
-        PlayerCatalog.appEntries
-            .compactMap { player(for: $0.id) }
-            .filter(\.isInstalled)
-            .sorted { $0.displayName.localizedCaseInsensitiveCompare($1.displayName) == .orderedAscending }
-    }
-
     /// Entradas do catálogo que o usuário pode escolher agora: visíveis, instaladas,
     /// incluindo os atalhos (que não identificam sessão mas são lançáveis).
     ///

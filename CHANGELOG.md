@@ -3,6 +3,27 @@
 Formato semver: MINOR por release cronológica, PATCH para hotfix.
 Entradas novas vão no topo.
 
+## [1.17.0] — 2026-08-20 · #01 — Spotify, TIDAL, Deezer, navegador e posição vinda do stream
+
+Fecha a Fase 1: o critério de saída exigia o Spotify, que agora entra com a camada
+AppleScript completa. Todas as capacidades declaradas vêm da matriz de evidência —
+onde ela contradisse o plano, mandou a matriz.
+
+- **Spotify** com camada AppleScript: posição real, seek pelos dois caminhos, volume do
+  app, `shuffling`/`repeating` e comando endereçado (funciona com outro app tocando).
+- **TIDAL**, **Deezer** e **Google Chrome** entram no catálogo, cada um com o que foi
+  medido — nem um comando a mais. **YouTube Music** entra como atalho: abre o PWA ou o
+  site, e quem aparece como fonte é o navegador.
+- **`next` e `previous` viram capacidades separadas de play/pause.** O Deezer ignora o
+  "anterior" e o navegador ignora o "próxima": agora o botão aparece desligado, com o
+  motivo, em vez de ser engolido em silêncio.
+- **Seek pelo MediaRemote** passa a ser um caminho de verdade, o que dá barra arrastável
+  no TIDAL e no navegador — apps sem AppleScript nenhum.
+- **A posição publicada pela fonte vira a âncora da barra** onde ela é confiável (Apple
+  Music, Spotify, TIDAL e Deezer). No navegador não: lá o campo mente, fica em zero com o
+  vídeo correndo.
+- Safari fica fora do catálogo até ser medido — continua controlável como fonte genérica.
+
 ## [1.16.0] — 2026-08-19 · #02 — Visibilidade por app e o gate de evidência dos players
 
 **Novo: você escolhe quais apps o widget controla.** Nas Preferências, a seção

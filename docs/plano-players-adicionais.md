@@ -4,6 +4,13 @@
 > Steps usam checkbox (`- [ ]`) para acompanhamento. Nenhuma tarefa começa antes da
 > Tarefa 0.
 
+> **Executado.** Tarefas 0, 1, 5, 6, 7 e 8 em `2026-08-19 · #02`; **2, 3, 4 e 9 em
+> `2026-08-20 · #01`** (1.17.0). Onde este plano contradisse
+> `docs/compatibilidade-players.md`, valeu a matriz — as divergências e o que elas
+> produziram estão em `DECISOES.md · 2026-08-20 · #01`: transporte deixou de ser um bloco
+> só (`nextTrack`/`previousTrack`), o seek do MediaRemote virou caminho real, o atalho
+> ganhou `catalogID` e o Safari ficou fora do catálogo por não ter sido medido.
+
 **Objetivo:** dar suporte a Spotify, TIDAL, Deezer e YouTube Music, e deixar o usuário
 escolher por checkbox quais apps o widget controla e exibe.
 

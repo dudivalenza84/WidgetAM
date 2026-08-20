@@ -227,6 +227,24 @@ da Tarefa 0): o YouTube tocando publica sob `com.google.Chrome`, com o título d
 Não há bundle id do serviço nem do PWA — quem reproduz é o processo do navegador. O
 YouTube Music continua modelado como `.shortcut`, não como `.app`.
 
+## Como esta tabela virou código
+
+As capacidades declaradas em `Sources/MacMediaWidget/Players/` saíram daqui, célula por
+célula, em `2026-08-20 · #01`. Onde a matriz contradisse `docs/plano-players-adicionais.md`
+— escrito a partir do `.sdef`, antes da evidência —, mandou a matriz:
+
+| Player | Declarado no código |
+|---|---|
+| Amazon Music | `fullTransport` |
+| Apple Music | `fullTransport`, `streamPosition`, `realPosition`, `seek`, `appVolume`, `shuffleRepeat`, `directedControl` |
+| Spotify | idem Apple Music |
+| TIDAL | `fullTransport`, `seek`, `streamPosition` |
+| Deezer | `transport`, `nextTrack`, `streamPosition` — sem `previousTrack`, sem `seek` |
+| Google Chrome | `transport`, `seek` — sem `nextTrack`, sem `previousTrack`, sem `streamPosition` |
+
+`fullTransport` é o pacote play/pause + próxima + anterior. Ele deixou de ser indivisível
+justamente por causa das duas últimas linhas (`DECISOES.md · 2026-08-20 · #01`).
+
 ## Comportamento do sistema (não é de nenhum player específico)
 
 Observado no mesmo levantamento, e vale para o desenho do widget:
@@ -257,6 +275,7 @@ com pelo menos três faixas**.
 |---|---|---|
 | **Spotify** | não instalado nesta máquina | instalar, tocar uma playlist com 3+ faixas, `scripts/testar-player.sh com.spotify.client Spotify` |
 | **Deezer** | não instalado; e falta decidir se entra no escopo | idem, com o bundle id do app |
+| **Safari** | não medido: o perfil do Chrome é comportamento do par navegador+página, e copiá-lo seria a primeira capacidade declarada por dedução no projeto. Por isso ele ficou fora do catálogo (`DECISOES.md · 2026-08-20 · #01`) | tocar um vídeo com som no Safari e repetir a bateria do navegador, observando a página em vez do payload |
 | **Navegador (YouTube)** | exige **um clique humano**: autoplay com som é bloqueado, e mandar a página tocar por Apple Events depende da opção "Permitir JavaScript de Apple Events" do menu Desenvolvedor, ligada à mão — inviável como recurso de produto e desnecessário como teste | abrir o vídeo, dar play manualmente e rodar `scripts/testar-player.sh com.google.Chrome` |
 | **Gesto de arraste na barra do widget** | a mecânica do seek está verificada por AppleScript, mas o gesto em si é interação de UI | com o Apple Music tocando, arrastar a barra do widget e conferir se a faixa pula |
 | **Automação negada** | exige revogar a permissão em Ajustes do Sistema | negar em Privacidade › Automação e conferir se o widget rebaixa as capacidades (barra deixa de ser arrastável, volume volta ao do sistema) |
