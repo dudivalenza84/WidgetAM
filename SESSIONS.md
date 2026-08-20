@@ -5,6 +5,7 @@ Formato: `YYYY-MM-DD · #NN — <objetivo> — <status>` → [arquivo](docs/sess
 
 ## 2026-08-19
 
+- 2026-08-19 · #02 — Visibilidade por app + gate de evidência dos players — concluída → [arquivo](docs/sessions/2026-08-19-02.md)
 - 2026-08-19 · #01 — Planejamento: Spotify, TIDAL, Deezer e YouTube Music + visibilidade por app — concluída → [arquivo](docs/sessions/2026-08-19-01.md)
 
 ## 2026-08-13

@@ -3,6 +3,46 @@
 Decisões com efeito além da sessão em que foram tomadas (ADR-lite). Entradas novas
 vão no topo. O que está aqui não se rediscute sem motivo novo.
 
+## 2026-08-20 · #02 — O observador de um teste de capacidade tem que ser do domínio do player, não do MediaRemote
+
+**Contexto.** A regra do projeto era "comando aceito sem erro não é comando funcionando",
+nascida do Amazon Music, que aceita o seek e o ignora. O `scripts/testar-player.sh` a
+implementa lendo o **payload do Now Playing** depois de agir. Na bateria do navegador isso
+falhou pelo lado oposto: o comando funcionou e o payload mentiu. O roteiro reportou
+`play/pause | NÃO FUNCIONA | playing continuou True` com o vídeo comprovadamente pausado,
+lido em `document.querySelector('video').paused`.
+
+**Decisão.** Ler o payload do MediaRemote é válido só quando o payload daquele player já
+se provou confiável. Onde ele não é — navegador, hoje —, o observador tem que ser o
+domínio do player: a página via `execute javascript` no Chrome, o `player state` do
+AppleScript onde existe. Nenhuma célula da matriz entra com base num campo que aquele
+mesmo player já foi visto publicando errado.
+
+**Alternativa descartada:** confiar no payload e marcar o navegador como sem transporte.
+Seria registrar como limitação do app um defeito do instrumento — e o widget perderia
+controle de aba de navegador, que funciona.
+
+**Consequência.** Vale para os dois sentidos: um "funciona" e um "não funciona" lidos no
+payload de fonte não confiável são igualmente inválidos. Três células desta sessão teriam
+entrado erradas sem isso.
+
+## 2026-08-20 · #02 — Ocultar um app não pode derrubar comando endereçado
+
+**Contexto.** O plano da Tarefa 7 mandava `canControlTransport` retornar `false` sempre
+que a sessão ativa fosse de um app oculto. No modo fixo com um player endereçável
+escolhido (hoje Apple Music, amanhã Spotify), o comando **não vai** para a sessão ativa —
+vai por AppleScript para o app escolhido. Um app oculto tocando desligaria um transporte
+que continua perfeitamente funcional.
+
+**Decisão.** O filtro de visibilidade só se aplica quando a permissão de transporte viria
+da própria sessão ativa: `if isControlledPlayerActive { return !isActiveSourceHidden }`.
+Pelo mesmo motivo, `isActiveSourceHidden` é `false` no modo fixo quando o controlado não é
+a sessão — senão o card avisaria "X está tocando · oculto" sobre um app que ele nem
+estava exibindo.
+
+**Alternativa descartada:** seguir o plano ao pé da letra. Simples de escrever e errado no
+caso que o modo fixo existe para atender.
+
 ## 2026-08-19 · #01 — Serviço que roda dentro do navegador é atalho de lançamento, nunca identidade de sessão
 
 **Contexto:** ao planejar a entrada do YouTube Music, a ideia inicial era tratá-lo como

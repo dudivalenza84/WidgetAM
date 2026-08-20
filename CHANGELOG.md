@@ -3,6 +3,30 @@
 Formato semver: MINOR por release cronológica, PATCH para hotfix.
 Entradas novas vão no topo.
 
+## [1.16.0] — 2026-08-20 · #02 — Visibilidade por app e o gate de evidência dos players
+
+**Novo: você escolhe quais apps o widget controla.** Nas Preferências, a seção
+**Apps controlados** lista o catálogo e também todo app que já apareceu tocando, cada um
+com um checkbox. Desmarcar tira o app do menu "Trocar app" e faz o widget ignorar o que
+ele toca. O player preferido nunca pode ser ocultado, nem o último visível — não dá para
+esvaziar o menu e ficar sem caminho de volta.
+
+Com um app oculto tocando, o card não fica em branco: ele diz "X está tocando · oculto" e
+oferece **Mostrar este app**. Card vazio com música no ar é indistinguível de app quebrado.
+
+**Por dentro:** o `PlayerCatalog` passa a separar "o que o usuário pode escolher" de "quem
+controla esta sessão", que era o mesmo conjunto até o YouTube Music entrar no desenho.
+
+**Compatibilidade apurada.** Spotify, TIDAL, Deezer e navegador foram medidos contra os
+apps reais e estão em `docs/compatibilidade-players.md`. Ainda **não** há suporte a esses
+players no widget — a matriz é o insumo das próximas tarefas. Destaques: o Spotify aceita
+tudo, inclusive comando endereçado; o Deezer não tem seek nem faixa anterior; o navegador
+publica posição e estado de reprodução incorretos, e o widget vai precisar tratá-lo à parte.
+
+> A sessão anterior reservou a 1.16.0 para a implementação dos players adicionais. Ela
+> saiu antes, com a visibilidade por app, que é feature completa por si. Spotify, TIDAL,
+> Deezer e navegador vão para a MINOR seguinte.
+
 ## [Não lançado] — 2026-08-19 · #01 — Planejamento dos players adicionais
 
 Sessão de planejamento: **nenhuma mudança no app** — o binário segue na 1.15.0. A
