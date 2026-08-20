@@ -5,7 +5,7 @@ Formato: `YYYY-MM-DD · #NN — <objetivo> — <status>` → [arquivo](docs/sess
 
 ## 2026-08-20
 
-- 2026-08-20 · #01 — Players adicionais: Spotify, TIDAL, Deezer, navegador e âncora de posição — em-andamento → [arquivo](docs/sessions/2026-08-20-01.md)
+- 2026-08-20 · #01 — Players adicionais: Spotify, TIDAL, Deezer, navegador e âncora de posição — concluída → [arquivo](docs/sessions/2026-08-20-01.md)
 
 ## 2026-08-19
 
