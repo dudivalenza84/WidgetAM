@@ -46,6 +46,8 @@ enum SelfTests {
         playerFonteDesconhecidaÉGenérica()
         playerSemSessãoNãoHáPlayer()
         playerRegistryMantémInstância()
+        catálogoTemAsEntradasConhecidas()
+        catálogoSeparaAppDeAtalho()
 
         appleScriptDecimalComVírgula()
         appleScriptEntradaInválida()
@@ -301,6 +303,23 @@ enum SelfTests {
         let a = PlayerRegistry.shared.player(for: AppleMusicPlayer.bundleID)
         let b = PlayerRegistry.shared.player(for: AppleMusicPlayer.bundleID)
         expect(a === b, "registry deveria reaproveitar a instância")
+    }
+
+    private static func catálogoTemAsEntradasConhecidas() {
+        let ids = PlayerCatalog.entries.map(\.id)
+        expect(ids.contains(AmazonMusicPlayer.bundleID), "catálogo deveria ter Amazon Music")
+        expect(ids.contains(AppleMusicPlayer.bundleID), "catálogo deveria ter Apple Music")
+        expect(Set(ids).count == ids.count, "catálogo não pode ter id repetido")
+    }
+
+    /// Um atalho é lançável mas nunca identifica sessão — se ele entrasse em
+    /// `appEntries`, o widget passaria a procurar uma sessão que não existe.
+    private static func catálogoSeparaAppDeAtalho() {
+        for entrada in PlayerCatalog.appEntries {
+            if case .shortcut = entrada.kind {
+                expect(false, "atalho \(entrada.id) não pode estar em appEntries")
+            }
+        }
     }
 
     // MARK: - AppleScript

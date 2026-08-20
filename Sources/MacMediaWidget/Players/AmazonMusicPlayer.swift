@@ -19,7 +19,11 @@ final class AmazonMusicPlayer: MediaRemotePlayer {
 
     /// URL oficial de download do Amazon Music para desktop. A página
     /// `music.amazon.com/download` dava 404 (`2026-06-24 · #01`).
-    override var installURL: URL? {
+    ///
+    /// `static` para o `PlayerCatalog` referenciar a mesma constante sem instanciar o
+    /// player — e sem manter uma segunda cópia da URL.
+    nonisolated static let installURL: URL? =
         URL(string: "https://am.app.link/zb0Bk69BNub/?__branch_flow_type=qr_code")
-    }
+
+    override var installURL: URL? { Self.installURL }
 }

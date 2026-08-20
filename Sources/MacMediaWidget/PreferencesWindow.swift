@@ -40,7 +40,7 @@ struct PreferencesView: View {
     /// Players com implementação própria instalados nesta máquina. Fixado uma vez por
     /// abertura da janela: instalar um player com as preferências abertas é raro o
     /// bastante para não valer um observador do LaunchServices.
-    private let players = PlayerRegistry.shared.installedKnownPlayers()
+    private let players = PlayerRegistry.shared.installedCatalogPlayers()
 
     var body: some View {
         VStack(spacing: 0) {

@@ -116,7 +116,7 @@ usuário.
   `PlayerCatalogEntry`, `PlayerCatalogKind`, `LaunchTarget`.
 - Consome: `Player`, `AmazonMusicPlayer`, `AppleMusicPlayer` (já existentes).
 
-- [ ] **Passo 1: Escrever o teste que falha**
+- [x] **Passo 1: Escrever o teste que falha**
 
 Em `SelfTests.swift`, acrescentar à lista de chamadas em `run()` (logo depois de
 `playerRegistryMantémInstância()`):
@@ -147,7 +147,7 @@ E as funções, junto das outras de player:
     }
 ```
 
-- [ ] **Passo 2: Rodar e ver falhar**
+- [x] **Passo 2: Rodar e ver falhar**
 
 ```bash
 swift build 2>&1 | tail -20
@@ -155,7 +155,7 @@ swift build 2>&1 | tail -20
 
 Esperado: FALHA de compilação com `cannot find 'PlayerCatalog' in scope`.
 
-- [ ] **Passo 3: Criar o catálogo**
+- [x] **Passo 3: Criar o catálogo**
 
 `Sources/MacMediaWidget/Players/PlayerCatalog.swift`:
 
@@ -232,7 +232,7 @@ enum PlayerCatalog {
 }
 ```
 
-- [ ] **Passo 4: Fazer o registry consultar o catálogo**
+- [x] **Passo 4: Fazer o registry consultar o catálogo**
 
 Em `PlayerRegistry.swift`, trocar o dicionário `builders` pelo catálogo e substituir
 `installedKnownPlayers()` — que misturava os dois papéis:
@@ -259,7 +259,7 @@ Em `PlayerRegistry.swift`, trocar o dicionário `builders` pelo catálogo e subs
 Atualizar as duas chamadas de `installedKnownPlayers()` (`AppMenuController.swift:191`
 e `PreferencesWindow.swift:43`) para `installedCatalogPlayers()`.
 
-- [ ] **Passo 5: Verificar**
+- [x] **Passo 5: Verificar**
 
 ```bash
 swift build 2>&1 | tail -20 && swift run MacMediaWidget --run-tests
@@ -267,7 +267,7 @@ swift build 2>&1 | tail -20 && swift run MacMediaWidget --run-tests
 
 Esperado: build limpo e todas as verificações passando (as antigas **e** as duas novas).
 
-- [ ] **Passo 6: Commit**
+- [x] **Passo 6: Commit**
 
 ```bash
 git add Sources/MacMediaWidget/Players/ Sources/MacMediaWidget/SelfTests.swift \
