@@ -177,7 +177,9 @@ Em **Preferências… → Apps controlados**.
       com *"abre no navegador"*.
 - [ ] **Fonte descoberta:** tocar algo no **Safari** (que está fora do catálogo de
       propósito) → ele aparece na lista de apps controlados, abaixo dos conhecidos.
-- [ ] **"Esquecer apps descobertos"** limpa essa lista.
+- [ ] **"Esquecer apps descobertos"** limpa essa lista. O botão **só existe enquanto
+      houver alguma descoberta** — sem o item acima ele não aparece, e isso é o
+      comportamento correto, não uma falha.
 
 ---
 
