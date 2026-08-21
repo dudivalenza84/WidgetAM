@@ -58,31 +58,35 @@ Migração para `PENDENCIAS_CONCLUIDAS.md` só por pedido explícito.
   no Chrome, com o motivo no tooltip; YouTube Music abrindo o PWA ou o site — roteiro
   completo na Tarefa 9 de `docs/plano-players-adicionais.md` — `2026-08-20 · #01`
 
-- [ ] **Atalho de serviço web escolhido como preferido no modo fixo fica sem sessão.**
+- [x] **Atalho de serviço web escolhido como preferido no modo fixo fica sem sessão.**
   O YouTube Music é `catalogID` sintético e `bundleIdentifier` do PWA; quem toca é o
   Chrome, então `isControlledPlayerActive` nunca casa e o card fica vazio com o transporte
   desligado. É consequência conhecida de o serviço não ter processo próprio
   (`DECISOES.md · 2026-08-19 · #01`), mas a UI não explica isso ao usuário — decidir entre
-  avisar na tela ou impedir a escolha — `2026-08-20 · #01`
+  avisar na tela ou impedir a escolha — `2026-08-20 · #01` · **resolvido em
+  `2026-08-21 · #01` avisando**: impedir a escolha custaria a função legítima de o atalho
+  ser o que o play abre. O card e as Preferências passam a dizer "O YouTube Music toca
+  dentro do navegador — escolha o Google Chrome para controlá-lo", com teste
 
-- [ ] **`scripts/testar-player.sh` produz falso negativo em três situações**, todas
+- [x] **`scripts/testar-player.sh` produz falso negativo em três situações**, todas
   encontradas em `2026-08-19 · #02` só porque o resultado foi conferido à mão:
   (a) testa shuffle/repeat com o vocabulário do Apple Music (`shuffle enabled`, `song
   repeat`) e reporta *não existe* com `syntax error (-2740)` no Spotify, que usa
   `shuffling`/`repeating`; (b) compara volume por igualdade exata, e o Spotify quantiza
   em `n-1`; (c) julga o efeito lendo o payload do Now Playing, que **mente no navegador**
   (reportou play/pause quebrado com o vídeo pausado de verdade). Corrigir os três e, para
-  navegador, observar a página via `execute javascript` — `2026-08-19 · #02`
+  navegador, observar a página via `execute javascript` — `2026-08-19 · #02` ·
+  **corrigido em `2026-08-21 · #01`**: o observador virou trocável (payload ou a própria
+  página, escolhido pelo bundle id), shuffle/repeat tentam os dois vocabulários e o volume
+  aceita ±1. O script também passou a distinguir "rebobina" de "não funciona" no
+  `previous`, que era o caso do navegador
 
-- [ ] **A interação de app oculto com o modo fixo ainda não tem teste** — mas a
-  infraestrutura que faltava existe desde `2026-08-21 · #01`:
-  `NowPlayingController.simulateSession(bundleIdentifier:isPlaying:)`, em debug, monta a
-  sessão que o stream não deixava montar. Só falta escrever as asserções.
-  Registro original: **A interação de app oculto com o modo fixo não tem teste automatizado.** A
-  correção em `95eb583` (oculto não derruba comando endereçado) foi verificada por
-  leitura: `NowPlayingController.track` é `private(set)` e vem do stream real, então não
-  há como montar "sessão X tocando, oculta, modo fixo" no `SelfTests` sem expor um setter
-  só para teste. Decidir se vale a infraestrutura — `2026-08-19 · #02`
+- [x] **A interação de app oculto com o modo fixo não tinha teste automatizado.** A
+  correção em `95eb583` (oculto não derruba comando endereçado) tinha sido verificada só
+  por leitura, porque `NowPlayingController.track` vem do stream real e não havia como
+  montar "sessão X tocando, oculta, modo fixo" no `SelfTests` — `2026-08-19 · #02` ·
+  **feito em `2026-08-21 · #01`**: `simulateSession(bundleIdentifier:isPlaying:)` em debug
+  montou o estado, e os dois modos ganharam asserção
 
 - [x] **Testar ao vivo a visibilidade por app** (1.16.0): desmarcar um app e conferir que
   ele some do submenu "Trocar app"; com ele tocando, ver o card mostrar "X está tocando ·
@@ -90,15 +94,9 @@ Migração para `PENDENCIAS_CONCLUIDAS.md` só por pedido explícito.
   que "Esquecer apps descobertos" limpa a lista — `2026-08-19 · #02` · **feito em
   `2026-08-21 · #01`**, no bloco 03 do roteiro
 
-- [ ] **PWA do YouTube Music não abre:** o `app_mode_loader` executa e sai sem deixar
-  processo (provável descasamento do shim com o Chrome 151). Conserto é reinstalar pelo
-  Chrome. **Não bloqueia o plano** — a entrada do catálogo usa `appElseURL` e cai na
-  página quando o PWA falha — `2026-08-19 · #01`
-
-- [ ] **Fase 2 — multi-monitor de verdade.** As correções foram feitas por leitura de
-  código e testes sintéticos, e o roteiro de `2026-08-21 · #01` só cobre o caso quando há
-  um segundo monitor à mão. A tradução pt-BR **na tela** saiu desta pendência: foi
-  conferida no bloco 05 do mesmo roteiro — `2026-08-10 · #01`
+- [x] **Fase 2 — o que exigia olho humano ou hardware.** Tradução pt-BR conferida na
+  tela e **multi-monitor validado ao vivo** pelo usuário, os dois no roteiro de
+  `2026-08-21 · #01`. Fecha a pendência inteira — `2026-08-10 · #01`
 
 - [x] Testar manualmente o formato compacto (1×1) novo: troca ao vivo nas
   preferências, snap à grade nos dois formatos, seek/volume/transporte no layout

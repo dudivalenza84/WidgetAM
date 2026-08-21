@@ -205,6 +205,12 @@ final class NowPlayingController: ObservableObject {
     var transportUnavailableReason: String? {
         guard !canControlTransport else { return nil }
         let name = controlledPlayer.displayName
+        // Atalho de serviço web escolhido: ele nunca vai virar sessão, então "não está
+        // tocando" seria uma explicação que não leva a lugar nenhum. Dizer o que fazer
+        // é mais útil do que dizer o que falta.
+        if PlayerCatalog.isShortcut(controlledPlayer.catalogID) {
+            return L10n.playerRunsInBrowser(name, PlayerCatalog.browserDisplayName)
+        }
         if !controlledPlayer.isInstalled { return L10n.playerNotInstalled(name) }
         if !controlledPlayer.isRunning { return L10n.playerNotRunning(name) }
         return L10n.playerNotPlaying(name)

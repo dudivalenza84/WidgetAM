@@ -14,6 +14,8 @@
 "%@ is closed" = "O %@ está fechado";
 "%@ is not playing" = "O %@ não está tocando";
 "%@ does not accept this command" = "O %@ não aceita este comando";
+/* Duas interpolações distintas: serviço e navegador, na ordem em que aparecem. */
+"%@ plays inside the browser — choose %@ to control it" = "O %1$@ toca dentro do navegador — escolha o %2$@ para controlá-lo";
 
 /* Volume */
 "System volume" = "Volume do sistema";

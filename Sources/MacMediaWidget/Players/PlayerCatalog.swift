@@ -118,6 +118,12 @@ enum PlayerCatalog {
         ]
     }
 
+    /// Nome do navegador que o widget sabe controlar, para explicar ao usuário para
+    /// onde ir quando ele escolhe um serviço web.
+    static var browserDisplayName: String {
+        entry(for: chromeID)?.displayName ?? "Google Chrome"
+    }
+
     static func entry(for id: String) -> PlayerCatalogEntry? {
         entries.first { $0.id == id }
     }
@@ -139,6 +145,17 @@ enum PlayerCatalog {
             }
         }
         return ids
+    }
+
+    /// Esta entrada é um serviço hospedado em outro app?
+    ///
+    /// Importa para a UI: um atalho é escolhível e lançável, mas **nunca** vai ser a
+    /// sessão de Now Playing, então promessas que dependem de sessão precisam ser
+    /// explicadas em vez de simplesmente falharem em silêncio.
+    static func isShortcut(_ id: String) -> Bool {
+        guard let entrada = entry(for: id) else { return false }
+        if case .shortcut = entrada.kind { return true }
+        return false
     }
 
     /// Só as entradas que identificam sessão de Now Playing.

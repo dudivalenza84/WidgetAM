@@ -38,6 +38,11 @@ enum L10n {
     static func playerCommandUnsupported(_ name: String) -> String {
         String(localized: "\(name) does not accept this command")
     }
+    /// Um serviço web não tem processo próprio: quem toca — e quem o widget controla —
+    /// é o navegador. Dizer isso é melhor do que deixar o card vazio sem motivo.
+    static func playerRunsInBrowser(_ name: String, _ browser: String) -> String {
+        String(localized: "\(name) plays inside the browser — choose \(browser) to control it")
+    }
 
     // MARK: - Fonte oculta
 

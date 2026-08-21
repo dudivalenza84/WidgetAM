@@ -235,6 +235,11 @@ struct PreferencesView: View {
             return L10n.controlModeAutomaticHelp
         case .fixed:
             let name = preferredPlayerName
+            // Serviço web no modo fixo é o único caso sem saída: ele não tem processo
+            // próprio, então nunca vai ser a sessão, e o card ficaria eternamente vazio.
+            if PlayerCatalog.isShortcut(settings.preferredPlayerBundleId) {
+                return L10n.playerRunsInBrowser(name, PlayerCatalog.browserDisplayName)
+            }
             if preferredPlayer?.capabilities.contains(.directedControl) == true {
                 return L10n.controlModeFixedHelp(name)
             }

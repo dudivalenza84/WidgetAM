@@ -64,6 +64,9 @@ enum SelfTests {
         trocarAppSilenciaASessãoAnterior()
         trocarAppParaQuemJáTocaNãoPausa()
         semSessãoOCardIdentificaOPreferido()
+        ocultoNoAutomáticoEsvaziaOCardEExplica()
+        ocultoNãoDerrubaOModoFixoDeOutroPlayer()
+        atalhoNoModoFixoExplicaEmVezDeFalharCalado()
 
         appleScriptDecimalComVírgula()
         appleScriptEntradaInválida()
@@ -680,6 +683,97 @@ enum SelfTests {
             controller.controlledPlayer.bundleIdentifier == AmazonMusicPlayer.bundleID,
             "com sessão viva, o automático espelha quem está tocando"
         )
+    }
+
+    /// Fonte oculta tocando, no modo automático: o card não mostra a faixa, mas também
+    /// não pode ficar mudo — card em branco com música no ar é indistinguível de app
+    /// quebrado, e o usuário não teria como saber que ele mesmo mandou ocultar.
+    private static func ocultoNoAutomáticoEsvaziaOCardEExplica() {
+        let settings = AppSettings.shared
+        let modoAntes = settings.controlMode
+        let oculto = "com.exemplo.oculto"
+        defer {
+            settings.controlMode = modoAntes
+            settings.setHidden(false, for: oculto)
+        }
+
+        settings.controlMode = .automatic
+        settings.setHidden(true, for: oculto)
+
+        let controller = NowPlayingController()
+        controller.simulateSession(bundleIdentifier: oculto, isPlaying: true)
+
+        expect(controller.isActiveSourceHidden, "a sessão é de um app que o usuário ocultou")
+        expect(!controller.displayedTrack.hasContent, "o card não exibe a faixa do app oculto")
+        expect(controller.hiddenSourceName != nil, "e diz de qual app se trata")
+        expect(!controller.canControlTransport, "nem controla o que decidiu não exibir")
+    }
+
+    /// O caso corrigido em `95eb583`, até agora verificado só por leitura: no modo fixo,
+    /// um app **oculto** tocando não é o alvo do comando — o alvo é o player escolhido,
+    /// que recebe por AppleScript. Tratar a sessão alheia como "oculta" ali faria o card
+    /// avisar sobre um app que ele nem estava exibindo, e derrubaria o transporte de
+    /// quem continua perfeitamente controlável.
+    private static func ocultoNãoDerrubaOModoFixoDeOutroPlayer() {
+        let settings = AppSettings.shared
+        let modoAntes = settings.controlMode
+        let preferidoAntes = settings.preferredPlayerBundleId
+        let oculto = "com.exemplo.oculto"
+        defer {
+            settings.controlMode = modoAntes
+            settings.preferredPlayerBundleId = preferidoAntes
+            settings.setHidden(false, for: oculto)
+        }
+
+        settings.controlMode = .fixed
+        settings.preferredPlayerBundleId = AppleMusicPlayer.bundleID
+        settings.setHidden(true, for: oculto)
+
+        let controller = NowPlayingController()
+        controller.simulateSession(bundleIdentifier: oculto, isPlaying: true)
+
+        expect(!controller.isControlledPlayerActive, "a sessão não é do player escolhido")
+        expect(
+            !controller.isActiveSourceHidden,
+            "no modo fixo a sessão alheia já é ignorada por desenho — não é caso de 'oculto'"
+        )
+        expect(controller.hiddenSourceName == nil, "e por isso não há aviso de app oculto")
+        expect(
+            !controller.displayedTrack.hasContent,
+            "o card fica vazio: exibir a faixa de outro app seria mostrar o que não controla"
+        )
+    }
+
+    /// Serviço web escolhido no modo fixo é o único estado sem saída do widget: ele não
+    /// tem processo próprio, então nunca vai ser a sessão, e o card ficaria vazio para
+    /// sempre. Sem explicação, isso é indistinguível de app quebrado.
+    private static func atalhoNoModoFixoExplicaEmVezDeFalharCalado() {
+        let settings = AppSettings.shared
+        let modoAntes = settings.controlMode
+        let preferidoAntes = settings.preferredPlayerBundleId
+        defer {
+            settings.controlMode = modoAntes
+            settings.preferredPlayerBundleId = preferidoAntes
+        }
+
+        settings.controlMode = .fixed
+        settings.preferredPlayerBundleId = PlayerCatalog.youTubeMusicID
+
+        let controller = NowPlayingController()
+        controller.simulateSession(bundleIdentifier: PlayerCatalog.chromeID, isPlaying: true)
+
+        expect(!controller.canControlTransport, "o atalho não vira sessão, então não há o que controlar")
+        let motivo = controller.transportUnavailableReason ?? ""
+        expect(
+            motivo.contains(PlayerCatalog.browserDisplayName),
+            "o motivo aponta o navegador como caminho — veio \"\(motivo)\""
+        )
+        expect(
+            !motivo.contains(L10n.playerNotPlaying("YouTube Music")),
+            "e não repete 'não está tocando', que aqui não leva a lugar nenhum"
+        )
+        expect(PlayerCatalog.isShortcut(PlayerCatalog.youTubeMusicID), "YouTube Music é atalho")
+        expect(!PlayerCatalog.isShortcut(SpotifyPlayer.bundleID), "Spotify não é atalho")
     }
 
     // MARK: - AppleScript

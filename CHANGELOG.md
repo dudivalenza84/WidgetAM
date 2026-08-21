@@ -24,6 +24,20 @@ onde ela contradisse o plano, mandou a matriz.
   vídeo correndo.
 - Safari fica fora do catálogo até ser medido — continua controlável como fonte genérica.
 
+Depois da aceitação, a dívida técnica que o desenvolvimento tinha deixado para trás:
+
+- **`scripts/testar-player.sh` mentia em três lugares.** É a ferramenta que produz a
+  evidência de que todo o resto do projeto depende, e os três falsos negativos só não
+  estragaram a matriz porque cada resultado foi conferido à mão. O observador virou
+  trocável — payload do Now Playing ou a própria página, escolhido pelo bundle id —,
+  shuffle e repeat tentam o vocabulário de cada app, e o volume aceita ±1. Ele também
+  distingue "rebobina" de "não funciona" no `previous`.
+- **Serviço web no modo fixo agora se explica.** Escolher YouTube Music como player fixo
+  deixava o card vazio para sempre, sem dizer por quê: ele não tem processo próprio e
+  nunca vira sessão. O widget passa a dizer o que fazer — usar o navegador.
+- **A interação de app oculto com o modo fixo ganhou teste**, com a suíte indo de 122 a
+  138 verificações.
+
 Oito bugs corrigidos antes da aceitação, sete deles achados no teste ao vivo:
 
 - **Conteúdo do card sumia em capa escura.** Com o Black Album do Metallica tocando, o
