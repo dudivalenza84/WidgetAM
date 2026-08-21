@@ -43,9 +43,15 @@ aparecer vira linha em `PENDENCIAS.md` depois.
       cd "/Users/dudivalenza/Projetos IA/Pessoal/MacMediaWidget"
       scripts/build-app.sh
       open dist/                       # arrastar para /Applications, substituindo
-      xattr -dr com.apple.quarantine /Applications/MacMediaWidget.app
-      open /Applications/MacMediaWidget.app
       ```
+
+      Abrir pelo **Finder**, não por `open` no terminal: assim o LaunchServices garante
+      instância única e o app herda a sessão gráfica normal.
+
+      > O `xattr -dr com.apple.quarantine` **não** entra aqui. Bundle montado localmente
+      > não tem quarentena para remover, e o comando ainda falha com *permission denied* no
+      > `mediaremote-adapter.pl` (que vem com permissão 555). Ele só faz sentido para um
+      > `.app` vindo de DMG ou download.
 
 - [ ] **Confirmar a versão:** bandeja → **Preferências…** → o cabeçalho diz
       **Versão 1.17.0**.

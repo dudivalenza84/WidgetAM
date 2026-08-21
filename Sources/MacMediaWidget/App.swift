@@ -14,11 +14,35 @@ enum App {
         }
         #endif
 
+        guard !DuplicateInstance.shouldYield() else {
+            NSLog("MacMediaWidget: já há uma instância rodando; encerrando esta")
+            exit(0)
+        }
+
         let app = NSApplication.shared
         let delegate = AppDelegate()
         app.delegate = delegate
         app.setActivationPolicy(.accessory)
         app.run()
+    }
+}
+
+/// Guarda de instância única.
+///
+/// Pelo Finder isto nunca acontece: o LaunchServices traz a instância existente à frente
+/// em vez de abrir outra. Mas `open -n`, o binário executado direto de dentro do bundle e
+/// um relançamento durante a substituição do `.app` passam por fora dele — e cada cópia
+/// planta o **próprio ícone na bandeja**, com o widget duplicado atrás. Foi o que se viu
+/// ao instalar a 1.17.0 por linha de comando (`2026-08-21 · #01`).
+///
+/// A checagem é pelo bundle id, então não atrapalha o desenvolvimento: o binário solto do
+/// SPM não tem bundle id e nunca cede a vez.
+enum DuplicateInstance {
+    static func shouldYield() -> Bool {
+        guard let id = Bundle.main.bundleIdentifier else { return false }
+        let current = NSRunningApplication.current
+        return NSRunningApplication.runningApplications(withBundleIdentifier: id)
+            .contains { $0 != current && !$0.isTerminated }
     }
 }
 

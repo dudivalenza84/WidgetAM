@@ -117,6 +117,12 @@ Migração para `PENDENCIAS_CONCLUIDAS.md` só por pedido explícito.
   `MMW_NOTARY_PROFILE`), só falta o certificado para exercitá-lo. Sem Developer ID
   também não faz sentido montar o Sparkle — `2026-08-10 · #01`
 
+- [x] **Três ícones na bandeja ao instalar por linha de comando.** Cada execução do
+  binário criava uma instância nova, cada uma com seu `NSStatusItem`. Encontrado ao vivo
+  em `2026-08-21 · #01`, durante a instalação da 1.17.0. Corrigido na mesma sessão com
+  guarda de instância única em `App.swift`, verificada por execução dupla real (a segunda
+  sai em 13 ms com `exit 0`)
+
 ## Média
 
 - [ ] Migrar `SelfTests.swift` para swift-testing **se** o Xcode entrar no projeto — as

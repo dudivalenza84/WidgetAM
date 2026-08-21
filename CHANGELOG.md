@@ -24,7 +24,13 @@ onde ela contradisse o plano, mandou a matriz.
   vídeo correndo.
 - Safari fica fora do catálogo até ser medido — continua controlável como fonte genérica.
 
-Dois bugs corrigidos na mesma sessão, os dois sobre o widget prometer o que não entrega:
+Três bugs corrigidos antes da aceitação, os três sobre o widget prometer o que não
+entrega:
+
+- **Instância única.** Cada cópia do app plantava o próprio ícone na bandeja, com o widget
+  duplicado atrás. Pelo Finder isso nunca acontecia — o LaunchServices barra —, mas
+  `open -n`, o binário executado direto e um relançamento durante a substituição do `.app`
+  passavam por fora. Agora a segunda instância encerra sozinha, dizendo por quê no log.
 
 - **Com a Automação negada, Apple Music e Spotify ficavam com botões mudos.** As
   capacidades eram rebaixadas corretamente, mas os comandos continuavam saindo por
