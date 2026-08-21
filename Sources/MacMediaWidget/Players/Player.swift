@@ -101,6 +101,11 @@ protocol Player: AnyObject {
 
     /// Página de instalação do app, quando o produto sabe indicar uma.
     var installURL: URL? { get }
+    /// Onde mora o app desta fonte. Requisito do protocolo, e não só default da
+    /// extension, porque nem toda sessão de Now Playing corresponde a um app: o Safari
+    /// publica sob `com.apple.WebKit.GPU`, um processo auxiliar sem bundle instalável, e
+    /// precisa apontar para o Safari de verdade para ter ícone, nome e abertura.
+    var applicationURL: URL? { get }
     /// Abre (ou traz à frente) o app. `false` quando não está instalado — nesse caso
     /// o usuário já foi avisado por `promptInstall()`.
     @discardableResult func launch() -> Bool
@@ -123,6 +128,7 @@ extension Player {
     var applicationURL: URL? {
         NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleIdentifier)
     }
+
 
     var isInstalled: Bool { applicationURL != nil }
 

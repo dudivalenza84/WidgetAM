@@ -50,9 +50,8 @@ enum PlayerCatalog {
 
     private static let youTubeMusicURL = URL(string: "https://music.youtube.com")!
 
-    /// Bundle id do Chrome. É o navegador medido em `docs/compatibilidade-players.md`;
-    /// o Safari fica fora do catálogo até ser medido, e enquanto isso cai no
-    /// `MediaRemotePlayer` genérico, como qualquer fonte que ninguém previu.
+    /// Bundle id do Chrome. O Safari tem entrada própria, com a peculiaridade de
+    /// publicar a sessão sob outro identificador (ver `SafariPlayer`).
     static let chromeID = "com.google.Chrome"
 
     static var entries: [PlayerCatalogEntry] {
@@ -100,6 +99,13 @@ enum PlayerCatalog {
                 kind: .app,
                 installURL: URL(string: "https://www.google.com/chrome/"),
                 make: { BrowserPlayer(bundleIdentifier: chromeID, displayName: "Google Chrome") }
+            ),
+            PlayerCatalogEntry(
+                id: SafariPlayer.sessionID,
+                displayName: "Safari",
+                kind: .app,
+                installURL: nil,
+                make: { SafariPlayer() }
             ),
             PlayerCatalogEntry(
                 id: youTubeMusicID,

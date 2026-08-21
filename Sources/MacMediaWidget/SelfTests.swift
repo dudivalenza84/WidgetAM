@@ -67,6 +67,7 @@ enum SelfTests {
         ocultoNoAutomáticoEsvaziaOCardEExplica()
         ocultoNãoDerrubaOModoFixoDeOutroPlayer()
         atalhoNoModoFixoExplicaEmVezDeFalharCalado()
+        safariSeIdentificaPeloProcessoEApontaParaOApp()
 
         appleScriptDecimalComVírgula()
         appleScriptEntradaInválida()
@@ -774,6 +775,32 @@ enum SelfTests {
         )
         expect(PlayerCatalog.isShortcut(PlayerCatalog.youTubeMusicID), "YouTube Music é atalho")
         expect(!PlayerCatalog.isShortcut(SpotifyPlayer.bundleID), "Spotify não é atalho")
+    }
+
+    /// O Safari publica a sessão sob `com.apple.WebKit.GPU` — um processo auxiliar, não
+    /// um app. Sem separar "quem publica" de "onde mora o app", ele apareceria no widget
+    /// como `com.apple.WebKit.GPU`, sem ícone e sem como ser aberto.
+    private static func safariSeIdentificaPeloProcessoEApontaParaOApp() {
+        let safari = SafariPlayer()
+        expect(safari.bundleIdentifier == "com.apple.WebKit.GPU", "casa com o que o stream publica")
+        expect(safari.displayName == "Safari", "mas se apresenta pelo nome do app")
+        expect(
+            safari.applicationURL?.path.hasSuffix("Safari.app") == true,
+            "e aponta para o Safari de verdade — veio \(safari.applicationURL?.path ?? "nada")"
+        )
+        expect(safari.isInstalled, "com isso ele conta como instalado")
+
+        // Medido com um Mix do YouTube: o Safari troca de faixa, o Chrome não.
+        expect(safari.capabilities.contains(.nextTrack), "Safari pula para a próxima")
+        expect(safari.capabilities.contains(.previousTrack), "e volta para a anterior")
+        expect(safari.capabilities.contains(.seek), "e obedece ao seek")
+        expect(
+            !safari.capabilities.contains(.streamPosition),
+            "mas o elapsedTime dele fica em zero com o vídeo correndo"
+        )
+
+        let doCatálogo = PlayerRegistry.shared.player(for: SafariPlayer.sessionID)
+        expect(doCatálogo is SafariPlayer, "o registry resolve a sessão do WebKit no SafariPlayer")
     }
 
     // MARK: - AppleScript

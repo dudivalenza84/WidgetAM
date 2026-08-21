@@ -29,6 +29,9 @@ class MediaRemotePlayer: Player {
     /// estaticamente e `override` não a alcançaria.
     var installURL: URL? { nil }
     var catalogID: String { bundleIdentifier }
+    var applicationURL: URL? {
+        NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleIdentifier)
+    }
 
     func playPause() { MediaRemoteAdapter.send(.togglePlayPause) }
     func play() { MediaRemoteAdapter.send(.play) }

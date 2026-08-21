@@ -46,9 +46,17 @@ Migração para `PENDENCIAS_CONCLUIDAS.md` só por pedido explícito.
   `playpause.fill`, o status do menu mostra só o nome da faixa e a barra não corre
   sozinha
 
-- [ ] **Medir o Safari** e decidir se ele entra no catálogo. Hoje fica de fora de
-  propósito (`DECISOES.md · 2026-08-20 · #01`) e cai no `MediaRemotePlayer` genérico.
-  Roteiro na última tabela de `docs/compatibilidade-players.md` — `2026-08-20 · #01`
+- [x] **Medir o Safari** e decidir se ele entra no catálogo — `2026-08-20 · #01` ·
+  **feito em `2026-08-21 · #01`: entrou**, e a medição mudou a premissa. A sessão dele sai
+  sob `com.apple.WebKit.GPU`, não `com.apple.Safari`, e o transporte é **mais** capaz que
+  o do Chrome (next e previous funcionam, seek também). Copiar o perfil do Chrome teria
+  errado nas duas pontas
+
+- [ ] **Confirmar visualmente o play/pause do Safari.** A bateria de `2026-08-21 · #01`
+  rodou com o JavaScript por Apple Events desligado, então o observador foi o payload —
+  que no Chrome já foi flagrado mentindo em `playing`. Por precaução o `SafariPlayer` não
+  declara `.reliablePlaybackState`; para declarar, ligar a opção no menu Desenvolvedor do
+  Safari e repetir `scripts/testar-player.sh com.apple.Safari` — `2026-08-21 · #01`
 
 - [x] **Testar ao vivo a 1.17.0** — roteiro completo e executável em
   `docs/roteiro-teste-manual.md` (`2026-08-21 · #01`), que absorve também o teste
@@ -148,7 +156,9 @@ Migração para `PENDENCIAS_CONCLUIDAS.md` só por pedido explícito.
   **avaliado em `2026-08-21 · #01`**: nasceu `scripts/verificar.sh`, que roda as três de
   uma vez, e o `CLAUDE.md` manda rodá-lo antes de fechar. Falta decidir com o usuário se
   o `fechar-sessao.sh` **global** passa a preferir um `scripts/verificar.sh` do projeto
-  quando ele existir — é uma linha, mas mexe em ferramenta de todos os projetos
+  quando ele existir — **decidido em `2026-08-21 · #01`: não.** O usuário preferiu manter
+  a ferramenta global intocada; a verificação completa fica como passo explícito do
+  `CLAUDE.md` daqui
 - [x] Registrar no `README.md`/`ROADMAP` que o widget passou a ter visibilidade por app,
   quando a Fase 1 fechar (a Tarefa 9 do plano cobre isso) — `2026-08-19 · #02` · feito em
   `2026-08-20 · #01`: o README ganhou a tabela de apps suportados e a nota de "Apps

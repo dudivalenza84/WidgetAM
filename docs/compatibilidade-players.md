@@ -13,20 +13,20 @@ Legenda: **sim** = observado funcionando · **não** = observado não funcionand
 
 ## Tabela
 
-| Capacidade | Amazon Music | Apple Music | Spotify | TIDAL | Deezer | Navegador |
-|---|---|---|---|---|---|---|
-| Aparece como sessão de Now Playing | sim | sim | sim | sim | sim | sim |
-| Metadados (título, artista, capa) | sim | sim | sim | sim | sim | sim⁵ |
-| `elapsedTime` no stream | **não** | sim | sim¹ | sim¹ | **sim⁴** | **não confiável⁶** |
-| play/pause (MediaRemote) | sim | sim | sim | sim | sim | **sim** |
-| next/previous (MediaRemote) | sim | sim | sim | sim | next sim / **prev não** | **next não / prev rebobina⁷** |
-| seek (MediaRemote) | **não** | sim | **sim** | **sim** | **não** | **sim** |
-| AppleScript | **ausente** | sim | **sim** | **ausente** | **ausente** | **ausente** |
-| posição real (AppleScript) | ausente | sim | sim | ausente | ausente | ausente |
-| seek (AppleScript) | ausente | sim | sim | ausente | ausente | ausente |
-| volume por-app | ausente | sim | sim² | ausente | ausente | ausente |
-| shuffle / repeat (AppleScript) | ausente | sim | sim³ | ausente | ausente | ausente |
-| comando endereçado (sem ser a sessão) | **não** | sim | **sim** | **não** | **não** | não |
+| Capacidade | Amazon Music | Apple Music | Spotify | TIDAL | Deezer | Chrome | Safari |
+|---|---|---|---|---|---|---|---|
+| Aparece como sessão de Now Playing | sim | sim | sim | sim | sim | sim | sim⁸ |
+| Metadados (título, artista, capa) | sim | sim | sim | sim | sim | sim⁵ | sim⁵ |
+| `elapsedTime` no stream | **não** | sim | sim¹ | sim¹ | **sim⁴** | **não confiável⁶** | **não confiável⁶** |
+| play/pause (MediaRemote) | sim | sim | sim | sim | sim | **sim** | sim |
+| next/previous (MediaRemote) | sim | sim | sim | sim | next sim / **prev não** | **next não / prev rebobina⁷** | **sim⁹** |
+| seek (MediaRemote) | **não** | sim | **sim** | **sim** | **não** | **sim** | **sim** |
+| AppleScript | **ausente** | sim | **sim** | **ausente** | **ausente** | **ausente** | **ausente** |
+| posição real (AppleScript) | ausente | sim | sim | ausente | ausente | ausente | ausente |
+| seek (AppleScript) | ausente | sim | sim | ausente | ausente | ausente | ausente |
+| volume por-app | ausente | sim | sim² | ausente | ausente | ausente | ausente |
+| shuffle / repeat (AppleScript) | ausente | sim | sim³ | ausente | ausente | ausente | ausente |
+| comando endereçado (sem ser a sessão) | **não** | sim | **sim** | **não** | **não** | não | não |
 
 ## Evidência
 
@@ -55,6 +55,19 @@ pausado. Consequência direta: para fonte de navegador, o widget não pode confi
 
 ⁷ `nextTrack` não tem efeito. `previousTrack` **rebobina o vídeo atual** para o início
 (`t=114` → `t=0`) em vez de trocar de mídia.
+
+⁸ **O Safari não publica sob o próprio bundle id.** A sessão sai como
+`com.apple.WebKit.GPU` — o processo auxiliar de mídia do WebKit, que não é app
+instalável, não tem ícone e cujo nome resolve para `com.apple.WebKit.GPU.xpc`. É por isso
+que o `SafariPlayer` casa a sessão por um identificador e aponta o app por outro.
+
+⁹ **Safari e Chrome não são o mesmo navegador para efeito de mídia.** No mesmo teste, com
+um Mix do YouTube, o Safari trocou de faixa nos dois sentidos
+(`'Where Have You Been'` → `'Only Girl (In The World)'` → volta), enquanto no Chrome
+`nextTrack` não faz nada e `previousTrack` rebobina. O seek também obedeceu: posicionado a
+10 s do fim de uma faixa de 251 s, o `elapsedTime` foi a 258.861 e a faixa terminou logo
+depois. Copiar o perfil de um navegador para o outro teria errado nas duas pontas — foi
+por isso que o Safari ficou fora do catálogo até ser medido.
 
 ⁴ O Deezer é o **único do lote cujo `elapsedTime` é um relógio de verdade**: avança
 sozinho, com o `timestamp` acompanhando. Cinco leituras em 12 s sem tocar em nada:
@@ -241,12 +254,36 @@ célula, em `2026-08-20 · #01`. Onde a matriz contradisse `docs/plano-players-a
 | TIDAL | `fullTransport`, `seek`, `streamPosition` |
 | Deezer | `transport`, `nextTrack`, `streamPosition` — sem `previousTrack`, sem `seek` |
 | Google Chrome | `transport`, `seek` — sem `nextTrack`, sem `previousTrack`, sem `streamPosition`, sem `reliablePlaybackState` |
+| Safari | `fullTransport`, `seek` — sem `streamPosition`, sem `reliablePlaybackState` |
 
 Todos os outros declaram `reliablePlaybackState`: o navegador é o único cujo campo
 `playing` foi observado mentindo.
 
 `fullTransport` é o pacote play/pause + próxima + anterior. Ele deixou de ser indivisível
 justamente por causa das duas últimas linhas (`DECISOES.md · 2026-08-20 · #01`).
+
+### Safari (sessão: `com.apple.WebKit.GPU`)
+
+Levantado em **2026-08-21 · #01**, com um Mix do YouTube (playlist de várias faixas).
+
+```
+sessão MediaRemote     | verificado   | bundleIdentifier=com.apple.WebKit.GPU (não com.apple.Safari)
+metadados              | verificado   | title='Rihanna - Where Have You Been', artist='RihannaVEVO'
+next (MediaRemote)     | verificado   | 'Where Have You Been' -> 'Only Girl (In The World)'
+previous (MediaRemote) | verificado   | 'Only Girl (In The World)' -> 'Where Have You Been'
+play/pause (MR)        | ver ressalva | playing true -> false pelo payload
+seek (MediaRemote)     | verificado   | pediu 258,9s -> elapsedTime=258.861, e a faixa terminou em seguida
+posição (MediaRemote)  | NÃO CONFIÁVEL| elapsedTime=0 com o vídeo correndo e duration=251
+AppleScript (mídia)    | não existe   | navegador só expõe do JavaScript
+```
+
+> **Ressalva da medição:** o observador foi o payload do Now Playing, não a página — o
+> JavaScript por Apple Events estava desligado no Safari, e o `scripts/testar-player.sh`
+> avisou disso em vez de fingir que o dado valia. As linhas de `next`, `previous` e `seek`
+> se sustentam mesmo assim, porque o efeito observado é difícil de falsificar (o título
+> mudou nos dois sentidos; o seek foi confirmado pela faixa terminar). Já `play/pause`
+> herda a desconfiança do Chrome, onde `playing` foi flagrado mentindo — por isso o
+> `SafariPlayer` **não** declara `.reliablePlaybackState`.
 
 ## Comportamento do sistema (não é de nenhum player específico)
 
@@ -278,7 +315,6 @@ com pelo menos três faixas**.
 |---|---|---|
 | **Spotify** | não instalado nesta máquina | instalar, tocar uma playlist com 3+ faixas, `scripts/testar-player.sh com.spotify.client Spotify` |
 | **Deezer** | não instalado; e falta decidir se entra no escopo | idem, com o bundle id do app |
-| **Safari** | não medido: o perfil do Chrome é comportamento do par navegador+página, e copiá-lo seria a primeira capacidade declarada por dedução no projeto. Por isso ele ficou fora do catálogo (`DECISOES.md · 2026-08-20 · #01`) | tocar um vídeo com som no Safari e repetir a bateria do navegador, observando a página em vez do payload |
 | **Navegador (YouTube)** | exige **um clique humano**: autoplay com som é bloqueado, e mandar a página tocar por Apple Events depende da opção "Permitir JavaScript de Apple Events" do menu Desenvolvedor, ligada à mão — inviável como recurso de produto e desnecessário como teste | abrir o vídeo, dar play manualmente e rodar `scripts/testar-player.sh com.google.Chrome` |
 | **Gesto de arraste na barra do widget** | a mecânica do seek está verificada por AppleScript, mas o gesto em si é interação de UI | com o Apple Music tocando, arrastar a barra do widget e conferir se a faixa pula |
 | **Automação negada** | exige revogar a permissão em Ajustes do Sistema | negar em Privacidade › Automação e conferir se o widget rebaixa as capacidades (barra deixa de ser arrastável, volume volta ao do sistema) |
