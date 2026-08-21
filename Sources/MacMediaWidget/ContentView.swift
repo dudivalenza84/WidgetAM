@@ -177,8 +177,15 @@ struct ContentView: View {
     }
 
     /// Player cuja identidade o card está exibindo.
+    ///
+    /// É sempre o player controlado, o que resolve os dois modos de uma vez: no fixo é o
+    /// escolhido; no automático é quem está tocando **ou**, sem ninguém tocando, o
+    /// preferido. Essa segunda parte é o que dá efeito visível ao "Trocar app" com o Mac
+    /// em silêncio — antes o card ficava sem identidade nenhuma e a troca parecia não ter
+    /// acontecido (`2026-08-21 · #01`). Assim que qualquer app começa a tocar, o
+    /// automático volta a espelhar quem toca.
     private var sourcePlayer: Player? {
-        settings.controlMode == .fixed ? nowPlaying.controlledPlayer : nowPlaying.activePlayer
+        nowPlaying.controlledPlayer
     }
 
     /// Aviso de que a sessão que toca é de um app que o usuário mandou ocultar.

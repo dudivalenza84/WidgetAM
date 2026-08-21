@@ -25,10 +25,16 @@ escolhido. Quanto ele consegue entregar depende do app:
 Trocar para o app que **já** detém a sessão não pausa nada — seria estragar o estado que
 já estava certo.
 
-**Alternativa descartada.** Fazer o widget exibir o app escolhido mesmo sem ele ter a
-sessão, no modo automático. Seria mentir sobre o que está tocando, e desmancharia a
-distinção entre os dois modos de controle — exibir o escolhido independente da sessão é
-exatamente o que o modo fixo faz.
+**Alternativa descartada.** Fazer o widget exibir o app escolhido **no lugar de quem
+está tocando**, no modo automático. Seria mentir sobre o que toca, e desmancharia a
+distinção entre os dois modos — exibir o escolhido independente da sessão é exatamente o
+que o modo fixo faz.
+
+**Complemento (mesma sessão, decidido pelo dono do produto).** Com **ninguém** tocando não
+há o que espelhar, e aí o card passa a identificar o preferido — ícone, nome e o motivo de
+não haver transporte. Não há mentira possível nesse estado, e é o que dá efeito visível ao
+"Trocar app" com o Mac em silêncio. Assim que qualquer app começa a tocar, o automático
+volta a espelhar quem toca.
 
 **Nota de cobertura.** Isto destravou o teste da pendência de `2026-08-19 · #02`: com
 `simulateSession(bundleIdentifier:isPlaying:)` em debug, dá para montar "app X tocando" e

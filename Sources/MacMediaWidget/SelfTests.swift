@@ -63,6 +63,7 @@ enum SelfTests {
         descobertaNãoRepeteOQueOCatálogoCobre()
         trocarAppSilenciaASessãoAnterior()
         trocarAppParaQuemJáTocaNãoPausa()
+        semSessãoOCardIdentificaOPreferido()
 
         appleScriptDecimalComVírgula()
         appleScriptEntradaInválida()
@@ -645,6 +646,40 @@ enum SelfTests {
         expect(recebidos.isEmpty, "não se pausa quem já é a sessão — veio \(recebidos)")
         expect(alvo.abriu, "o app ainda é trazido à frente")
         expect(!alvo.tocou, "e não leva um play por cima do que já está tocando")
+    }
+
+    /// Sem ninguém tocando, o widget não fica órfão: o app controlado — e portanto a
+    /// identidade que o card exibe — é o preferido. É o que faz "Trocar app" ter efeito
+    /// visível com o Mac em silêncio.
+    private static func semSessãoOCardIdentificaOPreferido() {
+        let settings = AppSettings.shared
+        let modoAntes = settings.controlMode
+        let preferidoAntes = settings.preferredPlayerBundleId
+        defer {
+            settings.controlMode = modoAntes
+            settings.preferredPlayerBundleId = preferidoAntes
+        }
+
+        settings.controlMode = .automatic
+        settings.preferredPlayerBundleId = AppleMusicPlayer.bundleID
+
+        let controller = NowPlayingController()
+        controller.simulateSession(bundleIdentifier: nil, isPlaying: false)
+        expect(
+            controller.activePlayer == nil,
+            "sem bundle id na sessão não há player ativo"
+        )
+        expect(
+            controller.controlledPlayer.bundleIdentifier == AppleMusicPlayer.bundleID,
+            "sem sessão, quem o card identifica é o preferido"
+        )
+
+        // Com alguém tocando, o automático volta a espelhar quem toca.
+        controller.simulateSession(bundleIdentifier: AmazonMusicPlayer.bundleID, isPlaying: true)
+        expect(
+            controller.controlledPlayer.bundleIdentifier == AmazonMusicPlayer.bundleID,
+            "com sessão viva, o automático espelha quem está tocando"
+        )
     }
 
     // MARK: - AppleScript

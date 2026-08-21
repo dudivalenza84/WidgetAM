@@ -34,6 +34,9 @@ Oito bugs corrigidos antes da aceitação, sete deles achados no teste ao vivo:
   é a regra em música, e cortar com reticências esconde justamente o que distingue uma
   versão da outra.
 
+- **Sem ninguém tocando, o card identifica o player preferido** — ícone, nome e o motivo
+  de os controles estarem inativos — em vez de um "Nada tocando" anônimo. Com música no
+  ar, o modo automático continua espelhando quem toca.
 - **"Trocar app" agora troca de verdade.** Antes ele definia o preferido e abria o app,
   mas a sessão de Now Playing continuava com o anterior — no modo automático o card
   seguia mostrando o app antigo até alguém dar play no novo. Agora o widget silencia a
