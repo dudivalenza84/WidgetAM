@@ -325,14 +325,24 @@ fi
 # o `<video>` da página, não o payload.
 DUR="$(np_field duration)"
 if [[ -n "$DUR" && "$DUR" != "0" ]]; then
+    # O alvo é 10 s antes do fim de propósito: dá duas evidências independentes de uma
+    # vez — a posição salta para lá, e a mídia termina logo depois. Mas isso cria uma
+    # armadilha de leitura: se a mídia acabar antes de o script ler, a posição observada
+    # é a do **início da mídia seguinte**, e um seek que funcionou aparece como zero.
+    # Foi o que aconteceu no Safari (2026-08-21 · #01): 'pediu 326,6s -> observou 4,15s',
+    # com o título já sendo outro. Por isso o título entra no julgamento.
+    TITULO_PRE_SEEK="$(obs_title)"
     ALVO_S="$(python3 -c "print(round($DUR - 10, 1))")"
     ALVO_US="$(python3 -c "print(int(($DUR - 10) * 1000000))")"
-    adapter seek "$ALVO_US" >/dev/null; sleep 2
+    adapter seek "$ALVO_US" >/dev/null; sleep 1
     POS_MR="$(obs_position)"
+    TITULO_POS_SEEK="$(obs_title)"
     if [[ -n "$POS_MR" ]] && perto "$POS_MR" "$ALVO_S" 3; then
         resultado "seek (MediaRemote)" "verificado" "pediu ${ALVO_S}s -> observou $POS_MR"
+    elif [[ -n "$TITULO_PRE_SEEK" && "$TITULO_PRE_SEEK" != "$TITULO_POS_SEEK" ]]; then
+        resultado "seek (MediaRemote)" "verificado" "a mídia terminou logo após o seek para ${ALVO_S}s: '$TITULO_PRE_SEEK' -> '$TITULO_POS_SEEK'"
     elif [[ -n "$POS_MR" ]]; then
-        resultado "seek (MediaRemote)" "NÃO FUNCIONA" "pediu ${ALVO_S}s -> observou $POS_MR"
+        resultado "seek (MediaRemote)" "NÃO FUNCIONA" "pediu ${ALVO_S}s -> observou $POS_MR, mesma mídia"
     else
         resultado "seek (MediaRemote)" "indeterminado" "sem posição observável: julgue vendo a faixa terminar"
     fi

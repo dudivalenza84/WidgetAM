@@ -795,8 +795,12 @@ enum SelfTests {
         expect(safari.capabilities.contains(.previousTrack), "e volta para a anterior")
         expect(safari.capabilities.contains(.seek), "e obedece ao seek")
         expect(
+            safari.capabilities.contains(.reliablePlaybackState),
+            "o playing do Safari acompanhou a página nos três estados — ele não mente"
+        )
+        expect(
             !safari.capabilities.contains(.streamPosition),
-            "mas o elapsedTime dele fica em zero com o vídeo correndo"
+            "mas a posição dele precisa da conta com timestamp, que o widget ainda não faz"
         )
 
         let doCatálogo = PlayerRegistry.shared.player(for: SafariPlayer.sessionID)

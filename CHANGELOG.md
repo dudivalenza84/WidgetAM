@@ -26,6 +26,11 @@ onde ela contradisse o plano, mandou a matriz.
 
 Depois da aceitação, a dívida técnica que o desenvolvimento tinha deixado para trás:
 
+- **Safari entra no catálogo, medido.** Ele publica a sessão sob `com.apple.WebKit.GPU` —
+  um processo auxiliar do WebKit, não um app —, e era assim que aparecia no widget. Agora
+  casa a sessão por um identificador e mostra ícone, nome e abertura pelo outro. E não é o
+  Chrome: `next`, `previous` e `seek` funcionam, e o campo `playing` dele não mente.
+
 - **`scripts/testar-player.sh` mentia em três lugares.** É a ferramenta que produz a
   evidência de que todo o resto do projeto depende, e os três falsos negativos só não
   estragaram a matriz porque cada resultado foi conferido à mão. O observador virou

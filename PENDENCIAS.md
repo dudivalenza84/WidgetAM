@@ -52,11 +52,19 @@ Migração para `PENDENCIAS_CONCLUIDAS.md` só por pedido explícito.
   o do Chrome (next e previous funcionam, seek também). Copiar o perfil do Chrome teria
   errado nas duas pontas
 
-- [ ] **Confirmar visualmente o play/pause do Safari.** A bateria de `2026-08-21 · #01`
-  rodou com o JavaScript por Apple Events desligado, então o observador foi o payload —
-  que no Chrome já foi flagrado mentindo em `playing`. Por precaução o `SafariPlayer` não
-  declara `.reliablePlaybackState`; para declarar, ligar a opção no menu Desenvolvedor do
-  Safari e repetir `scripts/testar-player.sh com.apple.Safari` — `2026-08-21 · #01`
+- [x] **Confirmar visualmente o play/pause do Safari** — `2026-08-21 · #01` · **feito na
+  mesma sessão**, com o JavaScript por Apple Events ligado: o campo `playing` acompanhou a
+  página nos três estados, e o `SafariPlayer` passou a declarar `.reliablePlaybackState`
+
+- [ ] **Ancorar a posição em `elapsedTime + (agora − timestamp)`, e não no relógio local.**
+  O par que o MediaRemote publica é "posição medida **no instante** timestamp", e o widget
+  hoje ancora com `Date()` — o que joga fora a defasagem entre o evento e a leitura.
+  Medido no Safari com âncora parada em `elapsed=40,5 @ 18:40:22Z`: a conta certa
+  reconstrói a posição com **menos de 1 s de erro** em três leituras (116,5/116 ·
+  122,6/122 · 128,7/129). Vale para TIDAL, Spotify e Deezer também, e destravaria
+  `.streamPosition` para o Safari — hoje ele fica de fora só por causa disso. Mexe no
+  coração do `NowPlayingController`, então merece sessão própria e nova rodada do roteiro
+  — `2026-08-21 · #01`
 
 - [x] **Testar ao vivo a 1.17.0** — roteiro completo e executável em
   `docs/roteiro-teste-manual.md` (`2026-08-21 · #01`), que absorve também o teste

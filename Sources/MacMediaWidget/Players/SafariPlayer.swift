@@ -28,12 +28,21 @@ final class SafariPlayer: MediaRemotePlayer {
         super.init(bundleIdentifier: Self.sessionID, displayName: "Safari")
     }
 
-    /// Transporte completo e seek, os dois observados. Sem `.streamPosition`: o
-    /// `elapsedTime` do Safari fica em `0` com o vídeo correndo, igual ao do Chrome, e só
-    /// se mexe depois de um seek. Sem `.reliablePlaybackState` pelo mesmo motivo de
-    /// família — no Chrome o campo `playing` foi flagrado mentindo, e aqui ele não foi
-    /// medido contra a página.
-    override var capabilities: PlayerCapabilities { [.fullTransport, .seek] }
+    /// Transporte completo, seek e estado de reprodução confiável — os três medidos
+    /// contra a própria página, com o JavaScript por Apple Events ligado.
+    ///
+    /// `.reliablePlaybackState` **é** declarado, ao contrário do Chrome: pausando e
+    /// retomando pelo `<video>` (sem passar pelo MediaRemote), o campo `playing` do
+    /// payload acompanhou nos três estados. O Safari não herda a mentira do Chrome.
+    ///
+    /// `.streamPosition` continua fora, mas não porque o campo minta: ele é uma âncora
+    /// medida **no instante `timestamp`**, e o widget hoje ancora no relógio local. Com a
+    /// conta certa — `elapsedTime + (agora − timestamp)` — a posição do Safari se
+    /// reconstrói com menos de 1 s de erro (medido em três leituras). Está em
+    /// `PENDENCIAS.md`.
+    override var capabilities: PlayerCapabilities {
+        [.fullTransport, .seek, .reliablePlaybackState]
+    }
 
     override var applicationURL: URL? {
         NSWorkspace.shared.urlForApplication(withBundleIdentifier: Self.appID)

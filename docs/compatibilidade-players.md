@@ -19,6 +19,7 @@ Legenda: **sim** = observado funcionando · **não** = observado não funcionand
 | Metadados (título, artista, capa) | sim | sim | sim | sim | sim | sim⁵ | sim⁵ |
 | `elapsedTime` no stream | **não** | sim | sim¹ | sim¹ | **sim⁴** | **não confiável⁶** | **não confiável⁶** |
 | play/pause (MediaRemote) | sim | sim | sim | sim | sim | **sim** | sim |
+| campo `playing` confiável | sim | sim | sim | sim | sim | **não⁶** | **sim¹⁰** |
 | next/previous (MediaRemote) | sim | sim | sim | sim | next sim / **prev não** | **next não / prev rebobina⁷** | **sim⁹** |
 | seek (MediaRemote) | **não** | sim | **sim** | **sim** | **não** | **sim** | **sim** |
 | AppleScript | **ausente** | sim | **sim** | **ausente** | **ausente** | **ausente** | **ausente** |
@@ -277,13 +278,32 @@ posição (MediaRemote)  | NÃO CONFIÁVEL| elapsedTime=0 com o vídeo correndo 
 AppleScript (mídia)    | não existe   | navegador só expõe do JavaScript
 ```
 
-> **Ressalva da medição:** o observador foi o payload do Now Playing, não a página — o
-> JavaScript por Apple Events estava desligado no Safari, e o `scripts/testar-player.sh`
-> avisou disso em vez de fingir que o dado valia. As linhas de `next`, `previous` e `seek`
-> se sustentam mesmo assim, porque o efeito observado é difícil de falsificar (o título
-> mudou nos dois sentidos; o seek foi confirmado pela faixa terminar). Já `play/pause`
-> herda a desconfiança do Chrome, onde `playing` foi flagrado mentindo — por isso o
-> `SafariPlayer` **não** declara `.reliablePlaybackState`.
+Repetido em seguida com o **JavaScript por Apple Events ligado**, ou seja, com a página
+como observador — e aí o seek saiu direto: `pediu 234,8s -> observou 235,31` no
+`currentTime` do `<video>`.
+
+¹⁰ **O `playing` do Safari não mente**, ao contrário do Chrome. Pausando e retomando pelo
+próprio `<video>` (sem passar pelo MediaRemote), os três estados casaram:
+
+```
+tocando   | página paused=false t=40 | payload playing=True  elapsed=0
+pausado   | página paused=true  t=41 | payload playing=False elapsed=40.54
+retomado  | página paused=false t=44 | payload playing=True  elapsed=40.54
+```
+
+**E a posição se reconstrói com a conta certa.** O `elapsedTime` não é relógio nem lixo:
+é o valor medido **no instante `timestamp`**. Três leituras seguidas, com âncora parada em
+`elapsed=40,5 @ 18:40:22Z`:
+
+```
+75,9s depois -> estimativa 116,5 | página 116
+82,0s depois -> estimativa 122,6 | página 122
+88,2s depois -> estimativa 128,7 | página 129
+```
+
+Menos de 1 s de erro. O widget ainda não usa essa conta — ele ancora no relógio local —,
+e por isso o `SafariPlayer` não declara `.streamPosition` ainda. Está em `PENDENCIAS.md`,
+e vale para TIDAL, Spotify e Deezer também.
 
 ## Comportamento do sistema (não é de nenhum player específico)
 
