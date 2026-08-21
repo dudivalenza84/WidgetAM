@@ -142,9 +142,13 @@ Migração para `PENDENCIAS_CONCLUIDAS.md` só por pedido explícito.
 - [ ] Migrar `SelfTests.swift` para swift-testing **se** o Xcode entrar no projeto — as
   funções já são independentes, é mecânico. Enquanto não houver, `swift test` é
   impossível (CLT não trazem os frameworks; ver `DECISOES.md`) — `2026-08-10 · #01`
-- [ ] Avaliar se `verificar-traducoes.sh` e `--run-tests` devem entrar no
+- [x] Avaliar se `verificar-traducoes.sh` e `--run-tests` devem entrar no
   `fechar-sessao.sh` — hoje o encerramento só roda `swift build`, então uma chave de
-  tradução quebrada ou uma asserção falhando passariam batido — `2026-08-10 · #01`
+  tradução quebrada ou uma asserção falhando passariam batido — `2026-08-10 · #01` ·
+  **avaliado em `2026-08-21 · #01`**: nasceu `scripts/verificar.sh`, que roda as três de
+  uma vez, e o `CLAUDE.md` manda rodá-lo antes de fechar. Falta decidir com o usuário se
+  o `fechar-sessao.sh` **global** passa a preferir um `scripts/verificar.sh` do projeto
+  quando ele existir — é uma linha, mas mexe em ferramenta de todos os projetos
 - [x] Registrar no `README.md`/`ROADMAP` que o widget passou a ter visibilidade por app,
   quando a Fase 1 fechar (a Tarefa 9 do plano cobre isso) — `2026-08-19 · #02` · feito em
   `2026-08-20 · #01`: o README ganhou a tabela de apps suportados e a nota de "Apps

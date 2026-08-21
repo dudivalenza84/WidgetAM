@@ -30,9 +30,12 @@ daqui:
 
 - **Changelog:** `CHANGELOG.md` na raiz (o app não tem changelog embutido).
 - **Push:** `git push origin main`.
-- **Verificação de qualidade:** `swift build`. O `fechar-sessao.sh` detecta o
-  `Package.swift` e roda sozinho — mas o bundle `.app` só é montado por
-  `scripts/build-app.sh`, que **não** roda no encerramento. Testar o `.app` é manual.
+- **Verificação de qualidade:** `scripts/verificar.sh` roda as três de uma vez —
+  `swift build`, as asserções e as traduções. O `fechar-sessao.sh` detecta o
+  `Package.swift` e roda **só** o `swift build`, então asserção quebrada e chave de
+  tradução faltando passariam batido no encerramento: rodar `scripts/verificar.sh` antes
+  de fechar. O bundle `.app` só é montado por `scripts/build-app.sh`, que também não roda
+  no encerramento — testar o `.app` é manual, com `docs/roteiro-teste-manual.md`.
 - **Suíte de testes:** `swift run MacMediaWidget --run-tests` (sai 0/1). Não é
   `swift test`: as Command Line Tools não trazem XCTest nem swift-testing, então as
   asserções vivem em `SelfTests.swift`, no próprio módulo, sob `#if DEBUG`. Ver
