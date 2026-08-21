@@ -3,6 +3,10 @@
 Uma linha por sessão. Apenas índice — nunca acumula conteúdo de sessão.
 Formato: `YYYY-MM-DD · #NN — <objetivo> — <status>` → [arquivo](docs/sessions/YYYY-MM-DD-NN.md)
 
+## 2026-08-21
+
+- 2026-08-21 · #01 — Roteiro de teste manual da 1.17.0 — em-andamento → [arquivo](docs/sessions/2026-08-21-01.md)
+
 ## 2026-08-20
 
 - 2026-08-20 · #01 — Players adicionais: Spotify, TIDAL, Deezer, navegador e âncora de posição — concluída → [arquivo](docs/sessions/2026-08-20-01.md)

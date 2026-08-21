@@ -50,7 +50,9 @@ Migração para `PENDENCIAS_CONCLUIDAS.md` só por pedido explícito.
   propósito (`DECISOES.md · 2026-08-20 · #01`) e cai no `MediaRemotePlayer` genérico.
   Roteiro na última tabela de `docs/compatibilidade-players.md` — `2026-08-20 · #01`
 
-- [ ] **Testar ao vivo a 1.17.0** (`dist/`, ainda não instalada): trocar de app pelo menu
+- [ ] **Testar ao vivo a 1.17.0** — roteiro completo e executável em
+  `docs/roteiro-teste-manual.md` (`2026-08-21 · #01`), que absorve também o teste
+  pendente da visibilidade por app da 1.16.0. Resumo do que ele cobre: trocar de app pelo menu
   para cada player; barra acompanhando a música no TIDAL e no Deezer; seek arrastando a
   barra no Spotify e no TIDAL; botão "anterior" desligado no Deezer e "próxima" desligado
   no Chrome, com o motivo no tooltip; YouTube Music abrindo o PWA ou o site — roteiro
