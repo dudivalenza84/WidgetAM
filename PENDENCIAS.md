@@ -10,6 +10,18 @@ Migração para `PENDENCIAS_CONCLUIDAS.md` só por pedido explícito.
 > evidência de cada achado, em `docs/auditoria-achados-2026-08-21.md`. Aqui ficam só os
 > itens que precisam de dono — não repetir os 76 achados neste arquivo.
 
+> **Atualização `2026-08-21 · #03`.** A auditoria foi reescrita em linguagem executável
+> no artifact "Auditoria do MacMediaWidget"
+> (<https://claude.ai/code/artifact/300b06cd-90ef-4df9-95cf-68d8786bd903>), onde os 76
+> achados viraram **27 itens**: 5 decisões e 22 tarefas. O usuário liberou **15 tarefas**
+> e elas estão sequenciadas em **nove sessões** no próprio artifact (seção "Ordem de
+> trabalho"): S1 identidade (item 2) · S2 testes de ancoragem (21) · S3 subprocesso com
+> prazo (4) · S4 poll e volume (5, 6) · S5 alvo de volume e permissão negada (10, 15) ·
+> S6 energia (7, 8, 9) · S7 parser e roteamento (11, 12) · S8 primeira abertura (16, 14)
+> · S9 acessibilidade (13). O artifact é a fonte do estado de cada item (liberado /
+> entregue / testado); este arquivo é a fonte do que ainda **não** tem dono.
+
+
 - [ ] **Onda 1 — o que precisa estar certo ANTES de assinar com Developer ID.** Depois
   do certificado, estes custam migração forçada de todos os clientes:
   (a) **remover as duas entitlements dyld** de `Resources/MacMediaWidget.entitlements`
@@ -196,6 +208,101 @@ Migração para `PENDENCIAS_CONCLUIDAS.md` só por pedido explícito.
   Achados no teste ao vivo em `2026-08-21 · #01`. O contraste passou a sair da luminância
   da capa (`CardContrast`, com teste), e o `MarqueeText` da barra de menus foi
   reaproveitado no card com a largura descoberta em vez de informada
+
+## Fora do plano de execução — para uma sessão futura
+
+> Registrado em `2026-08-21 · #03`. Nada aqui foi recusado: são itens que ficaram de
+> fora do plano das nove sessões por decisão pendente, por escolha de momento, ou por
+> não terem sido promovidos a tarefa. Revisitar quando as Decisões 4 e 5 fecharem.
+
+### Decisões em aberto (travam cinco tarefas)
+
+- [ ] **Decisão 4 — Apple Developer Program (US$ 99/ano).** Sem a assinatura não existe
+  certificado; sem certificado não há assinatura, notarização, DMG confiável nem canal
+  de atualização. Decidir também **como titular**: pessoa física ou empresa — o nome
+  legal aparece no Gatekeeper para o cliente, e trocar depois obriga a refazer os
+  certificados. Trava as tarefas 17, 18 e, na prática, o lançamento — `2026-08-21 · #03`
+- [ ] **Decisão 5 — merchant of record e casca jurídica.** Escolher Paddle ou Lemon
+  Squeezy (assumem o imposto internacional), o que define como a chave de licença é
+  gerada e o que o app precisa validar. Junto vêm o EULA — com cláusula explícita sobre
+  a dependência de API não oficial do macOS — e a política de privacidade. Trava a
+  tarefa 22 — `2026-08-21 · #03`
+- [x] **Confirmar o bundle id de WidPlay** — `com.dudivalenza.widplay`, confirmado
+  pelo usuário em `2026-08-21 · #03`. App Store e domínios verificados na mesma sessão
+  (ver `DECISOES.md`): nenhum app com o nome, `widplay.com` registrado desde 2010 e sem
+  site, `.app`/`.dev`/`.net`/`.co`/`.io` livres — `2026-08-21 · #03`
+- [ ] **Busca de anterioridade de marca para "WidPlay" — não feita.** Justia e
+  uspto.report bloqueiam acesso automatizado (Cloudflare) e as APIs do USPTO e do TMview
+  recusaram a consulta; a ausência do nome na busca web **não** é busca de anterioridade.
+  Fazer manualmente em `tmsearch.uspto.gov` e `euipo.europa.eu` (e no INPI, se a venda
+  sair do Brasil) **antes** do certificado Developer ID — o nome fica gravado no
+  notariado. Atenção ao antecedente: existiu uma WidPlay em Valência, Espanha, hoje
+  fechada — verificar se deixou marca viva na UE — `2026-08-21 · #03`
+- [ ] **Registrar `widplay.app` antes de anunciar o nome.** Está livre hoje, custa pouco
+  e resolve dois problemas de uma vez: a página do produto e o endereço HTTPS estável que
+  o appcast do Sparkle (tarefa 17) exige — o `.app` força HTTPS por desenho da TLD. O
+  `.com` está tomado desde 2010, sem site, no Unstoppable Domains — só vale a pena
+  perseguir se a marca virar negócio — `2026-08-21 · #03`
+
+### Tarefas do plano que o usuário não liberou agora
+
+- [ ] **Tarefa 1 — remover as duas entitlements dyld.** Cinco minutos, risco funcional
+  nenhum, e é o único buraco de segurança do build de venda. Não depende de decisão
+  nenhuma. (Mesmo conteúdo do item (a) da Onda 1, acima — não duplicar o trabalho:
+  quando entrar, fechar os dois) — `2026-08-21 · #03`
+- [ ] **Tarefa 3 — declarar no app o que já foi decidido:** `LSMinimumSystemVersion` e
+  `Package.swift` em macOS 26, arm64 declarado, README e material de venda alinhados. As
+  Decisões 2 e 3 já estão em `DECISOES.md`; falta escrevê-las no código. Trinta minutos
+  — `2026-08-21 · #03`
+- [ ] **Tarefa 17 — Sparkle 2.** Depende da Decisão 4 e de um endereço HTTPS estável
+  para o appcast (GitHub Pages ou domínio do produto). Chaves EdDSA geradas pelo
+  usuário, privada no Chaveiro + backup em gerenciador de senhas, **nunca no repo** —
+  `2026-08-21 · #03`
+- [ ] **Tarefa 18 — assinar, notarizar e grampear o DMG.** Depende da Decisão 4.
+  Estender `scripts/package-dmg.sh` com o padrão de variáveis do `build-app.sh`, e
+  publicar o checksum — `2026-08-21 · #03`
+- [ ] **Tarefa 19 — pinar ou vendorizar o `mediaremote-adapter`.** Hoje o build copia do
+  Homebrew da máquina, sem versão nem checksum: release irreproduzível da peça central.
+  Criar `Resources/mediaremote-adapter/`, que o `CLAUDE.md` descreve mas não existe, e
+  gravar a versão dentro do bundle — `2026-08-21 · #03`
+- [ ] **Tarefa 20 — diagnóstico e botão "Reportar problema".** Log nas falhas hoje
+  silenciosas (comando one-shot, `osascript` com exit ≠ 0, linha descartada) e um botão
+  que abra e-mail com versão do app, versão do macOS e estado do adapter. Sem
+  telemetria. Falta o usuário definir o e-mail de suporte — `2026-08-21 · #03`
+- [ ] **Tarefa 22 — EULA, política de privacidade, checkout e chave de licença.**
+  Depende da Decisão 5. O rascunho dos textos é meu; a revisão jurídica de verdade não —
+  para venda internacional, vale modelo de fornecedor especializado — `2026-08-21 · #03`
+
+### Achado grave sem segunda opinião
+
+- [ ] **Letreiros a 30 Hz (tarefa 8) nunca foi refutado.** Dos 11 achados altos, 10
+  passaram por um verificador adversarial; este não — o agente caiu no limite de sessão
+  e não foi reexecutado. A evidência de código existe
+  (`MenuStatusView.swift:80`, `AppMenuController.swift:112`), mas ele entrou no plano com
+  severidade não confirmada. **Antes ou durante a S6**: refutar como os outros, ou medir
+  o consumo real do timer — se o impacto for menor que o descrito, rebaixar em vez de
+  tratar como grave — `2026-08-21 · #03`
+
+### Os 30 achados baixos que não viraram tarefa
+
+- [ ] **Não promovidos ao plano; ficam registrados para uma varredura futura de
+  acabamento.** Todos com arquivo e linha em `docs/auditoria-achados-2026-08-21.md`. Os
+  de maior chance de incomodar um cliente: menu da bandeja que se auto-fecha após 2 s
+  sem hover, fora do padrão do macOS (#60); atalho global fixo em ⌃⌥⌘M, sem
+  configuração e sem aviso quando o registro falha (#61); duplo clique para abrir o
+  player sem nenhuma pista na UI (#62); rótulo "Opacidade do tint", jargão de
+  implementação (#63); falha silenciosa ao alternar "Abrir no login", com o toggle
+  podendo mostrar estado errado (#64); tipografia em tamanhos fixos, ignorando o ajuste
+  de tamanho de texto do sistema (#65). Os demais são técnicos e sem efeito visível
+  — `2026-08-21 · #03`
+
+### Medição que a auditoria não fez
+
+- [ ] **As afirmações de energia são derivadas do código, não medidas.** Frequência de
+  timer e criação de processos foram lidas; consumo real, não. Medir com `powermetrics`
+  **antes** da S3 e **depois** da S6, e registrar o antes/depois — é o teste honesto, e
+  está coerente com a regra do projeto de não afirmar o que não foi observado
+  — `2026-08-21 · #03`
 
 ## Média
 

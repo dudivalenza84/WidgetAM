@@ -1,45 +1,44 @@
 # Estado — MacMediaWidget
 
-Última sessão: 2026-08-21 · #02 — Auditoria completa pré-comercialização (ultracode) — concluída
+Última sessão: 2026-08-21 · #03 — Guia executável da auditoria, decisões de produto e plano de execução — concluída
 
 ## Próximo passo
 
-O usuário está lendo o relatório da auditoria e vai voltar para conversar — **a conversa
-decide o que entra primeiro**, não abrir trabalho por conta própria. Relatório em
-`docs/auditoria-comercializacao.md` (síntese, seis causas-raiz, plano em 5 ondas) e
-`docs/auditoria-achados-2026-08-21.md` (os 76 achados com evidência).
+**Sessão 1 do plano: virar WidPlay.** Trocar `CFBundleName`, `CFBundleDisplayName` e
+`CFBundleIdentifier` (`com.dudivalenza.widplay`) no `Info.plist`, mais o nome do alvo no
+`Package.swift`, `scripts/build-app.sh`, README e `CLAUDE.md`. Depois de montar o `.app`,
+o usuário apaga o antigo de `/Applications`, remove a entrada antiga em Ajustes ›
+Privacidade › Automação, reinstala e reconfigura — a troca de bundle id reseta TCC, item
+de login e preferências.
 
-Se ele mandar começar sem discutir, o primeiro item é **remover as duas entitlements
-dyld** de `Resources/MacMediaWidget.entitlements`: cinco minutos, risco funcional
-nenhum, e é o único achado alto cuja correção não depende de decisão de produto.
+O plano inteiro (nove sessões, ordem e porquê) está no artifact
+<https://claude.ai/code/artifact/300b06cd-90ef-4df9-95cf-68d8786bd903>, seção "Ordem de
+trabalho"; o índice das sessões está no topo de `PENDENCIAS.md`.
 
 ## Pendências abertas (prioridade)
 
-- [ ] **Onda 1 — antes de assinar com Developer ID**: entitlements dyld, nome/bundle id
-  definitivo, requisito de sistema coerente. Depois do certificado, custam migração
-  forçada de todos os clientes
-- [ ] **Onda 2** — uma implementação assíncrona de subprocesso (fecha cinco achados)
-- [ ] **Onda 3** — o app não fica ocioso quando nada toca
-- [ ] Ancorar a posição por `elapsedTime + (agora − timestamp)` — **e cobrir com teste
-  antes**, porque o bloco de reancoragem tem zero cobertura
-- [ ] Assinar o Apple Developer Program (US$ 99/ano) — segue bloqueando o resto da Fase 4
+- [ ] **S1 — WidPlay** (tarefa 2): renomear tudo e reinstalar
+- [ ] **S2 — testes da ancoragem de posição** (tarefa 21), antes de mexer no coração
+- [ ] **S3 — subprocesso com prazo** (tarefa 4): fecha cinco achados; medir consumo antes
+- [ ] **Busca de anterioridade de marca "WidPlay"** — não feita, bloqueia o certificado
+- [ ] **Registrar `widplay.app`** (livre hoje) — serve de site e de endereço do appcast
 
 ## Decisões vigentes que restringem o trabalho
 
-- **A auditoria produziu recomendações, não decisões.** Nada dela foi registrado em
-  `DECISOES.md` — o usuário ainda não decidiu. Não tratar as ondas como aprovadas.
+- **Nome: WidPlay, id `com.dudivalenza.widplay`. Só Apple Silicon. macOS 26+.** As duas
+  últimas ainda **não estão no código** — a tarefa 3 não foi liberada, então o app segue
+  declarando macOS 15.
+- **O artifact é a fonte do estado de cada tarefa** (Pode fazer / Entregue / Testado);
+  `PENDENCIAS.md` é a fonte do que não tem dono. Não criar uma terceira lista.
+- **Ler o artifact antes de retomar**: as autorizações e os comentários do usuário estão
+  gravados nele (`Artifact action:read`), não nesta conversa.
+- **A auditoria produziu recomendações, não decisões.** Só o que está em `DECISOES.md`
+  está decidido; tarefa não marcada como "Pode fazer" não entra.
 - **Nenhuma capacidade entra no código sem evidência observada.** Onde o plano e
   `docs/compatibilidade-players.md` divergirem, **manda a matriz**.
 - **O widget não afirma o que a fonte não garante**: sem `.streamPosition` não se ancora a
   barra, sem `.reliablePlaybackState` não se diz "tocando" nem se anima a barra.
-- **O observador de um teste tem que ser do domínio do player.** Para navegador, é a
-  página via JavaScript — e o `scripts/testar-player.sh` já escolhe sozinho pelo bundle id.
-- **Uma fonte pode ter identidade dupla:** o Safari publica a sessão sob
-  `com.apple.WebKit.GPU` e mora em `com.apple.Safari`; atalhos web separam `catalogID` de
-  `bundleIdentifier`.
-- **O comando do MediaRemote não tem destinatário** — só AppleScript endereça um app; e um
-  segundo player tocando **toma a sessão no meio de um teste**.
-- **`.transport` é só play/pause.** Pular faixa são capacidades separadas.
+- **O comando do MediaRemote não tem destinatário** — só AppleScript endereça um app.
 - **O conteúdo do card se contrasta com o card**, não com o tema do sistema.
 - Idioma-base inglês; string nova de UI precisa de chave no `pt-BR.lproj` (+ script);
   área interativa nova precisa de `.nonDraggableWindowArea()`.
@@ -48,14 +47,13 @@ nenhum, e é o único achado alto cuja correção não depende de decisão de pr
 ## Alertas
 
 - **Verificação: rodar `scripts/verificar.sh`** (build + 148 asserções + traduções). O
-  `fechar-sessao.sh` roda **só** `swift build` — decisão do usuário de não mexer no script
-  global — então asserção quebrada passaria batido no encerramento.
-- **Nenhum código mudou nesta sessão.** A 1.17.0 instalada em `/Applications` continua
-  válida e validada pelo roteiro inteiro; o `CHANGELOG` registra a auditoria sem versão.
-- Warning pré-existente em `ContentView.swift` (`doubleValue` main actor-isolated) —
-  agora com pendência própria, e o conserto é anotar o `Coordinator` com `@MainActor`.
-- **Um achado alto não foi refutado**: os letreiros a 30 Hz. O verificador caiu no limite
-  de sessão e não foi reexecutado — está marcado como não verificado no anexo.
-- Grafo em 4/5 no contador — sem `graphify update` nesta sessão, por desenho.
-- A nota final de `PENDENCIAS.md` diz "não há `ROADMAP.md` no repositório", mas há —
-  a linha ficou velha e não foi corrigida para não inflar o escopo do encerramento.
+  `fechar-sessao.sh` roda **só** `swift build`.
+- **Nenhum código mudou nesta sessão** — a 1.17.0 em `/Applications` continua válida.
+- Warning pré-existente em `ContentView.swift` (`doubleValue` main actor-isolated) — o
+  conserto é anotar o `Coordinator` com `@MainActor`.
+- **Um achado alto nunca foi refutado**: os letreiros a 30 Hz (tarefa 8). Refutar ou
+  medir antes da S6, em vez de tratar como grave por herança.
+- **As afirmações de energia são derivadas do código, não medidas.** Medir com
+  `powermetrics` antes da S3 e depois da S6.
+- Push: tentar `git push origin main` direto; só usar o contorno com
+  `credential.helper=` vazio se aparecer 403 de `DuneeAdmin`.

@@ -5,6 +5,7 @@ Formato: `YYYY-MM-DD · #NN — <objetivo> — <status>` → [arquivo](docs/sess
 
 ## 2026-08-21
 
+- 2026-08-21 · #03 — Guia executável da auditoria, decisões de produto e plano de execução — concluída → [arquivo](docs/sessions/2026-08-21-03.md)
 - 2026-08-21 · #02 — Auditoria completa pré-comercialização (ultracode) — concluída → [arquivo](docs/sessions/2026-08-21-02.md)
 - 2026-08-21 · #01 — Roteiro de aceitação, oito bugs achados nele, e a dívida técnica — concluída → [arquivo](docs/sessions/2026-08-21-01.md)
 

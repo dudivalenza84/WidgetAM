@@ -3,6 +3,21 @@
 Formato semver: MINOR por release cronológica, PATCH para hotfix.
 Entradas novas vão no topo.
 
+## Planejamento — 2026-08-21 · #03 — a auditoria vira plano de trabalho
+
+Sem versão: nenhuma linha de `Sources/`, `Resources/` ou `scripts/` mudou. Fica
+registrado aqui porque define o que será construído e sob que nome.
+
+Os 76 achados da auditoria foram reescritos como **27 itens executáveis** (5 decisões e
+22 tarefas) no artifact "Auditoria do MacMediaWidget", cada tarefa com arquivo, passo a
+passo, critério de aceitação e dono. O usuário liberou 15 tarefas, sequenciadas em
+**nove sessões** por dependência técnica.
+
+**Decisões de produto** (em `DECISOES.md`): o app passa a se chamar **WidPlay**
+(`com.dudivalenza.widplay`), suporta **apenas Apple Silicon** e exige **macOS 26+**. A
+disponibilidade do nome foi verificada na App Store e nos registros de domínio; a busca
+de anterioridade de marca **não** foi feita e bloqueia o certificado Developer ID.
+
 ## Auditoria — 2026-08-21 · #02 — pré-comercialização
 
 Sem versão: nenhuma linha de `Sources/`, `Resources/` ou `scripts/` mudou. Fica

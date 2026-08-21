@@ -3,6 +3,71 @@
 Decisões com efeito além da sessão em que foram tomadas (ADR-lite). Entradas novas
 vão no topo. O que está aqui não se rediscute sem motivo novo.
 
+## 2026-08-21 · #03 — O nome do produto é WidPlay
+
+**Contexto.** "MacMediaWidget" fere a diretriz de marcas da Apple, que veda "Mac"
+incorporado ao nome (permite "X for Mac", não "MacX"). O nome está no `CFBundleName`, no
+`CFBundleDisplayName` e — o que pesa — no `CFBundleIdentifier`. Trocar o identificador
+depois do lançamento reseta, na máquina de cada cliente, a permissão de Automação (TCC),
+o item de login e o domínio de `UserDefaults`.
+
+**Decisão.** O produto passa a se chamar **WidPlay**, com o identificador
+`com.dudivalenza.widplay` (confirmado pelo usuário em 2026-08-21). A troca acontece
+**antes** do primeiro build assinado com Developer ID e antes de qualquer material novo
+sob o nome antigo.
+
+**Alternativa descartada.** Manter "MacMediaWidget" até depois do lançamento: o custo de
+migração cresce a cada cliente vendido, e o risco de notificação jurídica da Apple já
+estava registrado no `ROADMAP.md`.
+
+**Verificação feita em 2026-08-21 · #03.**
+
+- **App Store (iOS + Mac, loja US, iTunes Search API):** nenhum app chamado WidPlay. As
+  seis correspondências difusas são outros nomes (WePlay, WIDR, WIA TV).
+- **Domínios (RDAP):** `widplay.com` **registrado desde 2010-07-16** (registrar
+  Unstoppable Domains) e **sem DNS** — nenhum site no ar. Livres: `widplay.app`,
+  `widplay.dev`, `widplay.net`, `widplay.co`, `widplay.io`.
+- **Antecedente:** existiu uma **WidPlay** em Valência, Espanha — rede social com
+  interface de desktop na nuvem —, registrada no Crunchbase como *permanently closed*.
+  Os identificadores `@widplay` no GitHub e no X estão ocupados.
+- **Marcas:** **não verificado.** Justia e uspto.report bloquearam o acesso automatizado
+  (Cloudflare), e as APIs do USPTO e do TMview recusaram a consulta. Nenhum registro
+  "WidPlay" apareceu na busca web, o que **não** equivale a busca de anterioridade.
+
+**O que isso permite e o que não permite.** Permite adotar o nome no código agora: não
+há conflito de app nem produto ativo com o nome. **Não** dispensa a busca de
+anterioridade de marca antes do certificado Developer ID e do lançamento — fica em
+`PENDENCIAS.md`.
+
+## 2026-08-21 · #03 — O produto é só para Apple Silicon
+
+**Contexto.** O build atual é arm64 puro (binário e framework do adapter), enquanto o
+`Info.plist` declarava macOS 15 — ou seja, um cliente Intel compraria e receberia "não é
+possível abrir", sem mensagem útil.
+
+**Decisão.** Não suportar Macs Intel. A exigência entra no app e no material de venda,
+para que a instalação recuse com mensagem clara. Revisível no futuro conforme o feedback
+dos usuários.
+
+**Alternativa descartada.** Build universal: exigiria o framework do adapter também em
+x86_64 (não verificado) e uma máquina Intel para testar, que não existe. Prometer
+suporte sem poder testá-lo é o oposto da regra do projeto de não afirmar o que não foi
+observado.
+
+## 2026-08-21 · #03 — O requisito mínimo é macOS 26
+
+**Contexto.** O projeto declarava três coisas diferentes: `Info.plist` e `Package.swift`
+em macOS 15, README em 26, e o visual Liquid Glass — que é o argumento de venda — só
+existe a partir do 26, com fallback nunca testado abaixo disso.
+
+**Decisão.** Exigir **macOS 26+**. `LSMinimumSystemVersion` e `Package.swift` sobem para
+26; o README e o material de venda passam a dizer a mesma coisa. Combinado com a decisão
+de arm64-only, o público-alvo fica coerente com o que o produto entrega. Revisível
+conforme o feedback dos usuários.
+
+**Alternativa descartada.** Suportar 15+: obrigaria a testar e a mostrar no material de
+venda o visual de fallback, que não é o produto anunciado.
+
 ## 2026-08-21 · #01 — O Safari tem identidade dupla: quem publica a sessão não é quem abre
 
 **Contexto.** Toda a arquitetura de players assume que o `bundleIdentifier` da sessão de
