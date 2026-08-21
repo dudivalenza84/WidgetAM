@@ -3,6 +3,23 @@
 Formato semver: MINOR por release cronológica, PATCH para hotfix.
 Entradas novas vão no topo.
 
+## Auditoria — 2026-08-21 · #02 — pré-comercialização
+
+Sem versão: nenhuma linha de `Sources/`, `Resources/` ou `scripts/` mudou. Fica
+registrado aqui porque muda o que se sabe sobre o produto.
+
+Sete auditores independentes varreram o app (correção, concorrência, segurança,
+performance, UI/UX, distribuição e qualidade), com os achados graves submetidos a
+refutação adversarial: **76 achados, nenhum crítico**; dos 11 altos, 5 sobreviveram à
+refutação. Relatório em `docs/auditoria-comercializacao.md`, evidência integral em
+`docs/auditoria-achados-2026-08-21.md`.
+
+O veredito: o código está bom, mas o produto não está à venda — e o que falta, na
+maior parte, não é código. Seis causas-raiz concentram os 76 achados, sendo a maior
+o modelo de subprocesso (I/O bloqueante sem timeout, pipes não drenados, sem guarda
+de chamada em voo), e os bloqueadores comerciais são os que o `ROADMAP` já previa,
+nenhum feito.
+
 ## [1.17.0] — 2026-08-20 · #01 — Spotify, TIDAL, Deezer, navegador e posição vinda do stream
 
 Fecha a Fase 1: o critério de saída exigia o Spotify, que agora entra com a camada

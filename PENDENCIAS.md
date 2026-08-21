@@ -5,6 +5,50 @@ Migração para `PENDENCIAS_CONCLUIDAS.md` só por pedido explícito.
 
 ## Alta
 
+> As pendências abaixo saíram da auditoria de `2026-08-21 · #02`. O plano completo, com
+> as cinco ondas e o porquê da ordem, está em `docs/auditoria-comercializacao.md`; a
+> evidência de cada achado, em `docs/auditoria-achados-2026-08-21.md`. Aqui ficam só os
+> itens que precisam de dono — não repetir os 76 achados neste arquivo.
+
+- [ ] **Onda 1 — o que precisa estar certo ANTES de assinar com Developer ID.** Depois
+  do certificado, estes custam migração forçada de todos os clientes:
+  (a) **remover as duas entitlements dyld** de `Resources/MacMediaWidget.entitlements`
+  (`allow-dyld-environment-variables` e `disable-library-validation`) — a justificativa
+  no comentário é tecnicamente falsa, o hardened runtime não bloqueia `exec` de binário
+  de plataforma e o framework é carregado pelo processo do perl; elas só se aplicam no
+  build Developer ID, ou seja, **a versão vendida seria a vulnerável**, notarizada;
+  (b) **decidir o nome definitivo e o bundle id** — "Mac" incorporado fere a diretriz de
+  marcas da Apple, e trocar o id depois reseta TCC, item de login e preferências;
+  (c) **alinhar o requisito de sistema** entre `Info.plist` (15.0), `Package.swift`,
+  README (26) e material de venda, e decidir Intel: universal ou arm64 declarado
+  — `2026-08-21 · #02`
+
+- [ ] **Onda 2 — a dívida estrutural: uma implementação assíncrona de subprocesso.**
+  Fila de dispatch própria, `terminationHandler` com `withCheckedContinuation`, os dois
+  pipes drenados concorrentemente, watchdog com `terminate()` e status de saída checado
+  e logado. Substitui as três cópias atuais (`AppleScriptRunner`,
+  `SystemVolumeController`, `MediaRemoteAdapter`) e fecha cinco achados de uma vez —
+  inclusive o congelamento silencioso por stderr não drenado do processo de stream, que
+  o verificador apontou como o pior modo de falha do arquivo. Junto: guarda de chamada
+  em voo no poll de posição e coalescência na escrita de volume (o padrão certo já
+  existe vinte linhas ao lado, no `SystemVolumeController`) — `2026-08-21 · #02`
+
+- [ ] **Onda 3 — o app não fica ocioso quando nada toca.** Poll de posição a 1 Hz roda
+  mesmo com a música pausada (~86 mil `osascript`/dia); o timer de 2 Hz publica
+  `displayedElapsed` sem checar mudança, re-renderizando três hierarquias SwiftUI
+  inclusive com o widget oculto; letreiros a 30 Hz rodam num item de menu fechado; e o
+  `body` do `ContentView` consulta LaunchServices a cada avaliação. Medir com
+  `powermetrics` antes e depois — a auditoria leu código, não mediu — `2026-08-21 · #02`
+
+- [ ] **O alvo do volume nunca é reavaliado, e com Automação negada o slider morre.**
+  `retarget()` só dispara na troca de bundle id, mas a decisão depende de `isRunning` e
+  das capacidades. No modo fixo o id nunca muda, então nunca reavalia. Pior: o
+  comentário em `AppleScriptPlayer.swift:157-161` promete que após um `-1743` o router
+  passa ao volume do sistema — não passa, e o volume é **o único comando sem fallback
+  para o MediaRemote**. Corrigir por evento (`NSWorkspace.didLaunch`/`didTerminate` +
+  reavaliação após `-1743`) e reler o valor por listener do CoreAudio, não por polling
+  — `2026-08-21 · #02`
+
 - [x] **Tarefa 0 do plano — bateria de testes nos players (gate do desenvolvimento):**
   rodar `scripts/testar-player.sh` em `com.spotify.client Spotify`, `com.tidal.desktop`,
   `com.deezer.deezer-desktop` e `com.google.Chrome`, cada um com fila de **3+ faixas**
@@ -154,6 +198,38 @@ Migração para `PENDENCIAS_CONCLUIDAS.md` só por pedido explícito.
   reaproveitado no card com a largura descoberta em vez de informada
 
 ## Média
+
+- [ ] **Onda 4 — correção e UX da auditoria.** Snapshot com conteúdo deve partir de
+  `TrackInfo()` e não do estado atual (capa e álbum da faixa anterior grudam); os três
+  buracos de roteamento (fonte oculta pausada contra o invariante do `SelfTests`, atalho
+  web que pausa e espera sessão impossível, play que vira no-op com auto-launch
+  desligado); acessibilidade do card (rótulos, barra de seek ajustável, `reduce motion`
+  — o padrão certo já existe no `MenuTransportView`); `NSAppleEventsUsageDescription` em
+  `InfoPlist.strings` por idioma (hoje todo usuário não-lusófono vê o prompt de permissão
+  em português); caminho de recuperação quando a Automação é negada; e o onboarding
+  mínimo já previsto na Fase 1 do `ROADMAP` — hoje o padrão é Amazon Music, então quem
+  não o tem recebe, de saída, um alerta oferecendo instalar um app que nunca pediu
+  — `2026-08-21 · #02`
+
+- [ ] **Onda 5 — sustentação.** Sparkle 2 com appcast e chaves EdDSA fora do repo;
+  assinar/notarizar/grampear o **DMG** e não só o `.app`; pinar ou vendorizar o adapter
+  com a versão gravada no bundle (hoje vem do `brew --prefix` do dia, e o `CLAUDE.md`
+  descreve um `Resources/mediaremote-adapter/` que não existe); log de diagnóstico e
+  botão "Reportar problema"; EULA, política de privacidade, checkout e chave de licença
+  — `2026-08-21 · #02`
+
+- [ ] **Testar a ancoragem de posição antes do refactor já agendado.** O bloco de
+  reancoragem do `NowPlayingController` é o caminho com mais bugs documentados do
+  projeto e tem **zero cobertura** — e a pendência de ancorar por
+  `elapsedTime + (agora − timestamp)` vai mexer exatamente ali. Extrair a decisão para
+  função pura com relógio injetado e cobrir os quatro ramos históricos **antes** de
+  mexer — `2026-08-21 · #02`
+
+- [ ] **Corrigir o warning conhecido e fechar a porta.** `Coordinator.changed` lê
+  `doubleValue` (main actor) de contexto `nonisolated` em `ContentView.swift:471` —
+  anotar a classe com `@MainActor` e, feito isso, fazer o `verificar.sh` falhar em
+  qualquer warning. Warning tolerado é como o segundo aparece sem ninguém notar; em modo
+  estrito de Swift 6 essa referência tende a virar erro — `2026-08-21 · #02`
 
 - [ ] Migrar `SelfTests.swift` para swift-testing **se** o Xcode entrar no projeto — as
   funções já são independentes, é mecânico. Enquanto não houver, `swift test` é
