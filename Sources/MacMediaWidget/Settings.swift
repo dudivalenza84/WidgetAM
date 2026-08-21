@@ -149,6 +149,7 @@ final class AppSettings: ObservableObject {
         // exatamente o que a ausência da chave já devolve.
         hiddenPlayerIDs = Set(defaults.stringArray(forKey: Keys.hiddenPlayerIDs) ?? [])
         discoveredPlayerIDs = defaults.stringArray(forKey: Keys.discoveredPlayerIDs) ?? []
+        pruneDiscovered()
     }
 
     // MARK: - Visibilidade por app
@@ -174,8 +175,25 @@ final class AppSettings: ObservableObject {
 
     /// Registra uma fonte vista no stream que não está no catálogo.
     func registerDiscovered(_ id: String) {
-        guard PlayerCatalog.entry(for: id) == nil, !discoveredPlayerIDs.contains(id) else { return }
+        guard !PlayerCatalog.coveredIDs.contains(id), !discoveredPlayerIDs.contains(id) else { return }
         discoveredPlayerIDs.append(id)
+    }
+
+    /// Tira da lista de descobertos o que o catálogo passou a cobrir.
+    ///
+    /// O catálogo cresce entre versões: Spotify, TIDAL, Deezer e Chrome foram descobertos
+    /// na 1.16.0, quando ainda não existiam ali, e ficaram gravados no `UserDefaults`. Na
+    /// 1.17.0 eles entraram no catálogo e a lista de apps controlados passou a mostrar
+    /// cada um **duas vezes** — uma como conhecido, outra como descoberta velha. Roda na
+    /// carga, uma vez por sessão do app.
+    private func pruneDiscovered() {
+        let cobertos = PlayerCatalog.coveredIDs
+        let restantes = discoveredPlayerIDs.filter { !cobertos.contains($0) }
+        guard restantes.count != discoveredPlayerIDs.count else { return }
+        // A lista de ocultos não se toca: o id é o mesmo antes e depois de o app entrar
+        // no catálogo, então quem estava oculto continua oculto — que é o que o usuário
+        // pediu. (Diferente de `forgetDiscovered()`, onde esquecer inclui desocultar.)
+        discoveredPlayerIDs = restantes
     }
 
     func forgetDiscovered() {

@@ -123,6 +123,12 @@ Migração para `PENDENCIAS_CONCLUIDAS.md` só por pedido explícito.
   guarda de instância única em `App.swift`, verificada por execução dupla real (a segunda
   sai em 13 ms com `exit 0`)
 
+- [x] **Apps duplicados em "Apps controlados" e janela de Preferências sem rolagem.**
+  Achados no teste ao vivo em `2026-08-21 · #01` (bloco 03 do roteiro). Os cinco ids
+  duplicados estavam gravados no `UserDefaults` desde a 1.16.0 — evidência direta em
+  `settings.discoveredPlayerIDs`. Corrigidos na mesma sessão, com teste automatizado da
+  purga
+
 ## Média
 
 - [ ] Migrar `SelfTests.swift` para swift-testing **se** o Xcode entrar no projeto — as

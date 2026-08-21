@@ -59,6 +59,8 @@ enum SelfTests {
         visibilidadePadrãoÉTudoVisível()
         listaDeEscolhaOmiteOcultos()
         fonteOcultaTemNomeParaExibir()
+        catálogoCobreOBundleDoAtalho()
+        descobertaNãoRepeteOQueOCatálogoCobre()
 
         appleScriptDecimalComVírgula()
         appleScriptEntradaInválida()
@@ -537,6 +539,44 @@ enum SelfTests {
             L10n.sourceHidden("Spotify").contains("Spotify"),
             "o aviso de fonte oculta precisa nomear o app"
         )
+    }
+
+    /// Um atalho é escolhido pelo id sintético mas **abre** outro bundle — e é esse que
+    /// aparece no Now Playing. Contar só `entry.id` deixava o PWA do YouTube Music passar
+    /// por fonte desconhecida.
+    private static func catálogoCobreOBundleDoAtalho() {
+        let cobertos = PlayerCatalog.coveredIDs
+        expect(cobertos.contains(PlayerCatalog.youTubeMusicID), "id do catálogo é coberto")
+        expect(cobertos.contains(PlayerCatalog.youTubeMusicPWA), "o bundle que o atalho abre também")
+        expect(cobertos.contains(SpotifyPlayer.bundleID), "app comum é coberto pelo próprio id")
+    }
+
+    /// O bug de `2026-08-21 · #01`: Spotify, TIDAL, Deezer e Chrome foram descobertos na
+    /// 1.16.0, entraram no catálogo na 1.17.0, e a lista de apps controlados passou a
+    /// mostrar cada um duas vezes — uma como conhecido, outra como descoberta velha.
+    private static func descobertaNãoRepeteOQueOCatálogoCobre() {
+        let settings = AppSettings.shared
+        let antes = settings.discoveredPlayerIDs
+
+        for id in [SpotifyPlayer.bundleID, TidalPlayer.bundleID, PlayerCatalog.chromeID,
+                   PlayerCatalog.youTubeMusicID, PlayerCatalog.youTubeMusicPWA] {
+            settings.registerDiscovered(id)
+            expect(
+                !settings.discoveredPlayerIDs.contains(id),
+                "\(id) está no catálogo e não pode virar descoberta"
+            )
+        }
+
+        let inédito = "com.exemplo.player.inedito"
+        settings.registerDiscovered(inédito)
+        expect(settings.discoveredPlayerIDs.contains(inédito), "fonte fora do catálogo é registrada")
+        settings.registerDiscovered(inédito)
+        expect(
+            settings.discoveredPlayerIDs.filter { $0 == inédito }.count == 1,
+            "registrar duas vezes não duplica"
+        )
+
+        settings.discoveredPlayerIDs = antes
     }
 
     // MARK: - AppleScript

@@ -46,7 +46,7 @@ enum PlayerCatalog {
 
     /// Bundle id do PWA do YouTube Music instalado pelo Chrome. Serve só para abrir —
     /// a sessão de Now Playing sai como o navegador de qualquer forma.
-    private static let youTubeMusicPWA = "com.google.Chrome.app.cinhimbnkkaeohfgghhklpknlkffjgod"
+    static let youTubeMusicPWA = "com.google.Chrome.app.cinhimbnkkaeohfgghhklpknlkffjgod"
 
     private static let youTubeMusicURL = URL(string: "https://music.youtube.com")!
 
@@ -120,6 +120,25 @@ enum PlayerCatalog {
 
     static func entry(for id: String) -> PlayerCatalogEntry? {
         entries.first { $0.id == id }
+    }
+
+    /// Todo id que o catálogo já cobre, para "fonte descoberta" não repetir o que já
+    /// está na lista de conhecidos.
+    ///
+    /// Não basta olhar `entry.id`: um atalho é escolhido pelo id sintético mas **abre**
+    /// outro bundle, e é esse bundle que aparece no Now Playing. Sem contar os dois, o
+    /// PWA do YouTube Music entra como descoberta e a lista mostra "YouTube Music" duas
+    /// vezes (visto ao vivo em `2026-08-21 · #01`).
+    static var coveredIDs: Set<String> {
+        var ids = Set<String>()
+        for entrada in entries {
+            ids.insert(entrada.id)
+            if case .shortcut(let destino) = entrada.kind,
+               case .appElseURL(let bundleID, _) = destino {
+                ids.insert(bundleID)
+            }
+        }
+        return ids
     }
 
     /// Só as entradas que identificam sessão de Now Playing.

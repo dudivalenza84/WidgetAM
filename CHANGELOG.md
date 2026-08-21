@@ -24,8 +24,17 @@ onde ela contradisse o plano, mandou a matriz.
   vídeo correndo.
 - Safari fica fora do catálogo até ser medido — continua controlável como fonte genérica.
 
-Três bugs corrigidos antes da aceitação, os três sobre o widget prometer o que não
-entrega:
+Cinco bugs corrigidos antes da aceitação, quatro deles achados no teste ao vivo:
+
+- **Apps duplicados na lista de "Apps controlados".** Spotify, TIDAL, Deezer e Chrome
+  foram descobertos como fontes na 1.16.0, quando ainda não estavam no catálogo; ao
+  entrarem nele agora, apareciam duas vezes — uma como conhecido, outra como descoberta
+  velha. O YouTube Music duplicava pelo bundle do PWA, que é diferente do id do catálogo.
+  A lista antiga é purgada na abertura, e o catálogo passa a contar também o bundle que
+  cada atalho abre.
+- **A janela de Preferências crescia sem teto.** Com a lista cheia ela passava da altura
+  da tela e o fim do formulário ficava inalcançável, porque altura livre desliga a
+  rolagem. Agora tem teto na área útil da tela e o formulário rola por dentro.
 
 - **Instância única.** Cada cópia do app plantava o próprio ícone na bandeja, com o widget
   duplicado atrás. Pelo Finder isso nunca acontecia — o LaunchServices barra —, mas

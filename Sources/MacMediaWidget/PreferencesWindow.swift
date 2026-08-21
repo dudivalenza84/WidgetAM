@@ -42,6 +42,17 @@ struct PreferencesView: View {
     /// "Apps controlados" alteram esta lista na mesma tela, ao vivo.
     private var players: [Player] { PlayerRegistry.shared.selectablePlayers() }
 
+    /// Teto de altura da janela: nunca mais que a área útil da tela, descontando barra
+    /// de menus e uma folga para o Dock.
+    private var maxHeight: CGFloat {
+        let visível = NSScreen.main?.visibleFrame.height ?? 800
+        return max(380, min(760, visível - 120))
+    }
+
+    /// Altura de abertura. Fica no teto porque o formulário é mais alto que qualquer
+    /// tela em uso normal — abrir menor só esconderia conteúdo de graça.
+    private var idealHeight: CGFloat { maxHeight }
+
     /// Catálogo inteiro, inclusive o que não está instalado — a lista é também a
     /// vitrine do que o widget suporta.
     private var catalogEntries: [PlayerCatalogEntry] {
@@ -56,7 +67,11 @@ struct PreferencesView: View {
             form
         }
         .frame(width: 460)
-        .fixedSize(horizontal: false, vertical: true)
+        // Sem teto, a janela crescia com a lista até passar da tela, e o conteúdo do fim
+        // ficava inalcançável — não há rolagem quando a altura é livre. Com o teto, o
+        // `Form` volta a rolar por dentro. Visto ao vivo em `2026-08-21 · #01`, com a
+        // lista de apps controlados cheia.
+        .frame(minHeight: 380, idealHeight: idealHeight, maxHeight: maxHeight)
     }
 
     /// Cabeçalho de marca: o ícone real do bundle (icns; genérico no binário solto de
