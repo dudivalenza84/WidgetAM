@@ -230,8 +230,9 @@ final class AppMenuController: NSObject, NSMenuDelegate {
     }
 
     @objc private func selectPlayer(_ sender: NSMenuItem) {
-        guard let bundleId = sender.representedObject as? String else { return }
-        AppSettings.shared.preferredPlayerBundleId = bundleId
-        PlayerRegistry.shared.player(for: bundleId)?.launch()
+        guard let bundleId = sender.representedObject as? String,
+              let player = PlayerRegistry.shared.player(for: bundleId)
+        else { return }
+        nowPlaying.switchTo(player)
     }
 }

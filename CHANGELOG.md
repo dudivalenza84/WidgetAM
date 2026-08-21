@@ -24,7 +24,13 @@ onde ela contradisse o plano, mandou a matriz.
   vídeo correndo.
 - Safari fica fora do catálogo até ser medido — continua controlável como fonte genérica.
 
-Cinco bugs corrigidos antes da aceitação, quatro deles achados no teste ao vivo:
+Seis bugs corrigidos antes da aceitação, cinco deles achados no teste ao vivo:
+
+- **"Trocar app" agora troca de verdade.** Antes ele definia o preferido e abria o app,
+  mas a sessão de Now Playing continuava com o anterior — no modo automático o card
+  seguia mostrando o app antigo até alguém dar play no novo. Agora o widget silencia a
+  sessão atual e entrega o palco ao escolhido; nos apps com AppleScript a troca é
+  imediata, nos demais o app vem à frente para o play do usuário.
 
 - **Apps duplicados na lista de "Apps controlados".** Spotify, TIDAL, Deezer e Chrome
   foram descobertos como fontes na 1.16.0, quando ainda não estavam no catálogo; ao

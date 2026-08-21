@@ -444,6 +444,20 @@ final class NowPlayingController: ObservableObject {
         }
     }
 
+    #if DEBUG
+    /// Injeta um estado de sessão para o `SelfTests`.
+    ///
+    /// O `track` real só vem do stream do adapter, e por isso os caminhos que decidem
+    /// **para onde o comando vai** — que dependem de quem detém a sessão — ficavam sem
+    /// cobertura (`PENDENCIAS.md`, `2026-08-19 · #02`). Fora de debug não existe.
+    func simulateSession(bundleIdentifier: String?, isPlaying: Bool) {
+        var t = TrackInfo()
+        t.bundleIdentifier = bundleIdentifier
+        t.isPlaying = isPlaying
+        track = t
+    }
+    #endif
+
     // MARK: - Comandos
 
     func next() {
@@ -469,6 +483,42 @@ final class NowPlayingController: ObservableObject {
         anchorWall = Date()
         lastPositionPoll = Date()
         refreshDisplayedElapsed()
+    }
+
+    /// Troca o app que o widget mostra e controla — o que o item "Trocar app" promete.
+    ///
+    /// Definir o preferido e abrir o app não bastava: no modo automático o card espelha a
+    /// **sessão** de Now Playing, que continua sendo do app anterior até alguém dar play
+    /// no novo. A ação ficava sem efeito visível (relatado ao vivo em `2026-08-21 · #01`).
+    ///
+    /// O quanto dá para fazer depende do app escolhido, e a diferença é a de sempre:
+    /// - **endereçável** (Apple Music, Spotify): o play chega nele por AppleScript e ele
+    ///   assume a sessão na hora — a troca acontece de verdade;
+    /// - **os demais** (Amazon Music, TIDAL, Deezer, navegador): não há como entregar um
+    ///   play a um app específico, e um play global voltaria para a sessão antiga. Aqui a
+    ///   troca para em silenciar o app anterior e trazer o novo à frente; quem completa é
+    ///   o usuário, dando play. É a mesma limitação de `DECISOES.md · 2026-08-05 · #01`.
+    func switchTo(_ player: Player) {
+        AppSettings.shared.preferredPlayerBundleId = player.catalogID
+
+        // Já é a sessão: não há o que assumir, e pausar seria estragar o que já estava
+        // certo. Só trazer o app à frente.
+        guard track.bundleIdentifier != player.bundleIdentifier else {
+            player.launch()
+            return
+        }
+
+        // Silencia quem detém a sessão antes de entregar o palco — sem isso, os dois
+        // tocariam juntos. `pause` vai para a sessão ativa, que aqui é exatamente o alvo.
+        if track.isPlaying { MediaRemoteAdapter.send(.pause) }
+
+        if player.capabilities.contains(.directedControl), player.isRunning {
+            player.play()
+            return
+        }
+
+        guard player.launch() else { return }
+        waitForSessionThenPlay(player)
     }
 
     /// Aciona play/pause a partir do botão central do widget.

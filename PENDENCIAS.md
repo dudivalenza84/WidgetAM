@@ -74,7 +74,11 @@ Migração para `PENDENCIAS_CONCLUIDAS.md` só por pedido explícito.
   (reportou play/pause quebrado com o vídeo pausado de verdade). Corrigir os três e, para
   navegador, observar a página via `execute javascript` — `2026-08-19 · #02`
 
-- [ ] **A interação de app oculto com o modo fixo não tem teste automatizado.** A
+- [ ] **A interação de app oculto com o modo fixo ainda não tem teste** — mas a
+  infraestrutura que faltava existe desde `2026-08-21 · #01`:
+  `NowPlayingController.simulateSession(bundleIdentifier:isPlaying:)`, em debug, monta a
+  sessão que o stream não deixava montar. Só falta escrever as asserções.
+  Registro original: **A interação de app oculto com o modo fixo não tem teste automatizado.** A
   correção em `95eb583` (oculto não derruba comando endereçado) foi verificada por
   leitura: `NowPlayingController.track` é `private(set)` e vem do stream real, então não
   há como montar "sessão X tocando, oculta, modo fixo" no `SelfTests` sem expor um setter

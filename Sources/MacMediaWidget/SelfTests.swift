@@ -61,6 +61,8 @@ enum SelfTests {
         fonteOcultaTemNomeParaExibir()
         catálogoCobreOBundleDoAtalho()
         descobertaNãoRepeteOQueOCatálogoCobre()
+        trocarAppSilenciaASessãoAnterior()
+        trocarAppParaQuemJáTocaNãoPausa()
 
         appleScriptDecimalComVírgula()
         appleScriptEntradaInválida()
@@ -577,6 +579,69 @@ enum SelfTests {
         )
 
         settings.discoveredPlayerIDs = antes
+    }
+
+    /// Player de teste: `launch()` e `play()` sem efeito, para exercitar a troca de app
+    /// sem abrir nada de verdade na máquina de quem roda os testes.
+    private final class PlayerDeTeste: MediaRemotePlayer {
+        private(set) var abriu = false
+        private(set) var tocou = false
+
+        @discardableResult
+        override func launch() -> Bool {
+            abriu = true
+            return true
+        }
+
+        override func play() { tocou = true }
+    }
+
+    /// O bug de `2026-08-21 · #01`: "Trocar app" definia o preferido e abria o app, mas
+    /// não mexia em quem detinha a sessão — no modo automático o card continuava
+    /// espelhando o app anterior e a ação parecia não fazer nada.
+    private static func trocarAppSilenciaASessãoAnterior() {
+        var recebidos: [MediaCommand] = []
+        MediaRemoteAdapter.commandSink = { recebidos.append($0) }
+        defer { MediaRemoteAdapter.commandSink = nil }
+
+        let settings = AppSettings.shared
+        let preferidoAntes = settings.preferredPlayerBundleId
+        defer { settings.preferredPlayerBundleId = preferidoAntes }
+
+        let controller = NowPlayingController()
+        controller.simulateSession(bundleIdentifier: "com.exemplo.tocando", isPlaying: true)
+
+        let alvo = PlayerDeTeste(bundleIdentifier: "com.exemplo.alvo", displayName: "Alvo")
+        controller.switchTo(alvo)
+
+        expect(recebidos == [.pause], "a sessão anterior é pausada antes da troca — veio \(recebidos)")
+        expect(alvo.abriu, "o app escolhido é trazido à frente")
+        expect(
+            settings.preferredPlayerBundleId == alvo.catalogID,
+            "trocar de app também troca o preferido"
+        )
+    }
+
+    /// Trocar para quem já está com a sessão não pode pausar nada: seria estragar
+    /// exatamente o estado que já estava certo.
+    private static func trocarAppParaQuemJáTocaNãoPausa() {
+        var recebidos: [MediaCommand] = []
+        MediaRemoteAdapter.commandSink = { recebidos.append($0) }
+        defer { MediaRemoteAdapter.commandSink = nil }
+
+        let settings = AppSettings.shared
+        let preferidoAntes = settings.preferredPlayerBundleId
+        defer { settings.preferredPlayerBundleId = preferidoAntes }
+
+        let controller = NowPlayingController()
+        let alvo = PlayerDeTeste(bundleIdentifier: "com.exemplo.alvo", displayName: "Alvo")
+        controller.simulateSession(bundleIdentifier: alvo.bundleIdentifier, isPlaying: true)
+
+        controller.switchTo(alvo)
+
+        expect(recebidos.isEmpty, "não se pausa quem já é a sessão — veio \(recebidos)")
+        expect(alvo.abriu, "o app ainda é trazido à frente")
+        expect(!alvo.tocou, "e não leva um play por cima do que já está tocando")
     }
 
     // MARK: - AppleScript

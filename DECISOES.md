@@ -3,6 +3,37 @@
 Decisões com efeito além da sessão em que foram tomadas (ADR-lite). Entradas novas
 vão no topo. O que está aqui não se rediscute sem motivo novo.
 
+## 2026-08-21 · #01 — "Trocar app" troca quem toca, até onde a plataforma deixa
+
+**Contexto.** O item "Trocar app" definia o preferido e abria o app escolhido. No modo
+automático — que é o padrão — o card espelha a **sessão** de Now Playing, e a sessão
+continua com o app anterior até alguém dar play no novo. Resultado observado ao vivo: o
+usuário escolhe Amazon Music, o app abre, e o widget segue mostrando o outro app. A ação
+não tem efeito visível, que é o mesmo defeito que a decisão de `2026-08-11 · #01` (abrir
+o app ao trocar) tentou resolver pela metade.
+
+**Decisão.** Trocar de app passa a significar trocar quem toca: o widget silencia a
+sessão atual (`pause`, que vai justamente para quem a detém) e entrega o palco ao
+escolhido. Quanto ele consegue entregar depende do app:
+
+- **endereçável** (Apple Music, Spotify): o play chega por AppleScript e o app assume a
+  sessão na hora — a troca acontece de verdade;
+- **os demais** (Amazon Music, TIDAL, Deezer, navegador): não há como entregar um play a
+  um app específico, e um play global voltaria para a sessão antiga. A troca para em
+  silenciar o anterior e trazer o novo à frente; quem completa é o usuário.
+
+Trocar para o app que **já** detém a sessão não pausa nada — seria estragar o estado que
+já estava certo.
+
+**Alternativa descartada.** Fazer o widget exibir o app escolhido mesmo sem ele ter a
+sessão, no modo automático. Seria mentir sobre o que está tocando, e desmancharia a
+distinção entre os dois modos de controle — exibir o escolhido independente da sessão é
+exatamente o que o modo fixo faz.
+
+**Nota de cobertura.** Isto destravou o teste da pendência de `2026-08-19 · #02`: com
+`simulateSession(bundleIdentifier:isPlaying:)` em debug, dá para montar "app X tocando" e
+asserir para onde o comando vai — o que antes não tinha como.
+
 ## 2026-08-20 · #01 — O widget não afirma estado que a fonte não garante
 
 **Contexto.** O card diz "tocando" ou "pausado" a partir do campo `playing` do stream, e
