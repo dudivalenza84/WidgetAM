@@ -5,7 +5,7 @@ Formato: `YYYY-MM-DD · #NN — <objetivo> — <status>` → [arquivo](docs/sess
 
 ## 2026-08-21
 
-- 2026-08-21 · #01 — Roteiro de teste manual da 1.17.0 — em-andamento → [arquivo](docs/sessions/2026-08-21-01.md)
+- 2026-08-21 · #01 — Roteiro de aceitação, oito bugs achados nele, e a dívida técnica — concluída → [arquivo](docs/sessions/2026-08-21-01.md)
 
 ## 2026-08-20
 

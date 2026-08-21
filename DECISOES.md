@@ -3,6 +3,46 @@
 Decisões com efeito além da sessão em que foram tomadas (ADR-lite). Entradas novas
 vão no topo. O que está aqui não se rediscute sem motivo novo.
 
+## 2026-08-21 · #01 — O Safari tem identidade dupla: quem publica a sessão não é quem abre
+
+**Contexto.** Toda a arquitetura de players assume que o `bundleIdentifier` da sessão de
+Now Playing é o do app — é essa chave que liga o payload ao `Player`, e dela saem ícone,
+nome e abertura. O Safari quebra a premissa: quem publica é `com.apple.WebKit.GPU`, o
+processo auxiliar de mídia do WebKit, que não é app instalável, não tem ícone e cujo nome
+resolve para `com.apple.WebKit.GPU.xpc`. Era assim que ele aparecia no widget.
+
+**Decisão.** `applicationURL` vira **requisito do protocolo** `Player`, e não só default
+da extension — sem isso o despacho pelo existencial ignoraria qualquer sobrescrita. O
+`SafariPlayer` casa a sessão por `com.apple.WebKit.GPU` e aponta o app por
+`com.apple.Safari`. As duas identidades convivem sem se misturar, como `catalogID` já faz
+para os atalhos.
+
+**Alternativa descartada.** Registrar o Safari pelo bundle id do app. Nunca casaria com a
+sessão — o widget continuaria mostrando `com.apple.WebKit.GPU` como se fosse um player
+desconhecido.
+
+**Consequência medida.** Safari e Chrome **não** são o mesmo navegador para efeito de
+mídia: no Safari `next`, `previous` e `seek` funcionam, e o campo `playing` não mente; no
+Chrome, dois desses falham e o `playing` foi flagrado errado. Ter deixado o Safari fora do
+catálogo até medir (`DECISOES.md · 2026-08-20 · #01`) evitou declarar por dedução um
+perfil errado nas duas pontas.
+
+## 2026-08-21 · #01 — O conteúdo do card se contrasta com o card, não com o tema
+
+**Contexto.** O card é vidro tonalizado pela capa da faixa, mas texto e botões pediam suas
+cores à hierarquia do sistema (`.primary`/`.secondary`), que segue o **tema** claro/escuro.
+Com uma capa quase preta — o Black Album do Metallica — o tint escurecia o card e o
+conteúdo continuava escuro: botões invisíveis sobre o próprio fundo.
+
+**Decisão.** A cor do conteúdo sai da luminância percebida da capa combinada com a
+opacidade do tint, sobre a luminância do vidro no tema atual (`CardContrast`). Como todo o
+card já pedia cor pela hierarquia, definir os três estilos na raiz resolve título,
+artista, botões, barra e volume de uma vez. Com o tint em zero nada muda — sem
+tonalização, quem manda é o tema.
+
+**Por que a conta ficou fora da view.** É pura e testável, e o modo de falhar dela — um
+controle que some — não aparece em teste de UI nenhum: depende de qual capa está tocando.
+
 ## 2026-08-21 · #01 — "Trocar app" troca quem toca, até onde a plataforma deixa
 
 **Contexto.** O item "Trocar app" definia o preferido e abria o app escolhido. No modo
