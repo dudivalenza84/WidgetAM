@@ -67,6 +67,9 @@ enum SelfTests {
         appleScriptDecimalComVírgula()
         appleScriptEntradaInválida()
 
+        contrasteSegueACapaNãoOTema()
+        contrasteSemCapaSegueOTema()
+
         saúdeDoAdapter()
 
         if falhas.isEmpty {
@@ -658,6 +661,56 @@ enum SelfTests {
         expect(AppleScriptRunner.number(from: nil) == nil, "nil vira nil")
         expect(AppleScriptRunner.number(from: "") == nil, "vazio vira nil")
         expect(AppleScriptRunner.number(from: "erro de execução") == nil, "texto vira nil")
+    }
+
+    // MARK: - Contraste do card
+
+    /// O bug de `2026-08-21 · #01`: com a capa quase preta do Black Album, o card
+    /// escurecia e os botões sumiam — desenhados na cor do **tema**, não na do fundo que
+    /// eles tinham por trás.
+    private static func contrasteSegueACapaNãoOTema() {
+        let capaPreta = 0.05
+        let capaBranca = 0.95
+        let padrão = 0.45  // AppSettings.Defaults.tintOpacity
+
+        for temaEscuro in [true, false] {
+            expect(
+                CardContrast.prefersLightContent(
+                    isDarkAppearance: temaEscuro, tintLuminance: capaPreta, tintOpacity: padrão
+                ),
+                "capa preta pede conteúdo claro (tema escuro: \(temaEscuro))"
+            )
+        }
+
+        expect(
+            !CardContrast.prefersLightContent(
+                isDarkAppearance: true, tintLuminance: capaBranca, tintOpacity: padrão
+            ),
+            "capa clara pede conteúdo escuro mesmo no tema escuro"
+        )
+    }
+
+    /// Sem tonalização não há por que contrariar o sistema: o card é só o vidro.
+    private static func contrasteSemCapaSegueOTema() {
+        expect(
+            CardContrast.prefersLightContent(
+                isDarkAppearance: true, tintLuminance: nil, tintOpacity: 0.45
+            ),
+            "sem capa, tema escuro manda"
+        )
+        expect(
+            !CardContrast.prefersLightContent(
+                isDarkAppearance: false, tintLuminance: nil, tintOpacity: 0.45
+            ),
+            "sem capa, tema claro manda"
+        )
+        // Tint desligado é o mesmo caso: a capa existe e não pinta nada.
+        expect(
+            !CardContrast.prefersLightContent(
+                isDarkAppearance: false, tintLuminance: 0.05, tintOpacity: 0
+            ),
+            "com tint em zero, a capa não influencia"
+        )
     }
 
     // MARK: - Saúde do adapter

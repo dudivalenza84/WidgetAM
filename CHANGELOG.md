@@ -24,7 +24,15 @@ onde ela contradisse o plano, mandou a matriz.
   vídeo correndo.
 - Safari fica fora do catálogo até ser medido — continua controlável como fonte genérica.
 
-Seis bugs corrigidos antes da aceitação, cinco deles achados no teste ao vivo:
+Oito bugs corrigidos antes da aceitação, sete deles achados no teste ao vivo:
+
+- **Conteúdo do card sumia em capa escura.** Com o Black Album do Metallica tocando, o
+  tint escurecia o card e texto e botões continuavam sendo desenhados na cor do **tema**,
+  não na do fundo que tinham atrás. Agora a cor do conteúdo sai da luminância da capa
+  combinada com a opacidade do tint.
+- **Título e artista agora rolam no card**, como já rolavam na barra de menus. Nome longo
+  é a regra em música, e cortar com reticências esconde justamente o que distingue uma
+  versão da outra.
 
 - **"Trocar app" agora troca de verdade.** Antes ele definia o preferido e abria o app,
   mas a sessão de Now Playing continuava com o anterior — no modo automático o card

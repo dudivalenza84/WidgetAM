@@ -133,6 +133,11 @@ Migração para `PENDENCIAS_CONCLUIDAS.md` só por pedido explícito.
   `settings.discoveredPlayerIDs`. Corrigidos na mesma sessão, com teste automatizado da
   purga
 
+- [x] **Conteúdo do card invisível sobre capa escura e letreiro parado no widget.**
+  Achados no teste ao vivo em `2026-08-21 · #01`. O contraste passou a sair da luminância
+  da capa (`CardContrast`, com teste), e o `MarqueeText` da barra de menus foi
+  reaproveitado no card com a largura descoberta em vez de informada
+
 ## Média
 
 - [ ] Migrar `SelfTests.swift` para swift-testing **se** o Xcode entrar no projeto — as

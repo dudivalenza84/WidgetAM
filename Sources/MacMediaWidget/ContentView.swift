@@ -31,6 +31,9 @@ struct ContentView: View {
     @ObservedObject private var settings = AppSettings.shared
     @StateObject private var volume = VolumeRouter()
     @State private var tint: Color = .clear
+    /// Luminância da capa (0…1). `nil` sem capa — aí quem manda é só o tema do sistema.
+    @State private var tintLuminance: Double?
+    @Environment(\.colorScheme) private var colorScheme
     /// Posição sob o dedo durante o arraste da barra; `nil` fora do gesto.
     @State private var dragFraction: Double?
 
@@ -52,6 +55,12 @@ struct ContentView: View {
             }
         }
         .padding(isCompact ? 14 : 16)
+        // O conteúdo se contrasta com o card, não com o tema do sistema. Sem isto, uma
+        // capa quase preta (o Black Album do Metallica, na sessão `2026-08-21 · #01`)
+        // escurecia o card e os botões sumiam — texto escuro sobre fundo escuro.
+        // Os três estilos alimentam `.primary`/`.secondary`/`.tertiary` de toda a
+        // subárvore, que é como o card já pedia suas cores.
+        .foregroundStyle(contentPrimary, contentSecondary, contentTertiary)
         .frame(width: card.width, height: card.height)
         .modifier(CardSurface(tint: tint, tintOpacity: settings.tintOpacity))
         // Marca-d'água discreta no canto: vive na calha do padding do card, então não
@@ -72,8 +81,10 @@ struct ContentView: View {
         .task(id: track.artwork) {
             if let color = track.artwork?.averageColor() {
                 tint = Color(nsColor: color)
+                tintLuminance = color.perceivedLuminance
             } else {
                 tint = .clear
+                tintLuminance = nil
             }
         }
         // O alvo do volume acompanha o player controlado: trocar de fonte pode trocar
@@ -82,6 +93,22 @@ struct ContentView: View {
             volume.retarget(to: nowPlaying.controlledPlayer)
         }
     }
+
+    // MARK: - Contraste do conteúdo
+
+    /// O card é vidro tonalizado pela capa: a cor legível em cima dele depende da capa e
+    /// da opacidade do tint, não do tema do sistema.
+    private var prefersLightContent: Bool {
+        CardContrast.prefersLightContent(
+            isDarkAppearance: colorScheme == .dark,
+            tintLuminance: tintLuminance,
+            tintOpacity: settings.tintOpacity
+        )
+    }
+
+    private var contentPrimary: Color { prefersLightContent ? .white : Color(white: 0.08) }
+    private var contentSecondary: Color { contentPrimary.opacity(0.72) }
+    private var contentTertiary: Color { contentPrimary.opacity(0.45) }
 
     // MARK: - Layouts
 
@@ -127,10 +154,11 @@ struct ContentView: View {
     /// qual app ele está falando, agora que pode ser qualquer um.
     private var titleRow: some View {
         HStack(spacing: 6) {
-            Text(hiddenSourceTitle ?? track.title ?? L10n.nothingPlaying)
+            // Letreiro, como na barra de menus: nome de faixa longo é a regra, não a
+            // exceção, e cortar com reticências esconde justamente o que distingue uma
+            // versão da outra ("… (Remastered 2021)").
+            CardMarquee(text: hiddenSourceTitle ?? track.title ?? L10n.nothingPlaying)
                 .font(.system(size: isCompact ? 12 : 16, weight: .bold))
-                .lineLimit(isCompact ? 2 : 1)
-            Spacer(minLength: 4)
             // O aviso de canal degradado toma o lugar do ícone da fonte: nesse estado
             // não há fonte confiável para identificar, e o alerta é o que importa.
             if let healthMessage {
@@ -176,10 +204,9 @@ struct ContentView: View {
             .lineLimit(1)
             .nonDraggableWindowArea()
         } else {
-            Text(track.artist ?? subtitlePlaceholder)
+            CardMarquee(text: track.artist ?? subtitlePlaceholder)
                 .font(.system(size: size))
                 .foregroundStyle(.secondary)
-                .lineLimit(1)
         }
     }
 
@@ -463,5 +490,69 @@ extension NSImage {
             blue: CGFloat(data[2]) / 255.0,
             alpha: 1.0
         )
+    }
+}
+
+extension NSColor {
+    /// Luminância percebida (0…1), pelos pesos do sRGB. Serve para decidir se o que se
+    /// desenha por cima precisa ser claro ou escuro.
+    var perceivedLuminance: Double {
+        guard let rgb = usingColorSpace(.sRGB) else { return 0.5 }
+        return 0.2126 * Double(rgb.redComponent)
+            + 0.7152 * Double(rgb.greenComponent)
+            + 0.0722 * Double(rgb.blueComponent)
+    }
+}
+
+/// Decide a cor do conteúdo sobre o card.
+///
+/// Separado da view para poder ser testado: é uma conta pura, e o erro dela — botão
+/// invisível sobre o próprio fundo — é do tipo que só aparece com uma capa específica
+/// tocando, o que nenhum teste de UI pegaria por acaso.
+enum CardContrast {
+    /// Luminância aproximada do vidro **sem** tonalização, em cada tema.
+    static let lightAppearanceBase = 0.85
+    static let darkAppearanceBase = 0.18
+
+    static func prefersLightContent(
+        isDarkAppearance: Bool,
+        tintLuminance: Double?,
+        tintOpacity: Double
+    ) -> Bool {
+        // Sem capa não há tonalização: o card é só o vidro, e quem manda é o tema.
+        guard let tintLuminance else { return isDarkAppearance }
+        let base = isDarkAppearance ? darkAppearanceBase : lightAppearanceBase
+        let opacity = min(max(tintOpacity, 0), 1)
+        let efetiva = base * (1 - opacity) + tintLuminance * opacity
+        return efetiva < 0.5
+    }
+}
+
+/// Letreiro do card: o `MarqueeText` da barra de menus, com a largura descoberta em vez
+/// de informada.
+///
+/// No menu a largura é fixa e conhecida (`MenuStatusView` explica por quê); aqui ela
+/// depende do formato do widget e do que mais divide a linha, então uma régua invisível
+/// mede o espaço proposto pelo pai antes de o texto existir. Sem a régua, o letreiro
+/// mediria a si mesmo e a largura convergiria para zero.
+private struct CardMarquee: View {
+    let text: String
+
+    @State private var available: CGFloat = 0
+
+    var body: some View {
+        ZStack(alignment: .leading) {
+            Color.clear
+                .frame(height: 0)
+                .frame(maxWidth: .infinity)
+                .onGeometryChange(for: CGFloat.self, of: { $0.size.width }) { available = $0 }
+
+            if available > 0 {
+                // `.id(text)` faz a view renascer a cada faixa: sem isso o letreiro
+                // continuaria do offset da anterior, entrando no meio da palavra.
+                MarqueeText(text: text, availableWidth: available)
+                    .id(text)
+            }
+        }
     }
 }
