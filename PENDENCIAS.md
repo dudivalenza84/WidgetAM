@@ -50,7 +50,7 @@ Migração para `PENDENCIAS_CONCLUIDAS.md` só por pedido explícito.
   propósito (`DECISOES.md · 2026-08-20 · #01`) e cai no `MediaRemotePlayer` genérico.
   Roteiro na última tabela de `docs/compatibilidade-players.md` — `2026-08-20 · #01`
 
-- [ ] **Testar ao vivo a 1.17.0** — roteiro completo e executável em
+- [x] **Testar ao vivo a 1.17.0** — roteiro completo e executável em
   `docs/roteiro-teste-manual.md` (`2026-08-21 · #01`), que absorve também o teste
   pendente da visibilidade por app da 1.16.0. Resumo do que ele cobre: trocar de app pelo menu
   para cada player; barra acompanhando a música no TIDAL e no Deezer; seek arrastando a
@@ -84,36 +84,37 @@ Migração para `PENDENCIAS_CONCLUIDAS.md` só por pedido explícito.
   há como montar "sessão X tocando, oculta, modo fixo" no `SelfTests` sem expor um setter
   só para teste. Decidir se vale a infraestrutura — `2026-08-19 · #02`
 
-- [ ] **Testar ao vivo a visibilidade por app** (1.16.0): desmarcar um app e conferir que
+- [x] **Testar ao vivo a visibilidade por app** (1.16.0): desmarcar um app e conferir que
   ele some do submenu "Trocar app"; com ele tocando, ver o card mostrar "X está tocando ·
   oculto" e o botão "Mostrar este app" devolver; conferir que o preferido fica esmaecido e
-  que "Esquecer apps descobertos" limpa a lista — `2026-08-19 · #02`
+  que "Esquecer apps descobertos" limpa a lista — `2026-08-19 · #02` · **feito em
+  `2026-08-21 · #01`**, no bloco 03 do roteiro
 
 - [ ] **PWA do YouTube Music não abre:** o `app_mode_loader` executa e sai sem deixar
   processo (provável descasamento do shim com o Chrome 151). Conserto é reinstalar pelo
   Chrome. **Não bloqueia o plano** — a entrada do catálogo usa `appElseURL` e cai na
   página quando o PWA falha — `2026-08-19 · #01`
 
-- [ ] **Fase 2 — o que ainda exige olho humano ou hardware:** conferir a tradução
-  pt-BR **na tela** (o texto do `pt-BR.lproj` foi revisado em arquivo em
-  `2026-08-11 · #03`, sem erro encontrado — falta só o contexto visual) e testar
-  multi-monitor de verdade (correções feitas por leitura de código e testes
-  sintéticos; não há segundo monitor aqui) — `2026-08-10 · #01`
+- [ ] **Fase 2 — multi-monitor de verdade.** As correções foram feitas por leitura de
+  código e testes sintéticos, e o roteiro de `2026-08-21 · #01` só cobre o caso quando há
+  um segundo monitor à mão. A tradução pt-BR **na tela** saiu desta pendência: foi
+  conferida no bloco 05 do mesmo roteiro — `2026-08-10 · #01`
 
-- [ ] Testar manualmente o formato compacto (1×1) novo: troca ao vivo nas
+- [x] Testar manualmente o formato compacto (1×1) novo: troca ao vivo nas
   preferências, snap à grade nos dois formatos, seek/volume/transporte no layout
-  compacto, duplo clique e arraste — `2026-08-11 · #03`
+  compacto, duplo clique e arraste — `2026-08-11 · #03` · feito em `2026-08-21 · #01`
 
-- [ ] Testar manualmente a 1.14.0: ícone novo no Finder, glifo da bandeja,
+- [x] Testar manualmente a 1.14.0: ícone novo no Finder, glifo da bandeja,
   cabeçalho das Preferências e marca-d'água do widget (ajustar opacidade se
   necessário). Linha de status e botões de transporte não fecharem o menu ao
-  clicar já foi validado ao vivo — `2026-08-12 · #01`
+  clicar já foi validado ao vivo — `2026-08-12 · #01` · feito em `2026-08-21 · #01`
 
-- [ ] Confirmar visualmente o letreiro (`MarqueeText`) rodando com música de nome
+- [x] Confirmar visualmente o letreiro (`MarqueeText`) rodando com música de nome
   longo na 1.15.0 — validado só por instrumentação nesta sessão (offset avançando
   com o menu aberto); usuário ainda não viu o resultado após a correção do bug do
   `NSHostingView` (layout ignorava o frame, letreiro nunca via overflow) —
-  `2026-08-13 · #01`
+  `2026-08-13 · #01` · **feito em `2026-08-21 · #01`**, quando o letreiro também passou a
+  valer no card, e não só na barra de menus
 
 - [ ] **Fase 4 — assinar o Apple Developer Program (US$ 99/ano)**. É o único bloqueio
   real do resto da fase: o pipeline de assinatura, hardened runtime, notarização e
